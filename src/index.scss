@@ -1,0 +1,28 @@
+@import 'reset-css';
+@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+
+*{
+  &::before{
+  margin:0;
+  box-sizing: border-box;
+  }
+  &::-webkit-scrollbar{
+    width: 8px; /* Width of the vertical scrollbar */
+    background-color: #F5F5F5; /* Color of the scrollbar track */
+  }
+
+  &::-webkit-scrollbar-thumb{
+    background-color: #c9c9c9; /* Color of the scroll thumb */
+    border-radius: 4px; /* Rounded corners on the thumb */
+  }
+
+  &::-webkit-scrollbar-thumb:hover{
+    background-color: #939393;/* Rounded corners on the thumb */
+  }
+}
+
+a {
+  text-decoration: none;
+  color: darkgray;
+}

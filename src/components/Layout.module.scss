@@ -1,0 +1,34 @@
+@import '../assets/styles/variables';
+@import '../assets/styles/mixins';
+
+.Layout {
+  position: relative;
+  
+  height: 100%;
+
+  .main-wrapper{
+    position:absolute;
+
+    top:0;
+    left : $sidebar-width;
+    right : 0;
+
+    .main{
+      position:absolute;    
+      top: $topbar-height;
+      width: 100%;
+      min-height: 1000px;
+    }
+  }
+
+  @include mobile-and-tablet {
+    .main-wrapper{
+      left : 0;
+      transition: transform .4s ease;
+      &.active{
+        // left : $sidebar-width;
+        transform: translate($sidebar-width);
+      }
+    }
+  }
+}

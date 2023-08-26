@@ -1,0 +1,30 @@
+@import '../assets/styles/variables';
+@import '../assets/styles/mixins';
+
+
+$topbar-color : #fff;
+
+
+.TopBar {
+  position:fixed;
+
+  width:100%;
+  top:0;
+  right : 0;
+  left:0;
+
+  z-index:5;
+
+  height:$topbar-height;
+  box-shadow: 0 .8px 0 rgba(0,0,0,0.09); /* X-offset, Y-offset, blur radius, color */
+  background-color: $topbar-color;
+
+
+  @include mobile-and-tablet {
+    display: flex;
+    width:auto;
+
+    align-items: center;
+    padding-left:1rem;
+  }
+}

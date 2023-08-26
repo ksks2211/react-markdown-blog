@@ -1,0 +1,20 @@
+@import '../assets/styles/variables';
+
+
+$sidebar-color : #eeeeee;
+
+
+.SideBar {
+  position:fixed;
+  top : 0;
+  left: 0;
+  width: #{$sidebar-width};
+  z-index:10;
+  background-color: $sidebar-color;
+  height: 100%;
+  transform: translate(#{-$sidebar-width});
+  transition: transform .4s ease;
+  &.active{
+    transform: translate(0);
+  }
+}
