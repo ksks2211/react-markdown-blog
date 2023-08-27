@@ -3,10 +3,8 @@
 
 
 *{
-  &::before{
   margin:0;
   box-sizing: border-box;
-  }
   &::-webkit-scrollbar{
     width: 8px; /* Width of the vertical scrollbar */
     background-color: #F5F5F5; /* Color of the scrollbar track */

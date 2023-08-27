@@ -1,6 +1,9 @@
+import { ComponentPropsWithoutRef } from "react";
 import Layout from "../components/Layout";
 
-const Home: React.FC = () => {
+interface HomeProps extends ComponentPropsWithoutRef<"div"> {}
+
+const Home: React.FC<HomeProps> = () => {
   return (
     <Layout>
       <p>This is home</p>
