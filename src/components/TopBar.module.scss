@@ -19,12 +19,16 @@ $topbar-color : #fff;
   box-shadow: 0 .8px 0 rgba(0,0,0,0.09); /* X-offset, Y-offset, blur radius, color */
   background-color: $topbar-color;
 
+  padding: 0 2.5rem;
 
   @include mobile-and-tablet {
     display: flex;
     width:auto;
-
     align-items: center;
-    padding-left:1rem;
+    padding: 0 1.5rem;
+    transition: left .4s ease;
+    &.active{
+      left : $sidebar-width;
+    }
   }
 }

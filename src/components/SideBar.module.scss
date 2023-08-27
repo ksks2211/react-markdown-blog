@@ -1,8 +1,7 @@
 @import '../assets/styles/variables';
-
-
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&family=Shadows+Into+Light&display=swap');
 $sidebar-color : #eeeeee;
-
+$letter-color : #868585;
 
 .SideBar {
   position:fixed;
@@ -17,4 +16,84 @@ $sidebar-color : #eeeeee;
   &.active{
     transform: translate(0);
   }
+  display: flex;
+  flex-direction: column;
+  
+
+
+  .profile{
+
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    margin: 3rem 0;
+    min-width:100%;
+    min-height:100px;
+
+    gap:1rem;
+
+
+    .avatar{
+      display: flex;
+      width:100%;
+      align-items: center;
+      justify-content: center;
+
+      .link {
+        display:block;
+        width:100%;
+        border-radius: 50%;
+        border: 2px solid rgba(222,222,222,0.7);
+        display:block;
+        width:6rem;
+        height:6rem;          
+        transition: border .2s;
+        img{
+          width: 100%;
+          height: 100%;
+          transition: transform .6s;
+        }
+
+        &:hover{
+          border: 2px solid #fff;
+          img{
+            transform: scale(120%);
+          }
+        }
+      }
+    }
+
+    .profile--title{
+      cursor: pointer;
+      width: 100%;
+      font-weight:900;
+      font-size:1.5rem;
+      color: $letter-color ;
+      text-align: center;
+      transition: color .2s;
+      font-family: 'Roboto Slab', serif;
+
+      &:hover{
+        color: darken($letter-color ,15%);
+      }
+    }
+
+    .profile--subtitle{
+      width: 100%;
+      font-size: .95rem;
+      color: lighten( $letter-color , 15%);
+      line-height: 1.2rem;
+      word-spacing: 1px;
+      text-align: center;
+      font-style: italic;
+      font-family: 'Shadows Into Light', cursive;
+    }
+  }
+
+  .items{
+    width:100%;
+  }
+
 }

@@ -3,12 +3,11 @@
 
 .Layout {
   position: relative;
-  
+  width:100%;
   height: 100%;
 
   .main-wrapper{
     position:absolute;
-
     top:0;
     left : $sidebar-width;
     right : 0;
@@ -16,7 +15,7 @@
     .main{
       position:absolute;    
       top: $topbar-height;
-      width: 100%;
+      width: auto;
       min-height: 1000px;
     }
   }
@@ -24,10 +23,10 @@
   @include mobile-and-tablet {
     .main-wrapper{
       left : 0;
-      transition: transform .4s ease;
+      transition: transform .4s ease, left .4s ease;
       &.active{
-        // left : $sidebar-width;
-        transform: translate($sidebar-width);
+        left : $sidebar-width;
+        width : calc(100% - $sidebar-width);
       }
     }
   }

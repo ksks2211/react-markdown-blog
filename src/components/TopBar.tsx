@@ -14,7 +14,7 @@ interface TopBarProps extends ComponentPropsWithoutRef<"header"> {
 
 const TopBar: React.FC<TopBarProps> = ({ active, isTablet, toggle }) => {
   return (
-    <header className={cx("TopBar")}>
+    <header className={cx("TopBar", { active })}>
       {isTablet && <HamburgerButton active={active} onClick={toggle} />}
     </header>
   );
