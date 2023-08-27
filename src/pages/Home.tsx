@@ -1,14 +1,15 @@
 import { ComponentPropsWithoutRef } from "react";
-import Layout from "../components/Layout";
+import useGlobal from "../hooks/useGlobal";
+import withLayout from "../hoc/withLayout";
 
 interface HomeProps extends ComponentPropsWithoutRef<"div"> {}
 
 const Home: React.FC<HomeProps> = () => {
-  return (
-    <Layout>
-      <p>This is home</p>
-    </Layout>
-  );
+  const { selectedMenu } = useGlobal();
+
+  return <p>This is home -- Selected Menu : {selectedMenu}</p>;
 };
 
-export default Home;
+const HomeWithLayout = withLayout(Home);
+
+export default HomeWithLayout;

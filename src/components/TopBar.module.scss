@@ -6,12 +6,14 @@ $topbar-color : #fff;
 
 
 .TopBar {
+  display: flex;
+  align-items: center;
   position:fixed;
 
   width:100%;
   top:0;
-  right : 0;
-  left:0;
+  right:0;
+  left:$sidebar-width;
 
   z-index:5;
 
@@ -22,9 +24,8 @@ $topbar-color : #fff;
   padding: 0 2.5rem;
 
   @include mobile-and-tablet {
-    display: flex;
+    left:0;
     width:auto;
-    align-items: center;
     padding: 0 1.5rem;
     transition: left .4s ease;
     &.active{

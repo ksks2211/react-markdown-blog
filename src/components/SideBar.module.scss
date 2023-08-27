@@ -102,13 +102,26 @@ $letter-color : #868585;
       justify-content: center;
       width:100%;
       height: 3rem;
-      font-family: 'Roboto', sans-serif;
-      font-weight: 500;
-      color:$letter-color;
 
-      &:hover{
-        color:darken($letter-color,15%);
+      .item-link{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        color:$letter-color;
+        text-align: center;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 500;
+
+        &:hover{
+          color:darken($letter-color,15%);
+        }
       }
+
+      
+
     }
 
     .bar{

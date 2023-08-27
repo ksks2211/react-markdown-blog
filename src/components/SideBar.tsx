@@ -1,16 +1,24 @@
-import { ComponentPropsWithoutRef, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { ComponentPropsWithoutRef, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import styles from "./SideBar.module.scss";
 import cn from "classnames/bind";
-import { MENU } from "../constants";
+import { SelectedMenu } from "../constants";
 const cx = cn.bind(styles);
 
 interface SideBarProps extends ComponentPropsWithoutRef<"aside"> {
   active: boolean;
   isTablet: boolean;
+  selectedMenu: SelectedMenu;
+  menu: readonly string[];
+  changeMenu: (e: SelectedMenu) => void;
 }
 
-const SideBar: React.FC<SideBarProps> = ({ active }) => {
+const SideBar: React.FC<SideBarProps> = ({
+  active,
+  selectedMenu,
+  menu,
+  changeMenu,
+}) => {
   const barRef = useRef<HTMLLIElement>(null);
 
   const profileUrl =
@@ -18,21 +26,35 @@ const SideBar: React.FC<SideBarProps> = ({ active }) => {
   const profileTitle = "Akatapata";
   const profileSubTitle = "Welcome...";
 
-  const navigate = useNavigate();
+  const selectedKey = menu.findIndex((m) => m === selectedMenu);
 
-  const redirectToHome = (e: React.MouseEvent) => {
-    e.preventDefault();
-    navigate("/");
-  };
+  useEffect(() => {
+    const bar = barRef.current;
+    const size = (menu.length - selectedKey) * 5;
 
-  const onMouseOver = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+    if (bar !== null) {
+      bar.style.transform = `scale(0.6) translateY(-${size}rem)`;
+    }
+  }, [menu.length, selectedKey]);
+
+  const onMouseOver = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     const target = e.target as HTMLLIElement;
 
     const key = parseInt(target.dataset.key as string);
 
-    const size = (MENU.length - key) * 5;
+    const size = (menu.length - key) * 5;
 
     const bar = barRef.current;
+    if (bar !== null) {
+      bar.style.transform = `scale(0.6) translateY(-${size}rem)`;
+    }
+  };
+
+  // onMouseLeave : back to original-selected category
+  const onMouseLeave = () => {
+    const bar = barRef.current;
+    const size = (menu.length - selectedKey) * 5;
+
     if (bar !== null) {
       bar.style.transform = `scale(0.6) translateY(-${size}rem)`;
     }
@@ -42,28 +64,46 @@ const SideBar: React.FC<SideBarProps> = ({ active }) => {
     <aside className={cx("SideBar", { active })}>
       <div className={cx("profile")}>
         <div className={cx("avatar")}>
-          <Link className={cx("link")} to="/">
+          <Link
+            className={cx("link")}
+            to="/"
+            onClick={() => changeMenu("HOME")}
+          >
             <img src={profileUrl} alt="profile" />
           </Link>
         </div>
 
-        <div className={cx("profile--title")} onClick={redirectToHome}>
-          {profileTitle}
+        <div className={cx("profile--title")}>
+          <Link
+            className={cx("link")}
+            to="/"
+            onClick={() => changeMenu("HOME")}
+          >
+            {profileTitle}
+          </Link>
         </div>
         <div className={cx("profile--subtitle")}>{profileSubTitle}</div>
       </div>
-      <ul className={cx("items")}>
-        {MENU.map((item, key) => (
-          <li
-            key={key}
-            data-key={key}
-            className={cx("item")}
-            onMouseOver={onMouseOver}
-          >
-            {item}
-          </li>
-        ))}
-        <li ref={barRef} className={cx("bar")} key={MENU.length}></li>
+      <ul className={cx("items")} onMouseLeave={onMouseLeave}>
+        {menu.map((item, key) => {
+          const style: React.CSSProperties | undefined =
+            item == selectedMenu ? { color: "#6189be" } : undefined;
+          return (
+            <li key={key} className={cx("item")}>
+              <Link
+                data-key={key}
+                onMouseOver={onMouseOver}
+                style={style}
+                className={cx("item-link")}
+                to={`/${item.toLowerCase()}`}
+                onClick={() => changeMenu(item as SelectedMenu)}
+              >
+                {item}
+              </Link>
+            </li>
+          );
+        })}
+        <li ref={barRef} className={cx("bar")} key={menu.length}></li>
       </ul>
     </aside>
   );
