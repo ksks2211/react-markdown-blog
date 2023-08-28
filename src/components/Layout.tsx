@@ -23,6 +23,12 @@ const Layout: React.FC<LayoutProps> = ({ children, ...rest }) => {
     setActive((prev) => !prev);
   };
 
+  const closeToggle = () => {
+    if (isTablet && active) {
+      setActive(false);
+    }
+  };
+
   useEffect(() => {
     if (isTablet) {
       setActive(false);
@@ -40,7 +46,7 @@ const Layout: React.FC<LayoutProps> = ({ children, ...rest }) => {
         menu={MENU}
         changeMenu={changeMenu}
       ></SideBar>
-      <div className={cx("main-wrapper", { active })}>
+      <div className={cx("main-wrapper", { active })} onClick={closeToggle}>
         <TopBar
           active={active}
           isTablet={isTablet}
