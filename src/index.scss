@@ -2,23 +2,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 
-body,html{
+html{
   height:100%;
   margin:0;
   overflow-x:hidden;
+  scrollbar-color: transparent transparent;
 }
 
 *{
   margin:0;
   box-sizing: border-box;
   &::-webkit-scrollbar{
-    width: 8px; /* Width of the vertical scrollbar */
-    background-color: #F5F5F5; /* Color of the scrollbar track */
+    transition: opacity 0.5s;
+    width: 6px; /* Width of the vertical scrollbar */
   }
 
-  &::-webkit-scrollbar-thumb{
-    background-color: #c9c9c9; /* Color of the scroll thumb */
-    border-radius: 4px; /* Rounded corners on the thumb */
+  &::-webkit-scrollbar-thumb{    
+    background-color: transparent; /* Color of the scroll thumb */
+    border-radius: 3px; /* Rounded corners on the thumb */
   }
 
   &::-webkit-scrollbar-thumb:hover{

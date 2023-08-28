@@ -5,6 +5,10 @@
   min-width: 1.4rem;
   flex-wrap: wrap;
   
+  box-sizing:content-box;
+
+  padding:1rem;
+
   .line {
     background-color: #837c7c;
     width: 100%;

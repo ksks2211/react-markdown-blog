@@ -87,7 +87,9 @@ const SideBar: React.FC<SideBarProps> = ({
       <ul className={cx("items")} onMouseLeave={onMouseLeave}>
         {menu.map((item, key) => {
           const style: React.CSSProperties | undefined =
-            item == selectedMenu ? { color: "#6189be" } : undefined;
+            item == selectedMenu
+              ? { color: "#6189be", backgroundColor: "rgba(0,0,150,.1)" }
+              : undefined;
           return (
             <li key={key} className={cx("item")}>
               <Link

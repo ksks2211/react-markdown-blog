@@ -37,6 +37,10 @@ $topbar-text-color : #837c7c;
       height: 1.6rem;
       width: 100%;
       color:$topbar-text-color;
+
+      &:hover{
+        color:darken($topbar-text-color,20%);
+      }
     }
   }
 
@@ -51,12 +55,11 @@ $topbar-text-color : #837c7c;
       display:block;
       position:absolute;
       right:6rem;
-
     }
   }
 
   @include mobile-and-tablet {
-    transition: left .4s ease;
+    transition: left .4s;
     justify-content: space-between;
     &.active{
       left : $sidebar-width;

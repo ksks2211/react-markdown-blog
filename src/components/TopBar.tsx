@@ -4,7 +4,7 @@ import styles from "./TopBar.module.scss";
 import cn from "classnames/bind";
 import HamburgerButton from "./HamburgerButton";
 import { SelectedMenu } from "../constants";
-import { capitalizeFirst } from "../utils/StringUtils";
+import { capitalizeFirst } from "../common/stringUtils";
 
 const cx = cn.bind(styles);
 

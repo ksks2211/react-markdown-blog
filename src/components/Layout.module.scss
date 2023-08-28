@@ -15,8 +15,8 @@
     .main{
       position:absolute;    
       top: $topbar-height;
-      width: auto;
-      min-height: 1000px;
+      width: 100%;
+      min-height: 1700px;
     }
     padding: 0 2.5rem;
   }
@@ -24,9 +24,10 @@
   @include mobile-and-tablet {
     .main-wrapper{
       left : 0;
-      transition: transform .4s ease, left .4s ease;
+      transition: .4s;
       &.active{
         left : $sidebar-width;
+        right: -$sidebar-width;
       }
       padding: 0 1.5rem;
     }

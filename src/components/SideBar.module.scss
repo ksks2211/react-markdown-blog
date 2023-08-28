@@ -1,3 +1,4 @@
+@import '../assets/styles/mixins';
 @import '../assets/styles/variables';
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500&display=swap');
 $sidebar-color : #eeeeee;
@@ -12,7 +13,7 @@ $letter-color : #868585;
   background-color: $sidebar-color;
   height: 100%;
   transform: translate(#{-$sidebar-width});
-  transition: transform .4s ease;
+  transition: transform 0s;
   &.active{
     transform: translate(0);
   }
@@ -132,9 +133,13 @@ $letter-color : #868585;
       border-radius: 2px;
       height: 3rem;
       background-color: darken($letter-color,10%);
-      transition: transform .3s;
+      transition: transform .4s;
       transform: scale(0.6) translateY(-5rem*5);
     }
+  }
+
+  @include mobile-and-tablet {
+    transition: .4s;
   }
 
 }

@@ -8,6 +8,7 @@ import useDeviceDetect from "../hooks/useDeviceDetect";
 import useGlobal from "../hooks/useGlobal";
 
 import { MENU } from "../constants";
+import ScrollToTop from "./ScrollToTop";
 
 const cx = cn.bind(styles);
 
@@ -18,7 +19,6 @@ const Layout: React.FC<LayoutProps> = ({ children, ...rest }) => {
   const { isTabletOrMobile: isTablet } = useDeviceDetect();
 
   const { selectedMenu, changeMenu } = useGlobal();
-
   const toggle = () => {
     setActive((prev) => !prev);
   };
@@ -53,8 +53,11 @@ const Layout: React.FC<LayoutProps> = ({ children, ...rest }) => {
           toggle={toggle}
           selectedMenu={selectedMenu}
         ></TopBar>
-        <main className={cx("main")}>{children}</main>
-        <footer></footer>
+        <main className={cx("main")}>
+          <div className={cx("content")}>{children}</div>
+          <ScrollToTop />
+          <footer>Footer</footer>
+        </main>
       </div>
     </div>
   );
