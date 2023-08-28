@@ -7,13 +7,13 @@
   height: 100%;
 
   .main-wrapper{
-    position:absolute;
+    position:relative;
     top:0;
     left : $sidebar-width;
     right : 0;
 
     .main{
-      position:absolute;    
+      position:relative;    
       top: $topbar-height;
       width: 100%;
       min-height: 1700px;

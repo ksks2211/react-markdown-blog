@@ -3,21 +3,22 @@ import styles from "./ScrollToTop.module.scss";
 import { FaArrowCircleUp } from "react-icons/fa";
 import { gsap } from "gsap";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+import { throttle } from "lodash";
 
 gsap.registerPlugin(ScrollToPlugin);
 
 const ScrollToTopButton: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const checkVisibility = () => {
-      if (window.scrollY > 100) {
+      if (window.scrollY > 800) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
       }
     };
-    window.addEventListener("scroll", checkVisibility);
+    window.addEventListener("scroll", throttle(checkVisibility, 300));
     return () => window.removeEventListener("scroll", checkVisibility);
   }, []);
 
@@ -27,6 +28,8 @@ const ScrollToTopButton: React.FC = () => {
       scrollTo: 0,
       ease: "power2.inOut",
     });
+
+    setIsVisible(false);
   };
 
   return (
