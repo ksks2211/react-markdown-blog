@@ -27,7 +27,7 @@ $directory-title-color : #6189be;
   .row-wrapper{
     max-height: 1500px;
     transition: .4s;
-    line-height: 3.3rem;
+    line-height: 2.2rem;
     width:100%;
     position:relative;
     cursor: pointer;
@@ -36,7 +36,7 @@ $directory-title-color : #6189be;
     & > .icon{
       color: $directory-card-text-color;
       font-size: 1.1rem;
-      transform: translateY(.1rem);
+      transform: translateY(.15rem);
     }
 
     &.root{
@@ -45,10 +45,12 @@ $directory-title-color : #6189be;
 
     &.closed > .icon.open{
       display: none;
+      pointer-events: none;
     }
 
     &:not(.closed) > .icon.closed{
       display: none;
+      pointer-events: none;
     }
 
 
@@ -86,19 +88,20 @@ $directory-title-color : #6189be;
 
     &:hover > .dropdown > .dropdown-icon{
       background-color: rgba(0,0,100,0.08); 
+
     }
 
     & > .dropdown > .dropdown-icon{
       pointer-events: none;
       z-index: 10;
-      transform: rotate(-180deg);
+      transform: rotate(0deg);
       font-size: 1.7rem;
       border-radius: 50%;
       transition: .4s;
     }
 
     &.closed > .dropdown >.dropdown-icon{
-      transform: rotate(0);
+      transform: rotate(-90deg);
     }
 
 

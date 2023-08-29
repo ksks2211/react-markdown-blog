@@ -9,8 +9,10 @@ import { RiArrowDropDownLine } from "react-icons/ri";
 
 import styles from "./DirectoryCard.module.scss";
 import cn from "classnames/bind";
-import { capitalizeFirst } from "../common/stringUtils";
+import { capitalizeFirst } from "../../helpers/stringUtils";
 import { Link } from "react-router-dom";
+import useGlobal from "../../hooks/useGlobal";
+import { SelectedMenu } from "../../constants";
 const cx = cn.bind(styles);
 
 interface Directory {
@@ -40,13 +42,15 @@ const DirectoryRow: React.FC<DirectoryRowProps> = ({
   parentDirname,
   closed,
   onClick,
-  ...props
+  // ...props
 }) => {
   const fullDirname = `${parentDirname}/${dirname}`;
   const root = depth === 1;
 
+  const { changeMenu } = useGlobal();
+
   return (
-    <div {...props} className={cx("row")}>
+    <div className={cx("row")}>
       <div
         onClick={dirCount !== 0 ? onClick : undefined}
         className={cx("row-wrapper", { closed, root })}
@@ -61,7 +65,13 @@ const DirectoryRow: React.FC<DirectoryRowProps> = ({
         {<FaRegFolderOpen className={cx("icon", "open")} />}
         {<FaRegFolder className={cx("icon", "closed")} />}
 
-        <Link className={cx("dirname")} to={fullDirname}>
+        <Link
+          className={cx("dirname")}
+          to={fullDirname}
+          onClick={() => {
+            changeMenu(fullDirname.split("/")[1].toUpperCase() as SelectedMenu);
+          }}
+        >
           {capitalizeFirst(dirname)}
         </Link>
 
@@ -113,7 +123,7 @@ const NestedDir: React.FC<NestedDirProps> = ({
       dirCount={dirCount}
       onClick={(e) => {
         e.preventDefault();
-        const dir = e.target as HTMLDivElement;
+        const dir = e.currentTarget as HTMLDivElement;
         dir.classList.toggle(cx("closed"));
         e.stopPropagation();
       }}

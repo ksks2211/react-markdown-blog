@@ -2,9 +2,9 @@ import { ComponentPropsWithoutRef } from "react";
 import { MdOutlineSearch } from "react-icons/md";
 import styles from "./TopBar.module.scss";
 import cn from "classnames/bind";
-import HamburgerButton from "./HamburgerButton";
-import { SelectedMenu } from "../constants";
-import { capitalizeFirst } from "../common/stringUtils";
+import HamburgerButton from "../common/HamburgerButton";
+import { capitalizeFirst } from "../../helpers/stringUtils";
+import useGlobal from "../../hooks/useGlobal";
 
 const cx = cn.bind(styles);
 
@@ -12,15 +12,10 @@ interface TopBarProps extends ComponentPropsWithoutRef<"header"> {
   active: boolean;
   isTablet: boolean;
   toggle: () => void;
-  selectedMenu: SelectedMenu;
 }
 
-const TopBar: React.FC<TopBarProps> = ({
-  active,
-  isTablet,
-  toggle,
-  selectedMenu,
-}) => {
+const TopBar: React.FC<TopBarProps> = ({ active, isTablet, toggle }) => {
+  const { selectedMenu } = useGlobal();
   return (
     <header className={cx("TopBar", { active })}>
       {isTablet && <HamburgerButton active={active} onClick={toggle} />}

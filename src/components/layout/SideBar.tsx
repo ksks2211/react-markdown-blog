@@ -2,23 +2,19 @@ import { ComponentPropsWithoutRef, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import styles from "./SideBar.module.scss";
 import cn from "classnames/bind";
-import { SelectedMenu } from "../constants";
+import { SelectedMenu } from "../../constants";
+import useGlobal from "../../hooks/useGlobal";
 const cx = cn.bind(styles);
 
 interface SideBarProps extends ComponentPropsWithoutRef<"aside"> {
   active: boolean;
   isTablet: boolean;
-  selectedMenu: SelectedMenu;
   menu: readonly string[];
-  changeMenu: (e: SelectedMenu) => void;
 }
 
-const SideBar: React.FC<SideBarProps> = ({
-  active,
-  selectedMenu,
-  menu,
-  changeMenu,
-}) => {
+const SideBar: React.FC<SideBarProps> = ({ active, menu }) => {
+  const { selectedMenu, changeMenu } = useGlobal();
+
   const barRef = useRef<HTMLLIElement>(null);
 
   const profileUrl =
@@ -84,10 +80,11 @@ const SideBar: React.FC<SideBarProps> = ({
         </div>
         <div className={cx("profile--subtitle")}>{profileSubTitle}</div>
       </div>
+
       <ul className={cx("items")} onMouseLeave={onMouseLeave}>
         {menu.map((item, key) => {
           const style: React.CSSProperties | undefined =
-            item == selectedMenu
+            item === selectedMenu
               ? { color: "#6189be", backgroundColor: "rgba(0,0,150,.1)" }
               : undefined;
           return (

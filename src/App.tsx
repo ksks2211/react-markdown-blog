@@ -1,5 +1,6 @@
 import "./App.scss";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { ErrorBoundary } from "react-error-boundary";
 import LogIn from "./pages/LogIn";
 import Home from "./pages/Home";
 import GlobalProvider from "./GlobalProvider";
@@ -7,10 +8,11 @@ import Posts from "./pages/Posts";
 import Categories from "./pages/Categories";
 import Data from "./pages/Data";
 import Maps from "./pages/Maps";
+import ErrorFallback from "./errors/ErrorFallback";
 
 function App() {
   return (
-    <>
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
       <BrowserRouter>
         <GlobalProvider>
           <Routes>
@@ -24,7 +26,7 @@ function App() {
           </Routes>
         </GlobalProvider>
       </BrowserRouter>
-    </>
+    </ErrorBoundary>
   );
 }
 
