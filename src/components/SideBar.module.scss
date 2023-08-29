@@ -125,7 +125,9 @@ $letter-color : #868585;
 
     }
 
-    .bar{
+
+
+    &:hover .bar{
       display: block;
       position:absolute;
       right:0;    

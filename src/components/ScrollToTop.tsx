@@ -12,7 +12,7 @@ const ScrollToTopButton: React.FC = () => {
 
   useEffect(() => {
     const checkVisibility = () => {
-      if (window.scrollY > 800) {
+      if (window.scrollY > 600) {
         setIsVisible(true);
       } else {
         setIsVisible(false);

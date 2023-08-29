@@ -1,7 +1,12 @@
+import DirectoryCard from "../components/DirectoryCard";
 import withLayout from "../hoc/withLayout";
 
 const Categories: React.FC = () => {
-  return <p>This is Categories</p>;
+  return (
+    <div>
+      <DirectoryCard />
+    </div>
+  );
 };
 
 const CategoriesWithLayout = withLayout(Categories);

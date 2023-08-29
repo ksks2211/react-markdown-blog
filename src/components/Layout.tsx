@@ -23,6 +23,8 @@ const Layout: React.FC<LayoutProps> = ({ children, ...rest }) => {
     setActive((prev) => !prev);
   };
 
+  console.log(isTablet);
+
   const closeToggle = () => {
     if (isTablet && active) {
       setActive(false);

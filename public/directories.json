@@ -1,0 +1,26 @@
+{
+  "maps": {
+    "directories": {
+      "united-states": {
+        "directories": {
+					"california":{
+						"directories" : {},
+						"files":30
+					}
+				},
+        "files" : 10 
+      },
+			"canada": {
+        "directories": {
+					"ontario":{
+						"directories" : {},
+						"files":3
+					}
+				},
+        "files": 2
+      }
+    },
+		
+    "files": 1
+  }
+}

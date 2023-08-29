@@ -7,9 +7,12 @@ const useDeviceDetect = () => {
   });
   const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
 
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1024px)" });
+
   return {
     isDesktop,
-    isTabletOrMobile: isTablet || isMobile,
+    isTablet,
+    isTabletOrMobile,
     isMobile,
   };
 };

@@ -1,0 +1,113 @@
+$directory-card-text-color : #837c7c;
+$directory-title-color : #6189be;
+
+
+.DirectoryCard{
+
+
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: .25rem;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.19), 0 2px 2px rgba(0,0,0,0.10);
+  padding:0;
+
+  display: flex;
+  flex-flow: column;
+  
+  color: darken($directory-card-text-color,20%);
+
+
+  .row{
+    max-height: 1500px;
+    transition: .4s;
+
+  }
+
+  
+
+  .row-wrapper{
+    max-height: 1500px;
+    transition: .4s;
+    line-height: 3.3rem;
+    width:100%;
+    position:relative;
+    cursor: pointer;
+
+
+    & > .icon{
+      color: $directory-card-text-color;
+      font-size: 1.1rem;
+      transform: translateY(.1rem);
+    }
+
+    &.root{
+      background-color: rgba(0,0,0,.075);
+    }
+
+    &.closed > .icon.open{
+      display: none;
+    }
+
+    &:not(.closed) > .icon.closed{
+      display: none;
+    }
+
+
+    & > .dirname{
+      color:darken($directory-title-color ,20%);
+      font-size: 1.1rem;
+      font-weight: 500;
+      padding : .4rem;
+    }
+
+    &  > .details{
+      font-size: .8rem;
+      color: #837c7c;
+    }
+
+    &.closed  ~ .row {
+      max-height: 0; 
+      opacity: 0;
+      overflow: hidden;
+      border:0;
+    }
+
+
+    & > .dropdown{
+      position:absolute;
+      right:1rem;
+      top:0; 
+      bottom:0;
+      margin:auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    &:hover > .dropdown > .dropdown-icon{
+      background-color: rgba(0,0,100,0.08); 
+    }
+
+    & > .dropdown > .dropdown-icon{
+      pointer-events: none;
+      z-index: 10;
+      transform: rotate(-180deg);
+      font-size: 1.7rem;
+      border-radius: 50%;
+      transition: .4s;
+    }
+
+    &.closed > .dropdown >.dropdown-icon{
+      transform: rotate(0);
+    }
+
+
+  }
+  .row > .row{
+    border-top: 1px solid rgba(0,0,0,.125);
+  }
+
+
+
+  
+}
