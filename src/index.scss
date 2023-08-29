@@ -12,7 +12,7 @@ html{
   margin:0;
   box-sizing: border-box;
   &::-webkit-scrollbar{
-    display: none;
+    // display: none;
     transition: opacity 0.5s;
     width: 6px; /* Width of the vertical scrollbar */
   }

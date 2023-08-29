@@ -5,6 +5,7 @@
   position: relative;
   width:100%;
   height: 100%;
+  overflow:hidden;
 
   
 
@@ -16,7 +17,7 @@
     transition: .4s;
 
     .main{
-      position:relative;    
+      position:relative; 
       top: $topbar-height;
       width: 100%;
       min-height: 1700px;
@@ -41,11 +42,19 @@
 
   @include desktop{
 
-    width:calc(100% - $sidebar-width);
+    // width:calc(100% - $sidebar-width);
+
 
     .main-wrapper{
-      left : $sidebar-width;
-      transition: 0s;
+      position:relative;
+      left:$sidebar-width;
+      right:0;
+      width: calc(100% - $sidebar-width);
+
+      .content{
+        position:relative;
+        width:calc(100% - $sidebar-width);
+      }
     }
   }
 }

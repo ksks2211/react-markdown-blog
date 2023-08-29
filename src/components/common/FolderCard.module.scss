@@ -1,5 +1,5 @@
-@import '../../assets/styles/variables';
 @import '../../assets/styles/mixins';
+@import '../../assets/styles/variables';
 
 $directory-card-text-color : #837c7c;
 $directory-title-color : #6189be;
@@ -72,7 +72,7 @@ $directory-title-color : #6189be;
     &.closed  ~ .row {
       max-height: 0; 
       opacity: 0;
-      overflow: hidden;
+      // overflow: hidden;
       border:0;
     }
 
@@ -114,8 +114,8 @@ $directory-title-color : #6189be;
   }
 
 
-  @include desktop{
-    width:auto;
-  }
+
+
+
   
 }
