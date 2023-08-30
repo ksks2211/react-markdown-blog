@@ -1,15 +1,11 @@
 {
   "maps": {
     "directories": {
-      "united-states": {
+      "north-america": {
         "directories": {},
         "files" : 1
-      },
-			"canada": {
-        "directories": {},
-        "files": 0
       }
     },		
-    "files": 0
+    "files": 1
   }
 }

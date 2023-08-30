@@ -15,12 +15,12 @@ import useGlobal from "../../hooks/useGlobal";
 import { SelectedMenu } from "../../constants";
 const cx = cn.bind(styles);
 
-interface Directory {
+export interface Directory {
   directories: { [key: string]: Directory };
   files: number;
 }
 
-interface RootDirectory {
+export interface RootDirectory {
   [key: string]: Directory;
 }
 

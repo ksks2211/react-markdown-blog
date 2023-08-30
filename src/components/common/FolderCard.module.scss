@@ -33,38 +33,68 @@ $directory-title-color : #6189be;
     line-height: 2.2rem;
     width:100%;
     position:relative;
-    cursor: pointer;
 
 
     & > .icon{
       color: $directory-card-text-color;
       font-size: 1.1rem;
       transform: translateY(.15rem);
+      // pointer-events: none;
+
     }
 
-    &.root{
+    &.marked{
       background-color: rgba(0,0,0,.075);
     }
 
-    &.closed > .icon.open{
+    &.closed > .icon.open-folder{
       display: none;
-      pointer-events: none;
     }
 
-    &:not(.closed) > .icon.closed{
+    &:not(.closed) > .icon.closed-folder{
       display: none;
-      pointer-events: none;
     }
 
 
+    position:relative;
     & > .dirname{
+
+      position: absolute;
+      top:0;
+      bottom:0;
+      margin:auto;
+
       color:darken($directory-title-color ,20%);
-      font-size: 1.1rem;
-      font-weight: 500;
-      padding : .4rem;
+      font-size: 1rem;
+      font-weight: 400;
+      padding-left : .4rem;
+      max-width: 50%;
+      overflow-x: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      &:hover, &.bold{
+        font-weight: 600;
+      }
+
+      &:hover{
+        max-width: 100%;
+        z-index: 100;
+      }
+
+      
     }
 
     &  > .details{
+
+
+      position: absolute;
+      right:3.5rem;
+      top:0;
+      bottom:0;
+      margin:auto;
+
+
       font-size: .8rem;
       color: #837c7c;
     }
@@ -86,7 +116,9 @@ $directory-title-color : #6189be;
       display: flex;
       align-items: center;
       justify-content: center;
-      pointer-events: none;
+      // pointer-events: none;
+      cursor: pointer;
+
     }
 
     &:hover > .dropdown > .dropdown-icon{
@@ -95,7 +127,7 @@ $directory-title-color : #6189be;
     }
 
     & > .dropdown > .dropdown-icon{
-      pointer-events: none;
+      // pointer-events: none;
       z-index: 10;
       transform: rotate(0deg);
       font-size: 1.7rem;

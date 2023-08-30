@@ -22,6 +22,7 @@ function App() {
             <Route path="/categories" element={<Categories />} />
             <Route path="/data" element={<Data />} />
             <Route path="/maps" element={<Maps />} />
+            <Route path="/maps/*" element={<Maps />} />
             <Route path="/log-in" element={<LogIn />} />
           </Routes>
         </GlobalProvider>
