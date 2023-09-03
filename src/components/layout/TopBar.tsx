@@ -4,7 +4,6 @@ import styles from "./TopBar.module.scss";
 import cn from "classnames/bind";
 import HamburgerButton from "../common/HamburgerButton";
 import { capitalizeFirst } from "../../helpers/stringUtils";
-import useGlobal from "../../hooks/useGlobal";
 
 const cx = cn.bind(styles);
 
@@ -12,16 +11,14 @@ interface TopBarProps extends ComponentPropsWithoutRef<"header"> {
   active: boolean;
   isTablet: boolean;
   toggle: () => void;
+  title: string;
 }
 
-const TopBar: React.FC<TopBarProps> = ({ active, isTablet, toggle }) => {
-  const { selectedMenu } = useGlobal();
+const TopBar: React.FC<TopBarProps> = ({ active, isTablet, toggle, title }) => {
   return (
     <header className={cx("TopBar", { active })}>
       {isTablet && <HamburgerButton active={active} onClick={toggle} />}
-      <span className={cx("title", { active })}>
-        {capitalizeFirst(selectedMenu)}
-      </span>
+      <span className={cx("title", { active })}>{capitalizeFirst(title)}</span>
       <span className={cx("search")}>
         <MdOutlineSearch className={cx("search--icon")} />
       </span>

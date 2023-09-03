@@ -9,7 +9,7 @@ $topbar-text-color : #837c7c;
 .TopBar {
   display: flex;
   align-items: center;
-  position:fixed;
+  position:fixed; 
   color:$topbar-text-color;
   
   left:0;
@@ -65,4 +65,6 @@ $topbar-text-color : #837c7c;
       left : $sidebar-width;
     }
   }
+
+
 }

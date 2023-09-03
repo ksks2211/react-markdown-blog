@@ -19,7 +19,7 @@ $directory-title-color : #6189be;
   color: darken($directory-card-text-color,20%);
 
 
-  .row{
+  .row-container{
     max-height: 1500px;
     transition: .4s;
 
@@ -99,7 +99,7 @@ $directory-title-color : #6189be;
       color: #837c7c;
     }
 
-    &.closed  ~ .row {
+    &.closed  ~ .row-container {
       max-height: 0; 
       opacity: 0;
       // overflow: hidden;
@@ -141,7 +141,7 @@ $directory-title-color : #6189be;
 
 
   }
-  .row > .row{
+  .row-container > .row-container{
     border-top: 1px solid rgba(0,0,0,.125);
   }
 

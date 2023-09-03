@@ -9,25 +9,30 @@ import Categories from "./pages/Categories";
 import Data from "./pages/Data";
 import Maps from "./pages/Maps";
 import ErrorFallback from "./errors/ErrorFallback";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <BrowserRouter>
-        <GlobalProvider>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/posts" element={<Posts />}></Route>
-            <Route path="/categories" element={<Categories />} />
-            <Route path="/data" element={<Data />} />
-            <Route path="/maps" element={<Maps />} />
-            <Route path="/maps/*" element={<Maps />} />
-            <Route path="/log-in" element={<LogIn />} />
-          </Routes>
-        </GlobalProvider>
-      </BrowserRouter>
-    </ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <BrowserRouter>
+          <GlobalProvider>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/posts" element={<Posts />}></Route>
+              <Route path="/categories" element={<Categories />} />
+              <Route path="/data" element={<Data />} />
+              <Route path="/maps" element={<Maps />} />
+              <Route path="/maps/*" element={<Maps />} />
+              <Route path="/log-in" element={<LogIn />} />
+            </Routes>
+          </GlobalProvider>
+        </BrowserRouter>
+      </ErrorBoundary>
+    </QueryClientProvider>
   );
 }
 

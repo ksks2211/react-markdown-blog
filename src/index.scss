@@ -11,20 +11,20 @@ html{
 *{
   margin:0;
   box-sizing: border-box;
-  &::-webkit-scrollbar{
-    // display: none;
-    transition: opacity 0.5s;
-    width: 6px; /* Width of the vertical scrollbar */
-  }
+  // &::-webkit-scrollbar{
+  //   // display: none;
+  //   transition: opacity 0.5s;
+  //   width: 4px; /* Width of the vertical scrollbar */
+  // }
 
-  &::-webkit-scrollbar-thumb{    
-    background-color: transparent; /* Color of the scroll thumb */
-    border-radius: 3px; /* Rounded corners on the thumb */
-  }
+  // &::-webkit-scrollbar-thumb{    
+  //   background-color: transparent; /* Color of the scroll thumb */
+  //   border-radius: 2px; /* Rounded corners on the thumb */
+  // }
 
-  &::-webkit-scrollbar-thumb:hover{
-    background-color: #939393;/* Rounded corners on the thumb */
-  }
+  // &::-webkit-scrollbar-thumb:hover{
+  //   background-color: #939393;/* Rounded corners on the thumb */
+  // }
 }
 
 a {

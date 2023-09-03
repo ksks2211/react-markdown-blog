@@ -57,7 +57,7 @@ const DirectoryRow: React.FC<DirectoryRowProps> = ({
   };
 
   return (
-    <div className={cx("row")}>
+    <div className={cx("row-container")}>
       <div
         className={cx("row-wrapper", { closed, marked })}
         ref={rowRef}
@@ -99,7 +99,7 @@ const DirectoryRow: React.FC<DirectoryRowProps> = ({
         const fileFullName = `${fullDirname}/${index + 1}`;
 
         return (
-          <div key={fileFullName} className={cx("row")}>
+          <div key={fileFullName} className={cx("row-container")}>
             <div className={cx("row-wrapper")}>
               <div
                 style={{
@@ -131,17 +131,17 @@ interface NestedDirProps extends ComponentPropsWithoutRef<"div"> {
   directory: Directory;
   depth: number;
   fileList?: FileList | undefined;
-  parentDirname?: string;
+  parentDirname: string;
   closed?: boolean;
 }
 
 const NestedDir: React.FC<NestedDirProps> = ({
-  parentDirname = "",
+  parentDirname,
   dirname,
   directory,
   depth,
   fileList,
-  closed = true,
+  closed = false,
 }) => {
   const directories = directory.directories;
 
@@ -164,7 +164,7 @@ const NestedDir: React.FC<NestedDirProps> = ({
     >
       {Object.keys(directories).map((dir) => (
         <NestedDir
-          closed={closed}
+          // closed={closed}
           parentDirname={fullDirname}
           depth={depth + 1}
           key={`${fullDirname}/${dir}`}
@@ -181,18 +181,21 @@ interface DirectoryCardProps {
   rootDir: RootDirectory;
   fileList: FileList;
   closed?: boolean;
+  parentDirname?: string;
 }
 
 const DirectoryCard = ({
   rootDir,
   fileList,
   closed = true,
+  parentDirname = "",
 }: DirectoryCardProps) => {
   return (
     <div className={cx("DirectoryCard")}>
       {Object.keys(rootDir).map((dirname) => {
         return (
           <NestedDir
+            parentDirname={parentDirname}
             fileList={fileList}
             closed={closed}
             depth={1}

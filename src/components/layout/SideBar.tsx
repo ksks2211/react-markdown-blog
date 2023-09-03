@@ -60,11 +60,7 @@ const SideBar: React.FC<SideBarProps> = ({ active, menu }) => {
     <aside className={cx("SideBar", { active })}>
       <div className={cx("profile")}>
         <div className={cx("avatar")}>
-          <Link
-            className={cx("link")}
-            to="/"
-            onClick={() => changeMenu("HOME")}
-          >
+          <Link className={cx("link")} to="/">
             <img src={profileUrl} alt="profile" />
           </Link>
         </div>

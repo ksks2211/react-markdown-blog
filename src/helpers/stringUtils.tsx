@@ -6,3 +6,8 @@ export function removeDash(str: string) {
   const words = str.split("-");
   return words.map((word) => capitalizeFirst(word)).join(" ");
 }
+
+export function canBeParsedToInt(str: string) {
+  const num = parseInt(str, 10);
+  return !isNaN(num) && num.toString() === str;
+}
