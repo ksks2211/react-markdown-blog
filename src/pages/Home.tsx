@@ -15,7 +15,7 @@ const Home: React.FC<HomeProps> = () => {
   return (
     <p>
       This is home -- Selected Menu
-      <Link to="/log-in">Log In</Link>
+      <Link to="/login">Log In</Link>
     </p>
   );
 };

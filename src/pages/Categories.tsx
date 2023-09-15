@@ -5,10 +5,10 @@ import useGlobal from "../hooks/useGlobal";
 
 const Categories: React.FC = () => {
   const { changeMenu } = useGlobal();
-
   useEffect(() => {
     changeMenu("CATEGORIES");
   }, [changeMenu]);
+
   return (
     <div>
       <DirectoryCard />

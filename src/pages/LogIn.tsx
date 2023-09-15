@@ -5,24 +5,36 @@ import styles from "./Login.module.scss";
 import cn from "classnames/bind";
 import { AiFillLock } from "react-icons/ai";
 import { BiSolidUser } from "react-icons/bi";
-
+import useToken from "../hooks/useToken";
+// import useRefresh from "../hooks/useRefresh";
 const cx = cn.bind(styles);
 
 export default function LogIn() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  // const [tryRefresh, setTryRefresh] = useState(false);
 
-  const submitForm = (e: FormEvent<HTMLFormElement>) => {
+  const mutationToken = useToken(username, password);
+  // const mutationRefresh = useRefresh();
+
+  // try refresh
+  // useEffect(() => {
+  //   if (!tryRefresh) {
+  //     (async function () {
+  //       await mutationRefresh.mutateAsync();
+  //     })();
+  //   }
+  //   setTryRefresh(true);
+  // }, [mutationRefresh, tryRefresh]);
+
+  const submitForm = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    console.log(username);
-    console.log(password);
+    await mutationToken.mutateAsync();
   };
 
   return (
     <>
       <TopFullBar title="Log In" />
-
       <div className={cx("LoginForm")}>
         <div className={cx("login-card")}>
           <form onSubmit={submitForm}>

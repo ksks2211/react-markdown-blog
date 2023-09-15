@@ -1,10 +1,7 @@
 import axios from "axios";
+import blogApi from "./auth";
 
 import type { FeatureCollection } from "geojson";
-
-function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 export const fetchGeoJson = async () => {
   const response = await axios.get(
@@ -14,6 +11,29 @@ export const fetchGeoJson = async () => {
   return data as FeatureCollection;
 };
 
+interface LoginForm {
+  username: string;
+  password: string;
+}
+
+export const getToken = async (loginForm: LoginForm) => {
+  const response = await blogApi.post("/log-in", loginForm);
+  return response.data;
+};
+
+export const getPostById = async (postId: number) => {
+  const { data } = await blogApi.get(`/posts/${postId}`);
+  return data;
+};
+
+export const getPosts = async (page: number) => {
+  const query = new URLSearchParams();
+  query.set("page", `${page}`);
+  const { data } = await blogApi.get(`/posts?${query.toString()}`);
+  return data;
+};
+
+// SAMPLE
 export interface Todo {
   id: number;
   title: string;
@@ -34,7 +54,6 @@ const globalTodos: Todos = {
   ],
 };
 export const fetchTodos = async (query = "") => {
-  await sleep(3000);
   //const response = await axios.get("/todos.json");
   //const { data } = response;
   console.log(query);
