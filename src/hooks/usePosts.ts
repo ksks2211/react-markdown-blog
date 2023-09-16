@@ -1,18 +1,24 @@
-import { toInteger } from "lodash";
-import { useQuery } from "react-query";
-import { Post } from "./usePost";
+import toInteger from "lodash-es/toInteger";
+import { useQuery, useQueryClient } from "react-query";
 import { getPosts } from "../api";
-
-type PostPreview = Pick<
-  Post,
-  "id" | "title" | "createdAt" | "updatedAt" | "writer"
->;
-
-interface Posts {
-  totalPages: number;
-  postList: PostPreview[];
-}
+import { Posts } from "../types/post.types";
+import unionBy from "lodash-es/unionBy";
 
 export default function usePosts(page = 1) {
-  return useQuery<Posts, Error>("posts", () => getPosts(toInteger(page)));
+  const queryClient = useQueryClient();
+
+  return useQuery<Posts, Error>("posts", () => getPosts(toInteger(page)), {
+    onSuccess: (newData) => {
+      const prevData = queryClient.getQueryData<Posts>("posts");
+      if (!prevData) return newData;
+
+      const totalPages = newData.totalPages;
+      const mergedPosts = unionBy(newData.postList, prevData.postList, "id");
+
+      return {
+        totalPages,
+        postList: mergedPosts,
+      };
+    },
+  });
 }

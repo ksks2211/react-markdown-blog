@@ -5,7 +5,7 @@ import type { FeatureCollection } from "geojson";
 import type { FillLayer, LineLayer, MapLayerMouseEvent } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { CSSProperties, useState } from "react";
-import { throttle } from "lodash";
+import throttle from "lodash-es/throttle";
 
 interface HoverInfo {
   title: string;

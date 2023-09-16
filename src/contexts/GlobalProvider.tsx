@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { SelectedMenu } from "./constants";
+import { SelectedMenu } from "../constants";
 import GlobalContext from "./GlobalContext";
-import { isValidToken, removeTokenFromBrowser } from "./api/auth";
+import { isValidToken, removeTokenFromBrowser } from "../api/auth";
 
 interface GlobalProviderProps {
   children: React.ReactNode;

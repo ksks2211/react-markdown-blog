@@ -1,17 +1,7 @@
-import { toInteger } from "lodash";
+import toInteger from "lodash-es/toInteger";
 import { useQuery } from "react-query";
 import { getPostById } from "../api";
-
-export interface Post {
-  id: number;
-  title: string;
-  content: string;
-  writer: string;
-  tags: string[];
-  createdAt: string;
-  updatedAt: string;
-  category: string;
-}
+import { Post } from "../types/post.types";
 
 export default function usePost(postId: number | string) {
   const pid = toInteger(postId);

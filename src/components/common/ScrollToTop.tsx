@@ -3,7 +3,7 @@ import styles from "./ScrollToTop.module.scss";
 import { FaArrowCircleUp } from "react-icons/fa";
 import { gsap } from "gsap";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
-import { throttle } from "lodash";
+import throttle from "lodash-es/throttle";
 
 gsap.registerPlugin(ScrollToPlugin);
 

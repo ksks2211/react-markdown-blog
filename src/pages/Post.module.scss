@@ -1,0 +1,61 @@
+
+$btn-color :  #53a8b6; 
+
+.Post{
+
+  margin-bottom: 3rem;
+  
+  .back-btn{
+
+   
+    .back-icon{
+      border-radius: .2rem;
+      color:#fff;
+      font-size:1.6rem;
+      background-color: $btn-color;      
+      cursor:pointer; 
+      transition: .2s ease-out;  
+      transform: translateY(-.5rem) scale(1.2);
+
+      &:hover{
+        background-color: lighten($btn-color,15%);
+        transform: translateX(-.15rem) translateY(-.5rem) scale(1.3);
+      }
+
+    }
+  }
+
+  .post-metadata{
+
+    padding:1rem 0 2rem;
+
+    .title{
+      font-size:1.8rem;
+      font-weight: 600;
+      margin-bottom:1.2rem;
+    }
+
+    .meta{
+      font-size: .75rem;
+      label{
+        color:rgba(100,100,100,.7);
+        margin-right:.3rem;      
+      }
+      margin-top:.6rem;
+    }
+
+    time{
+      &::after{
+        content: '•';  
+        margin-left: 5px;
+        margin-right: 5px; 
+      }
+      &:last-child::after{
+        content: '';
+      }
+    }
+
+
+  }
+
+}

@@ -9,14 +9,16 @@ import useGlobal from "../../hooks/useGlobal";
 
 import { MENU } from "../../constants";
 import ScrollToTop from "./../common/ScrollToTop";
+import Footer from "../common/Footer";
 
 const cx = cn.bind(styles);
 
 interface LayoutProps extends ComponentPropsWithoutRef<"div"> {}
 
 const Layout: React.FC<LayoutProps> = ({ children, ...rest }) => {
-  const [active, setActive] = useState(true);
-  const { isTabletOrMobile: isTablet } = useDeviceDetect();
+  const { isTabletOrMobile } = useDeviceDetect();
+
+  const [active, setActive] = useState(isTabletOrMobile ? false : true);
   const { selectedMenu } = useGlobal();
 
   const toggle = () => {
@@ -24,33 +26,41 @@ const Layout: React.FC<LayoutProps> = ({ children, ...rest }) => {
   };
 
   const closeToggle = () => {
-    if (isTablet && active) {
+    if (isTabletOrMobile && active) {
       setActive(false);
     }
   };
 
   useEffect(() => {
-    if (isTablet) {
+    if (isTabletOrMobile) {
       setActive(false);
     } else {
       setActive(true);
     }
-  }, [isTablet]);
+  }, [isTabletOrMobile]);
 
   return (
     <div {...rest} className={cx("Layout")}>
-      <SideBar active={active} isTablet={isTablet} menu={MENU}></SideBar>
+      <SideBar
+        active={active}
+        isTablet={isTabletOrMobile}
+        menu={MENU}
+      ></SideBar>
       <div className={cx("main-wrapper", { active })} onClick={closeToggle}>
         <TopBar
           active={active}
-          isTablet={isTablet}
+          isTablet={isTabletOrMobile}
           toggle={toggle}
           title={selectedMenu}
         ></TopBar>
         <main className={cx("main")}>
           <div className={cx("content")}>{children}</div>
+
+          <div className={cx("footer-wrapper")}>
+            <Footer>© 2023 MyBlog. All rights reserved.</Footer>
+          </div>
+
           <ScrollToTop />
-          <footer>Footer</footer>
         </main>
       </div>
     </div>

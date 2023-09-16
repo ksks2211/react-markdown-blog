@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import { NotFoundError, UnauthorizedError } from ".";
 
 interface FallbackProps {
@@ -9,6 +10,11 @@ const ErrorFallback = ({ error }: FallbackProps) => {
 
   if (error instanceof NotFoundError) {
     cause = "Not Found Error";
+  }
+
+  if (error instanceof AxiosError) {
+    // error.status
+    cause = "Axios Error";
   }
 
   if (error instanceof UnauthorizedError) {

@@ -151,8 +151,9 @@ $letter-color : #868585;
     }
   }
 
+
+  
   @include mobile-and-tablet {
     transition: .4s;
   }
-
 }

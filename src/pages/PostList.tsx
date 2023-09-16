@@ -3,8 +3,9 @@ import withLayout from "../hoc/withLayout";
 import useGlobal from "../hooks/useGlobal";
 import usePosts from "../hooks/usePosts";
 import useSearchParams from "../hooks/useSearchParams";
-import { toInteger } from "lodash";
-import { Link } from "react-router-dom";
+import toInteger from "lodash-es/toInteger";
+import { formatDateFromNow } from "../helpers/dateUtils";
+import PostCard from "../components/common/PostCard";
 
 // ?page=1
 const PostList: React.FC = () => {
@@ -19,23 +20,26 @@ const PostList: React.FC = () => {
   const { data, isLoading, error } = usePosts(toInteger(page));
 
   if (isLoading) return <div>Loading...</div>;
-  if (error || data === undefined) return <div>Error : {error?.message}</div>;
+  if (error || data === undefined) {
+    if (error) throw error;
+    else throw new Error(`Failed To Get Posts Page ${page}`);
+  }
 
-  const { totalPages, postList } = data;
+  const { postList } = data;
 
   return (
     <div>
-      Total Pages : {totalPages}
+      {/* Total Pages : {totalPages} */}
       <div>
         {postList.map((post) => (
-          <div key={post.id}>
-            Title : {post.title}
-            Created At : {post.createdAt}
-            Updated At : {post.updatedAt}
-            Writer : {post.writer}
-            Id : {post.id}
-            Link : <Link to={`/posts/${post.id}`}>Link</Link>
-          </div>
+          <PostCard
+            key={post.id}
+            id={post.id}
+            title={post.title}
+            description={post.description}
+            postedBy={post.writer}
+            createdAtFromNow={formatDateFromNow(post.createdAt)}
+          />
         ))}
       </div>
     </div>

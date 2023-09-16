@@ -1,0 +1,21 @@
+.Markdown{
+  ul{
+    li{
+      list-style-type: disc;
+    }
+  }
+  ol{
+    li{
+      list-style-type: decimal;
+    }
+  }
+
+  & > pre{
+    padding:.4rem !important;
+    background-color: transparent !important;
+    pre{
+      border-radius: .4rem !important;
+      font-size: .9rem;
+    }
+  }
+}

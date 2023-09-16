@@ -1,12 +1,14 @@
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
+import { UnauthorizedError } from "../errors";
 
 interface JWT {
   exp: number;
 }
 
-export const TOKEN_KEY = "jwt_token";
+const TOKEN_KEY = "jwt_token";
+
+const API_ADDR = import.meta.env.VITE_API_ADDR as string;
 
 export const setTokenToBrowser = (token: string) => {
   localStorage.setItem(TOKEN_KEY, token);
@@ -42,33 +44,30 @@ export const isValidToken = () => {
   return false;
 };
 
-axios.interceptors.response.use(
+const blogApi = axios.create({
+  baseURL: API_ADDR,
+});
+
+blogApi.interceptors.response.use(
   (response) => {
     return response;
   },
   (error) => {
     console.log("Error");
-    const navigate = useNavigate();
-
     if (error.response && error.response.status === 401) {
       // Handle unauthorized error
       removeTokenFromBrowser();
-      navigate("/login");
     }
-    return Promise.reject(error);
+    return Promise.reject(new UnauthorizedError(error));
   }
 );
 
-export const blogApi = axios.create({
-  baseURL: "http://localhost:8080",
-});
-
-blogApi.interceptors.request.use((config) => {
-  const token = getTokenFromBrowser();
-  if (token) {
-    config.headers["Authorization"] = `Bearer ${token}`;
+blogApi.interceptors.request.use((request) => {
+  if (isValidToken()) {
+    const token = getTokenFromBrowser();
+    request.headers["Authorization"] = `Bearer ${token}`;
   }
-  return config;
+  return request;
 });
 
 export default blogApi;
