@@ -33,6 +33,21 @@ export const getPosts = async (page: number) => {
   return data;
 };
 
+export const getPrevAndNextPosts = async (postId: number) => {
+  const query = new URLSearchParams();
+  query.set("postId", `${postId}`);
+  const { data } = await blogApi.get(
+    `/posts/prev-and-next?${query.toString()}`
+  );
+  return data;
+};
+
+export const getCategories = async () => {
+  const { data } = await blogApi.get("/categories");
+  console.log(data);
+  return data;
+};
+
 // SAMPLE
 export interface Todo {
   id: number;

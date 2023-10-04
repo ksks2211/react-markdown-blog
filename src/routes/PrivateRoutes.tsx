@@ -1,10 +1,11 @@
 import { Route, Routes } from "react-router-dom";
 import Home from "../pages/Home";
 import Posts from "../pages/PostList";
-import Categories from "../pages/Categories";
+import Categories from "../pages/CategoriesPage";
 import Data from "../pages/Data";
 import Maps from "../pages/Maps";
 import Post from "../pages/Post";
+
 const PrivateRoutes: React.FC = () => {
   return (
     <Routes>

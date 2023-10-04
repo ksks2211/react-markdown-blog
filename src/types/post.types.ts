@@ -19,3 +19,22 @@ export interface Posts {
   totalPages: number;
   postList: PostPreview[];
 }
+
+type PostPreviewExistence =
+  | { next: PostPreview; hasNext: true }
+  | { next?: never; hasNext: false };
+type PostPrevExistence =
+  | { prev: PostPreview; hasPrev: true }
+  | { prev?: never; hasPrev: false };
+
+export type PrevAndNextPosts = PostPreviewExistence & PostPrevExistence;
+
+export interface SubCategory {
+  subCategories: { [key: string]: SubCategory };
+  numOfPosts: number;
+  numOfAllPosts: number;
+}
+
+export interface Categories {
+  [key: string]: SubCategory;
+}

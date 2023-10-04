@@ -1,5 +1,6 @@
 import { AxiosError } from "axios";
 import { NotFoundError, UnauthorizedError } from ".";
+import { Link } from "react-router-dom";
 
 interface FallbackProps {
   error: Error;
@@ -27,6 +28,7 @@ const ErrorFallback = ({ error }: FallbackProps) => {
     <div role="alert">
       <p>Something went wrong:{cause}</p>
       <pre>{error.message}</pre>
+      <Link to="/login">Go Back to Log In</Link>
     </div>
   );
 };

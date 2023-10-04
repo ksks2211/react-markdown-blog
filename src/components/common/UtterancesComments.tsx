@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-
+import "./UtterencesComments.scss";
 const UtterancesComments = () => {
   const ref = useRef<HTMLInputElement>(null);
 
@@ -23,7 +23,7 @@ const UtterancesComments = () => {
       if (ref.current?.childNodes.length === 0) {
         ref.current?.append(script);
       }
-    }, 500);
+    }, 300);
   }, []);
 
   return <div ref={ref} />;

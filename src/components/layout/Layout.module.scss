@@ -76,6 +76,12 @@
       left: $sidebar-width;
       right: 0;
       width: calc(100% - $sidebar-width);
+
+      .main{
+        .content {
+          padding: 3rem 3rem;
+        }
+      }
       .content {
         position: relative;
         width: calc(100% - $sidebar-width);

@@ -4,7 +4,7 @@ export function capitalizeFirst(str: string) {
 
 export function removeDash(str: string) {
   const words = str.split("-");
-  return words.map((word) => capitalizeFirst(word)).join(" ");
+  return words.join(" ");
 }
 
 export function canBeParsedToInt(str: string) {
