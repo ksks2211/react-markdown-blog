@@ -16,6 +16,13 @@ const Home: React.FC<HomeProps> = () => {
     <p>
       This is home -- Selected Menu
       <Link to="/login">Log In</Link>
+      {/* <TextInputModal
+        prompt={"what is it?"}
+        open={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        label={"Hello World"}
+      /> */}
     </p>
   );
 };

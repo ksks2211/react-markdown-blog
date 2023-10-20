@@ -11,3 +11,7 @@ export function canBeParsedToInt(str: string) {
   const num = parseInt(str, 10);
   return !isNaN(num) && num.toString() === str;
 }
+
+export function convertSlashesToDashes(str: string) {
+  return str.slice(1).split("/").join("-");
+}

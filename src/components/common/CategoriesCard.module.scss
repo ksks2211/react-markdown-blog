@@ -30,18 +30,17 @@ $directory-title-color : #6189be;
   .row-wrapper {
     max-height: 5555px;
     transition: .4s;
-    line-height: 3rem;
+    // line-height: 3rem;
     width: 100%;
     position: relative;
+
+    display: flex;
+    align-items: center;
+    height:3rem;
     
-
-
-
-
     &.marked {
       background-color: rgba(0, 0, 0, .075);
     }
-
 
     &.closed .icon.open-folder {
       display: none;
@@ -53,13 +52,14 @@ $directory-title-color : #6189be;
 
 
     &>.category-details{
-      display: inline-flex;            
+      display:flex;
       align-items: center;
-
       .icon {
         color: $directory-card-text-color;
         font-size: 1.3rem;
       }
+
+      
 
 
       &>.count{
@@ -86,19 +86,22 @@ $directory-title-color : #6189be;
         font-size: 1.1rem;
         font-weight: 400;
         padding-left: .56rem;
+        padding-right:1.2rem;
         overflow-x: hidden;
-        text-overflow: ellipsis;
+        text-overflow: ellipsis;        
+        overflow:hidden;
         white-space: nowrap;
 
         &:hover,
         &.bold {
-          font-weight: 600;
+          transform: scale(1.2);
+          color: darken($directory-title-color, 40%);
         }
 
-        &:hover {
-          max-width: 100%;
-          z-index: 100;
-        }
+        // &:hover {
+        //   max-width: 100%;
+        //   z-index: 100;
+        // }
 
         &.disabled{
           pointer-events: none;
@@ -106,6 +109,20 @@ $directory-title-color : #6189be;
 
       }
 
+
+
+      .icon-sm{
+        font-size: 1.2rem;
+        cursor:pointer;
+        &:hover{
+          color:darken($directory-card-text-color,15%);
+        }
+      }
+      .add-icon{
+      }
+
+      .delete-icon{
+      }
 
     }
 
@@ -116,9 +133,8 @@ $directory-title-color : #6189be;
     &>.details {
       position: absolute;
       right: 3.5rem;
-      top: 0;
-      bottom: 0;
-      margin: auto;
+      display: flex;
+      align-items: center;
       font-size: .8rem;
       color: #837c7c;
     }

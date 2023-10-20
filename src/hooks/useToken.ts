@@ -1,30 +1,24 @@
 import { removeTokenFromBrowser, setTokenToBrowser } from "../api/auth";
 import { useMutation } from "react-query";
-import blogApi from "../api/auth";
 import useGlobal from "./useGlobal";
+import { getTokenFromServer } from "../api";
 
+interface LoginData {
+  username: string;
+  password: string;
+}
 export interface Token {
   statusCode: number;
   message: string;
   token: string;
 }
 
-const getTokenFromServer = async (username: string, password: string) => {
-  const res = await blogApi.post(
-    "/auth/log-in",
-    { username, password }
-    // { withCredentials: true }
-  );
-
-  console.log(res.headers);
-  return res.data;
-};
-
-export default function useToken(username: string, password: string) {
+export default function useToken() {
   const { setIsLoggedIn } = useGlobal();
 
-  return useMutation<Token, Error>({
-    mutationFn: () => getTokenFromServer(username, password),
+  return useMutation<Token, Error, LoginData, unknown>({
+    mutationFn: ({ username, password }) =>
+      getTokenFromServer(username, password),
     onSuccess: (data) => {
       const token = data.token;
       setTokenToBrowser(token);

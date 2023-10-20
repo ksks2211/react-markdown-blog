@@ -1,13 +1,23 @@
-import { ComponentPropsWithRef, ComponentPropsWithoutRef, useRef } from "react";
+import useDeleteCategory from "../../hooks/useDeleteCategory";
+import {
+  ComponentPropsWithRef,
+  ComponentPropsWithoutRef,
+  useRef,
+  useState,
+} from "react";
 import { FaRegFolder, FaRegFolderOpen } from "react-icons/fa";
+import { AiFillPlusCircle } from "react-icons/ai";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { MdDelete } from "react-icons/md";
 
 import styles from "./CategoriesCard.module.scss";
 import cn from "classnames/bind";
+
 import { Link } from "react-router-dom";
-import { removeDash } from "../../helpers/stringUtils";
+import { convertSlashesToDashes, removeDash } from "../../helpers/stringUtils";
 import { Categories, SubCategory } from "../../types/post.types";
+import TextInputModal from "./TextInputModal";
+import useCreateCategory from "../../hooks/useCreateCategory";
 
 const cx = cn.bind(styles);
 
@@ -34,6 +44,20 @@ const CategoryRow: React.FC<CategoryRowProps> = ({
 }) => {
   const fullCategoryName = `${parentCategoryName}/${categoryName}`;
 
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+  const categoryId = convertSlashesToDashes(fullCategoryName);
+  const deleteCategoryMutation = useDeleteCategory(categoryId);
+  const createCategoryMutation = useCreateCategory();
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
   const canToggle = numOfCategories !== 0;
   const marked = depth === 1;
   // Link disabled
@@ -48,58 +72,89 @@ const CategoryRow: React.FC<CategoryRowProps> = ({
 
   const rowRef = useRef<HTMLDivElement>(null);
 
-  const onClick = () => {
+  const toggleCategory = () => {
     rowRef.current?.classList.toggle(cx("closed"));
-    const fullName = rowRef.current?.dataset.fullName;
-    console.log(fullName);
+    // const fullName = rowRef.current?.dataset.fullName;
+    // console.log(fullName);
+  };
+
+  const removeCategory = async () => {
+    await deleteCategoryMutation.mutateAsync();
   };
 
   return (
-    <div className={cx("row-container")}>
-      <div
-        className={cx("row-wrapper", { closed, marked })}
-        ref={rowRef}
-        data-full-name={fullCategoryName}
-        // onClick={(e) => {
-        //   e.preventDefault();
-        //   e.stopPropagation();
-        // }}
-      >
+    <>
+      <div className={cx("row-container")}>
         <div
-          style={{
-            display: "inline-flex",
-            width: `${depth}rem`,
-            height: "100%",
-          }}
-        />
+          className={cx("row-wrapper", { closed, marked })}
+          ref={rowRef}
+          // data-full-name={fullCategoryName}
+          // onClick={(e) => {
+          //   e.preventDefault();
+          //   e.stopPropagation();
+          // }}
+        >
+          <div
+            style={{
+              display: "inline-flex",
+              width: `${depth}rem`,
+              height: "100%",
+            }}
+          />
 
-        <div className={cx("category-details")}>
-          {<FaRegFolderOpen className={cx("icon", "open-folder")} />}
-          {<FaRegFolder className={cx("icon", "closed-folder")} />}
-          {!numOfPosts || <span className={cx("count")}>{numOfPosts}</span>}
+          <div className={cx("category-details")}>
+            {<FaRegFolderOpen className={cx("icon", "open-folder")} />}
+            {<FaRegFolder className={cx("icon", "closed-folder")} />}
+            {!numOfPosts || <span className={cx("count")}>{numOfPosts}</span>}
 
-          <Link
-            className={cx("dirname", { disabled })}
-            to={`/categories${fullCategoryName}`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {removeDash(categoryName)}
-          </Link>
+            <Link
+              className={cx("dirname", { disabled })}
+              to={`/categories/${categoryId}`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {removeDash(categoryName)}
+            </Link>
 
-          {removable && <MdDelete className={cx("icon", "delete-icon")} />}
+            <AiFillPlusCircle
+              className={cx("icon", "icon-sm", "add-icon")}
+              onClick={openModal}
+            />
+
+            {removable && (
+              <MdDelete
+                className={cx("icon", "icon-sm", "delete-icon")}
+                onClick={removeCategory}
+              />
+            )}
+          </div>
+
+          <span className={cx("details")}>{`(${numOfAllPosts})`}</span>
+
+          {canToggle && (
+            <div className={cx("dropdown")} onClick={toggleCategory}>
+              <RiArrowDropDownLine className={cx("dropdown-icon")} />
+            </div>
+          )}
         </div>
 
-        <span className={cx("details")}>{`(${numOfAllPosts})`}</span>
-
-        {canToggle && (
-          <div className={cx("dropdown")} onClick={onClick}>
-            <RiArrowDropDownLine className={cx("dropdown-icon")} />
-          </div>
-        )}
+        {children}
       </div>
-
-      {children}
-    </div>
+      {modalOpen && (
+        <TextInputModal
+          prompt={`Add new category`}
+          open={modalOpen}
+          onClose={closeModal}
+          onSubmit={async (value) => {
+            const newCategory = `/${fullCategoryName
+              .split("/")
+              .slice(2)
+              .join("/")}/${value}`;
+            await createCategoryMutation.mutateAsync(newCategory);
+          }}
+          label={fullCategoryName}
+        />
+      )}
+    </>
   );
 };
 

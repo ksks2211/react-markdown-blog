@@ -11,14 +11,16 @@ export const fetchGeoJson = async () => {
   return data as FeatureCollection;
 };
 
-interface LoginForm {
-  username: string;
-  password: string;
-}
-
-export const getToken = async (loginForm: LoginForm) => {
-  const response = await blogApi.post("/log-in", loginForm);
-  return response.data;
+export const getTokenFromServer = async (
+  username: string,
+  password: string
+) => {
+  const res = await blogApi.post(
+    "/auth/log-in",
+    { username, password }
+    // { withCredentials: true }
+  );
+  return res.data;
 };
 
 export const getPostById = async (postId: number) => {
@@ -46,6 +48,14 @@ export const getCategories = async () => {
   const { data } = await blogApi.get("/categories");
   console.log(data);
   return data;
+};
+
+export const createCategory = async (newCategory: string) => {
+  await blogApi.post("/categories", { category: newCategory });
+};
+
+export const deleteCategory = async (categoryId: string) => {
+  await blogApi.delete(`/categories/${categoryId}`);
 };
 
 // SAMPLE

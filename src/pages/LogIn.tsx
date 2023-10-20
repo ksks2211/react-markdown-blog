@@ -14,7 +14,7 @@ export default function LogIn() {
   const [password, setPassword] = useState("");
   // const [tryRefresh, setTryRefresh] = useState(false);
 
-  const mutationToken = useToken(username, password);
+  const tokenMutation = useToken();
   // const mutationRefresh = useRefresh();
 
   // try refresh
@@ -29,7 +29,7 @@ export default function LogIn() {
 
   const submitForm = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await mutationToken.mutateAsync();
+    await tokenMutation.mutateAsync({ username, password });
   };
 
   return (
