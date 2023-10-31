@@ -113,6 +113,7 @@ $directory-title-color : #6189be;
 
       .icon-sm{
         font-size: 1.2rem;
+        margin-right:.4rem;
         cursor:pointer;
         &:hover{
           color:darken($directory-card-text-color,15%);

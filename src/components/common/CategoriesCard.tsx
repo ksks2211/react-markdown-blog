@@ -1,35 +1,26 @@
 import useDeleteCategory from "../../hooks/useDeleteCategory";
-import {
-  ComponentPropsWithRef,
-  ComponentPropsWithoutRef,
-  useRef,
-  useState,
-} from "react";
+import { useRef, useState } from "react";
 import { FaRegFolder, FaRegFolderOpen } from "react-icons/fa";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { MdDelete } from "react-icons/md";
+import { FaPen } from "react-icons/fa";
 
 import styles from "./CategoriesCard.module.scss";
 import cn from "classnames/bind";
 
 import { Link } from "react-router-dom";
 import { convertSlashesToDashes, removeDash } from "../../helpers/stringUtils";
-import { Categories, SubCategory } from "../../types/post.types";
 import TextInputModal from "./TextInputModal";
 import useCreateCategory from "../../hooks/useCreateCategory";
+import {
+  CategoriesCardProps,
+  CategoryRowProps,
+  NestedCategoryProps,
+} from "./CategoriesCard.types";
+import useChangeCategory from "../../hooks/useChangeCategory";
 
 const cx = cn.bind(styles);
-
-interface CategoryRowProps extends ComponentPropsWithRef<"div"> {
-  categoryName: string;
-  parentCategoryName: string;
-  depth: number;
-  numOfPosts: number;
-  numOfAllPosts: number;
-  numOfCategories: number;
-  closed: boolean;
-}
 
 const CategoryRow: React.FC<CategoryRowProps> = ({
   categoryName,
@@ -44,23 +35,33 @@ const CategoryRow: React.FC<CategoryRowProps> = ({
 }) => {
   const fullCategoryName = `${parentCategoryName}/${categoryName}`;
 
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
+  const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
 
   const categoryId = convertSlashesToDashes(fullCategoryName);
-  const deleteCategoryMutation = useDeleteCategory(categoryId);
+  const deleteCategoryMutation = useDeleteCategory();
   const createCategoryMutation = useCreateCategory();
+  const changeCategoryMutation = useChangeCategory();
 
-  const openModal = () => {
-    setModalOpen(true);
+  const openCreateModal = () => {
+    setCreateModalOpen(true);
   };
 
-  const closeModal = () => {
-    setModalOpen(false);
+  const closeCreateModal = () => {
+    setCreateModalOpen(false);
+  };
+
+  const openUpdateModal = () => {
+    setUpdateModalOpen(true);
+  };
+
+  const closeUpdateModal = () => {
+    setUpdateModalOpen(false);
   };
 
   const canToggle = numOfCategories !== 0;
   const marked = depth === 1;
-  // Link disabled
+  //
   const disabled = numOfPosts === 0;
 
   // Category removable
@@ -79,21 +80,28 @@ const CategoryRow: React.FC<CategoryRowProps> = ({
   };
 
   const removeCategory = async () => {
-    await deleteCategoryMutation.mutateAsync();
+    await deleteCategoryMutation.mutateAsync(categoryId);
+  };
+
+  const submitAdd = async (value: string) => {
+    const categoryArray = fullCategoryName.split("/");
+    categoryArray.splice(1, 1);
+    categoryArray.push(value);
+    const newCategory = categoryArray.join("/");
+    await createCategoryMutation.mutateAsync(newCategory);
+  };
+
+  const submitChange = async (newCategory: string) => {
+    console.log(newCategory);
+    console.log(categoryId);
+
+    await changeCategoryMutation.mutateAsync({ newCategory, categoryId });
   };
 
   return (
     <>
       <div className={cx("row-container")}>
-        <div
-          className={cx("row-wrapper", { closed, marked })}
-          ref={rowRef}
-          // data-full-name={fullCategoryName}
-          // onClick={(e) => {
-          //   e.preventDefault();
-          //   e.stopPropagation();
-          // }}
-        >
+        <div className={cx("row-wrapper", { closed, marked })} ref={rowRef}>
           <div
             style={{
               display: "inline-flex",
@@ -105,7 +113,7 @@ const CategoryRow: React.FC<CategoryRowProps> = ({
           <div className={cx("category-details")}>
             {<FaRegFolderOpen className={cx("icon", "open-folder")} />}
             {<FaRegFolder className={cx("icon", "closed-folder")} />}
-            {!numOfPosts || <span className={cx("count")}>{numOfPosts}</span>}
+            {disabled || <span className={cx("count")}>{numOfPosts}</span>}
 
             <Link
               className={cx("dirname", { disabled })}
@@ -117,8 +125,15 @@ const CategoryRow: React.FC<CategoryRowProps> = ({
 
             <AiFillPlusCircle
               className={cx("icon", "icon-sm", "add-icon")}
-              onClick={openModal}
+              onClick={openCreateModal}
             />
+
+            {!disabled && depth !== 0 && (
+              <FaPen
+                className={cx("icon", "icon-sm", "change-icon")}
+                onClick={openUpdateModal}
+              />
+            )}
 
             {removable && (
               <MdDelete
@@ -139,32 +154,30 @@ const CategoryRow: React.FC<CategoryRowProps> = ({
 
         {children}
       </div>
-      {modalOpen && (
+
+      {createModalOpen && (
         <TextInputModal
           prompt={`Add new category`}
-          open={modalOpen}
-          onClose={closeModal}
-          onSubmit={async (value) => {
-            const newCategory = `/${fullCategoryName
-              .split("/")
-              .slice(2)
-              .join("/")}/${value}`;
-            await createCategoryMutation.mutateAsync(newCategory);
-          }}
+          open={createModalOpen}
+          onClose={closeCreateModal}
+          onSubmit={submitAdd}
           label={fullCategoryName}
+        />
+      )}
+
+      {updateModalOpen && (
+        <TextInputModal
+          prompt={"Change category"}
+          open={updateModalOpen}
+          onClose={closeUpdateModal}
+          onSubmit={submitChange}
+          label={fullCategoryName}
+          placeholder={`/${fullCategoryName.split("/").slice(2).join("/")}`}
         />
       )}
     </>
   );
 };
-
-interface NestedCategoryProps extends ComponentPropsWithoutRef<"div"> {
-  categoryName: string;
-  category: SubCategory;
-  depth: number;
-  parentCategory: string;
-  closed?: boolean;
-}
 
 const NestedCategory: React.FC<NestedCategoryProps> = ({
   parentCategory,
@@ -203,13 +216,6 @@ const NestedCategory: React.FC<NestedCategoryProps> = ({
     </CategoryRow>
   );
 };
-
-interface CategoriesCardProps {
-  // rootDir: RootDirectory;
-  rootCategory: Categories;
-  closed?: boolean;
-  parentCategory?: string;
-}
 
 const CategoriesCard = ({
   rootCategory,

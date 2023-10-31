@@ -2,6 +2,7 @@ import axios from "axios";
 import blogApi from "./auth";
 
 import type { FeatureCollection } from "geojson";
+import { ChangeCategoryForm } from "../types/post.types";
 
 export const fetchGeoJson = async () => {
   const response = await axios.get(
@@ -11,6 +12,7 @@ export const fetchGeoJson = async () => {
   return data as FeatureCollection;
 };
 
+// JWT
 export const getTokenFromServer = async (
   username: string,
   password: string
@@ -23,6 +25,7 @@ export const getTokenFromServer = async (
   return res.data;
 };
 
+// Posts
 export const getPostById = async (postId: number) => {
   const { data } = await blogApi.get(`/posts/${postId}`);
   return data;
@@ -30,7 +33,7 @@ export const getPostById = async (postId: number) => {
 
 export const getPosts = async (page: number) => {
   const query = new URLSearchParams();
-  query.set("page", `${page}`);
+  query.set("page", page.toString());
   const { data } = await blogApi.get(`/posts?${query.toString()}`);
   return data;
 };
@@ -44,6 +47,20 @@ export const getPrevAndNextPosts = async (postId: number) => {
   return data;
 };
 
+// Categories + Posts
+export const getPostsByCategories = async (
+  page: number,
+  categoryId: string
+) => {
+  const query = new URLSearchParams();
+  query.set("page", page.toString());
+  const { data } = await blogApi.get(
+    `/categories/${categoryId}?${query.toString()}`
+  );
+  return data;
+};
+
+// Categories
 export const getCategories = async () => {
   const { data } = await blogApi.get("/categories");
   console.log(data);
@@ -56,6 +73,15 @@ export const createCategory = async (newCategory: string) => {
 
 export const deleteCategory = async (categoryId: string) => {
   await blogApi.delete(`/categories/${categoryId}`);
+};
+
+export const changeCategory = async ({
+  categoryId,
+  newCategory,
+}: ChangeCategoryForm) => {
+  await blogApi.put(`/categories/${categoryId}`, {
+    category: newCategory,
+  });
 };
 
 // SAMPLE

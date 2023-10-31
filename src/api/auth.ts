@@ -53,7 +53,7 @@ blogApi.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.log("Error");
+    console.log("Error Response");
     if (error.response && error.response.status === 401) {
       // Handle unauthorized error
       removeTokenFromBrowser();

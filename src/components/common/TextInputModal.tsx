@@ -23,7 +23,7 @@ const TextInputModal: React.FC<ModalProps> = ({
   prompt,
   placeholder,
 }) => {
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState(placeholder || "");
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);

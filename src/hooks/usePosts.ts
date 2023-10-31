@@ -11,7 +11,7 @@ export default function usePosts(page = 1) {
     () => getPosts(toInteger(page)),
     {
       onSuccess: (newData) => {
-        const prevData = queryClient.getQueryData<Posts>("posts");
+        const prevData = queryClient.getQueryData<Posts>(["posts", page]);
         if (!prevData) return newData;
 
         const totalPages = newData.totalPages;

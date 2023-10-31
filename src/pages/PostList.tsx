@@ -20,13 +20,13 @@ const PostList: React.FC = () => {
   }, [changeMenu]);
 
   const params = useSearchParams();
-  const [curPage, setPage] = useState(toInteger(params.get("page") || "1"));
-  const { data, isLoading, error } = usePosts(curPage);
+  const [page, setPage] = useState(toInteger(params.get("page") || "1"));
+  const { data, isLoading, error } = usePosts(page);
 
   if (isLoading) return <div>Loading...</div>;
   if (error || data === undefined) {
     if (error) throw error;
-    else throw new Error(`Failed To Get Posts Page ${curPage}`);
+    else throw new Error(`Failed To Get Posts Page ${page}`);
   }
 
   const { postList, totalPages } = data;
@@ -53,14 +53,14 @@ const PostList: React.FC = () => {
         ))}
       </div>
 
-      {/* <Paginator currentPage={curPage} lastPage={totalPages} /> */}
+      {/* <Paginator currentPage={page} lastPage={totalPages} /> */}
 
       <Stack justifyContent="center" alignItems="center" spacing={2}>
         <Pagination
           variant="outlined"
           color="primary"
           count={totalPages}
-          page={curPage}
+          page={page}
           onChange={handlePage}
         />
       </Stack>
