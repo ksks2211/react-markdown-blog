@@ -13,13 +13,12 @@ interface SideBarProps extends ComponentPropsWithoutRef<"aside"> {
 }
 
 const SideBar: React.FC<SideBarProps> = ({ active, menu }) => {
-  const { selectedMenu, changeMenu, logout } = useGlobal();
+  const { selectedMenu, changeMenu, logout, username } = useGlobal();
 
   const barRef = useRef<HTMLLIElement>(null);
 
   const profileUrl =
     "https://raw.githubusercontent.com/ksks2211/ksks2211.github.io/main/assets/img/commons/profile.png";
-  const profileTitle = "Akatapata";
   const profileSubTitle = "Welcome...";
 
   const selectedKey = menu.findIndex((m) => m === selectedMenu);
@@ -67,7 +66,7 @@ const SideBar: React.FC<SideBarProps> = ({ active, menu }) => {
 
         <div className={cx("profile--title")}>
           <Link className={cx("link")} to="/">
-            {profileTitle}
+            {username}
           </Link>
         </div>
         <div className={cx("profile--subtitle")}>{profileSubTitle}</div>

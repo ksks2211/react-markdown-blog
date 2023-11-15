@@ -7,25 +7,29 @@ interface LoginData {
   username: string;
   password: string;
 }
+
+type SetErrorMessage = (e: string | undefined) => void;
+
 export interface Token {
   statusCode: number;
   message: string;
   token: string;
+  username: string;
 }
 
-export default function useToken() {
-  const { setIsLoggedIn } = useGlobal();
+export default function useToken(setErrorMessage: SetErrorMessage) {
+  const { setIsLoggedIn, setUsername } = useGlobal();
 
   return useMutation<Token, Error, LoginData, unknown>({
     mutationFn: ({ username, password }) =>
       getTokenFromServer(username, password),
-    onSuccess: (data) => {
-      const token = data.token;
+    onSuccess: ({ token, username }) => {
       setTokenToBrowser(token);
+      setUsername(username);
       setIsLoggedIn(true);
     },
     onError: (error) => {
-      console.error(error);
+      setErrorMessage(error.message);
       removeTokenFromBrowser();
       setIsLoggedIn(false);
     },

@@ -53,12 +53,12 @@ blogApi.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.log("Error Response");
+    console.error("Error occured in blogApi");
     if (error.response && error.response.status === 401) {
-      // Handle unauthorized error
       removeTokenFromBrowser();
+      throw new UnauthorizedError(error);
     }
-    return Promise.reject(new UnauthorizedError(error));
+    throw error;
   }
 );
 

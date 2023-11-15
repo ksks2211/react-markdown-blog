@@ -10,6 +10,7 @@ interface GlobalProviderProps {
 const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   const [selectedMenu, setSelectedMenu] = useState<SelectedMenu>("HOME");
   const [isLoggedIn, setIsLoggedIn] = useState(isValidToken());
+  const [username, setUsername] = useState<string>("");
 
   useEffect(() => {
     setIsLoggedIn(isValidToken());
@@ -18,13 +19,14 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   const logout = () => {
     removeTokenFromBrowser();
     setIsLoggedIn(false);
+    setUsername("");
   };
 
   const globalValue = {
     selectedMenu,
-    changeMenu: (menu: SelectedMenu) => {
-      setSelectedMenu(menu);
-    },
+    changeMenu: setSelectedMenu,
+    username,
+    setUsername,
     isLoggedIn,
     setIsLoggedIn,
     logout,

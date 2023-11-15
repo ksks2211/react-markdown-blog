@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import TopFullBar from "../components/layout/TopFullBar";
 import styles from "./Login.module.scss";
@@ -6,26 +6,23 @@ import cn from "classnames/bind";
 import { AiFillLock } from "react-icons/ai";
 import { BiSolidUser } from "react-icons/bi";
 import useToken from "../hooks/useToken";
-// import useRefresh from "../hooks/useRefresh";
+import { Link } from "react-router-dom";
 const cx = cn.bind(styles);
 
 export default function LogIn() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  // const [tryRefresh, setTryRefresh] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(
+    undefined
+  );
+  const tokenMutation = useToken(setErrorMessage);
 
-  const tokenMutation = useToken();
-  // const mutationRefresh = useRefresh();
-
-  // try refresh
-  // useEffect(() => {
-  //   if (!tryRefresh) {
-  //     (async function () {
-  //       await mutationRefresh.mutateAsync();
-  //     })();
-  //   }
-  //   setTryRefresh(true);
-  // }, [mutationRefresh, tryRefresh]);
+  useEffect(() => {
+    if (errorMessage) {
+      alert(errorMessage);
+      setErrorMessage(undefined);
+    }
+  }, [errorMessage]);
 
   const submitForm = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -34,7 +31,9 @@ export default function LogIn() {
 
   return (
     <>
-      <TopFullBar title="Log In" />
+      <TopFullBar title="Log In">
+        <Link to="/sign-up">Sign Up</Link>
+      </TopFullBar>
       <div className={cx("LoginForm")}>
         <div className={cx("login-card")}>
           <form onSubmit={submitForm}>

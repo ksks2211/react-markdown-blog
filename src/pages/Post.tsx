@@ -7,7 +7,7 @@ import { formatDate } from "../helpers/dateUtils";
 import MarkdownRenderer from "../components/common/MarkdownRenderer";
 import styles from "./Post.module.scss";
 import cn from "classnames/bind";
-import { MdArrowBack } from "react-icons/md";
+import { MdArrowBack, MdDelete } from "react-icons/md";
 import UtterancesComments from "../components/common/UtterancesComments";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -16,16 +16,20 @@ import throttle from "lodash-es/throttle";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
+import useDeletePost from "../hooks/useDeletePost";
 
 const cx = cn.bind(styles);
 
 const Post: React.FC = () => {
-  const { changeMenu } = useGlobal();
+  const { changeMenu, username } = useGlobal();
   const { id } = useParams();
+  const mutation = useDeletePost();
 
   if (id === undefined) {
     throw new Error(`Incorrect Post Id`);
   }
+
+  const postId = parseInt(id);
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -55,13 +59,21 @@ const Post: React.FC = () => {
     return () => window.removeEventListener("scroll", checkLoadMore);
   }, [changeMenu]);
 
-  const goBack = () => {
+  const onPrevPageButtonClick = () => {
     // If you have the state and it has fromPage
     if (location.state && location.state.fromPage) {
       navigate(`/posts${location.state.fromPage}`);
     } else {
       // Else, navigate to default
       navigate("/posts?page=1");
+    }
+  };
+
+  const onDeletePostButtonClick = async () => {
+    const isConfirmed = window.confirm("Delete Post?");
+    if (isConfirmed) {
+      await mutation.mutateAsync(postId);
+      onPrevPageButtonClick();
     }
   };
 
@@ -88,17 +100,32 @@ const Post: React.FC = () => {
   const createdAt = formatDate(post.createdAt);
   const updatedAt = formatDate(post.updatedAt);
 
+  const isMyPost = username === post.writer;
+
   if (loadMore && morePostsError instanceof Error) throw morePostsError;
 
   return (
     <div className={cx("Post")}>
       <div className={cx("main")} ref={ref}>
         <div className={cx("back-btn")}>
-          <MdArrowBack className={cx("back-icon")} onClick={goBack} />
+          <MdArrowBack
+            className={cx("back-icon")}
+            onClick={onPrevPageButtonClick}
+          />
         </div>
 
         <div className={cx("post-metadata")}>
-          <h1 className={cx("title")}>{post.title}</h1>
+          <h1 className={cx("title")}>
+            {post.title}
+            {isMyPost && (
+              <div
+                className={cx("delete-btn")}
+                onClick={onDeletePostButtonClick}
+              >
+                <MdDelete />
+              </div>
+            )}
+          </h1>
 
           <div className={cx("meta", "time")}>
             <time>

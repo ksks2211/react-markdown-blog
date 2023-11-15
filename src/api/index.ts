@@ -12,17 +12,57 @@ export const fetchGeoJson = async () => {
   return data as FeatureCollection;
 };
 
+export interface AuthErrorResponse {
+  statusCode: number;
+  message: string;
+}
+
+// Sign-up
+export const isAvailableUsername = async (username: string) => {
+  const query = new URLSearchParams();
+  query.set("username", username);
+
+  try {
+    const res = await blogApi.get(
+      `/auth/is-username-taken?${query.toString()}`
+    );
+    if (res.status === 200) return true;
+  } catch (e) {
+    console.error(e);
+  }
+
+  return false;
+};
+
+export const createUser = async (
+  username: string,
+  password: string,
+  email: string
+) => {
+  const { data } = await blogApi.post("/auth/register", {
+    username,
+    password,
+    email,
+  });
+  return data;
+};
+
 // JWT
 export const getTokenFromServer = async (
   username: string,
   password: string
 ) => {
-  const res = await blogApi.post(
-    "/auth/log-in",
-    { username, password }
-    // { withCredentials: true }
-  );
-  return res.data;
+  try {
+    const res = await blogApi.post("/auth/log-in", { username, password });
+    return res.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      const errorResponse = error.response.data as AuthErrorResponse;
+      throw new Error(errorResponse.message);
+    } else {
+      throw new Error("Login Failed");
+    }
+  }
 };
 
 // Posts
@@ -45,6 +85,13 @@ export const getPrevAndNextPosts = async (postId: number) => {
     `/posts/prev-and-next?${query.toString()}`
   );
   return data;
+};
+
+export const deletePostById = async (postId: number) => {
+  // success : 204
+  // fail : 403
+  await blogApi.delete(`/posts/${postId}`);
+  return postId;
 };
 
 // Categories + Posts

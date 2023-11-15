@@ -1,69 +1,88 @@
 @import '../assets/styles/variables';
-$btn-color :  #53a8b6; 
+$btn-color : #53a8b6;
+$delete-btn-color : #fd5959;
 
+.Post {
 
-.Post{
-  
 
   position: relative;
 
-  .main{
+  .main {
 
     margin-bottom: 3rem;
-    
-    .back-btn{
 
-    
-      .back-icon{
+    .back-btn {
+      .back-icon {
         border-radius: .2rem;
-        color:#fff;
-        font-size:1.6rem;
-        background-color: $btn-color;      
-        cursor:pointer; 
-        transition: .2s ease-out;  
+        color: #fff;
+        font-size: 1.6rem;
+        background-color: $btn-color;
+        cursor: pointer;
+        transition: .2s ease-out;
         transform: translateY(-.5rem) scale(1.2);
 
-        &:hover{
-          background-color: lighten($btn-color,15%);
+        &:hover {
+          background-color: lighten($btn-color, 15%);
           transform: translateX(-.15rem) translateY(-.5rem) scale(1.3);
         }
 
       }
     }
 
-    .post-metadata{
+    .post-metadata {
 
-      padding:1rem 0 2rem;
+      padding: 1rem 0 2rem;
 
-      .title{
-        font-size:1.8rem;
+      .title {
+        font-size: 1.8rem;
         font-weight: 600;
-        margin-bottom:1.2rem;
+        margin-bottom: 1.2rem;
+        display: flex;
+        justify-content: space-between;
+
+        .delete-btn {
+          font-size: 1.2rem;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          margin-left: 1.2rem;
+          cursor: pointer;
+          color: $delete-btn-color;
+
+          &:hover {
+            color: darken($delete-btn-color, 15)
+          }
+        }
       }
 
-      .meta{
+
+
+      .meta {
         font-size: .75rem;
-        label{
-          color:rgba(100,100,100,.7);
-          margin-right:.3rem;      
+
+        label {
+          color: rgba(100, 100, 100, .7);
+          margin-right: .3rem;
         }
 
 
-        &.writer{
-          display:flex;
+        &.writer {
+          display: flex;
           justify-content: space-between;
         }
 
-        time{
-          &::after{
-            content: '•';  
+        time {
+          &::after {
+            content: '•';
             margin-left: 5px;
-            margin-right: 5px; 
+            margin-right: 5px;
           }
-          &:last-child::after{
+
+          &:last-child::after {
             content: '';
           }
         }
+
         margin-top:.6rem;
       }
 
@@ -74,64 +93,72 @@ $btn-color :  #53a8b6;
   }
 
 
-  .btn-group{
-    display:flex;
+  .btn-group {
+    display: flex;
     align-items: center;
     justify-content: center;
-    
+
     flex-flow: row;
-    .btn{
+
+    .btn {
       display: flex;
       flex-flow: column;
-      width:50%;
-      border:1px solid darken(rgba(#53a8b6,0.5),20%);
-      height:6rem;
+      width: 50%;
+      border: 1px solid darken(rgba(#53a8b6, 0.5), 20%);
+      height: 6rem;
       align-items: center;
       justify-content: center;
       position: relative;
       transition: .4s ease-out;
-      &::before{
-        display: flex;        
+
+      &::before {
+        display: flex;
         font-size: .9rem;
         transform: translateY(-.8rem);
       }
 
 
-      span{
-        color: darken(#53a8b6,20%);
+      span {
+        color: darken(#53a8b6, 20%);
         font-size: 1.2rem;
-        font-weight: 600;                
+        font-weight: 600;
         transition: .4s ease-out;
       }
 
-      
-      &.disabled{
-        border:1px solid rgba($dark-text,.2);
+
+      &.disabled {
+        border: 1px solid rgba($dark-text, .2);
         pointer-events: none;
-        span{
-          color: rgba($dark-text,.2);
+
+        span {
+          color: rgba($dark-text, .2);
         }
       }
 
-      &:hover{
-        background-color: darken(rgba(#53a8b6,0.8),20%);
-        color:#fff;
-        span{
-          color:#fff;
+      &:hover {
+        background-color: darken(rgba(#53a8b6, 0.8), 20%);
+        color: #fff;
+
+        span {
+          color: #fff;
         }
       }
     }
-    .btn-prev{
+
+    .btn-prev {
       border-top-left-radius: .8rem;
       border-bottom-left-radius: .8rem;
-      &::before{        
+
+      &::before {
         content: "PREV";
       }
     }
-    .btn-next{
+
+    .btn-next {
       border-top-right-radius: .8rem;
       border-bottom-right-radius: .8rem;
-      &::before{
+
+      &::before {
         content: "NEXT";
       }
     }

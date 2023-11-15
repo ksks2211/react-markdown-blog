@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import useGlobal from "../hooks/useGlobal";
 import LogIn from "../pages/LogIn";
 import PrivateRoutes from "./PrivateRoutes";
+import SignUp from "../pages/SignUp";
 
 const GlobalRoutes = () => {
   const { isLoggedIn } = useGlobal();
@@ -11,6 +12,10 @@ const GlobalRoutes = () => {
       <Route
         path="/login"
         element={!isLoggedIn ? <LogIn /> : <Navigate to="/" />}
+      />
+      <Route
+        path="/sign-up"
+        element={!isLoggedIn ? <SignUp /> : <Navigate to="/" />}
       />
       <Route
         path="*"
