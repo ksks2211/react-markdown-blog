@@ -7,7 +7,8 @@ import cn from "classnames/bind";
 import useDeviceDetect from "../../hooks/useDeviceDetect";
 import useGlobal from "../../hooks/useGlobal";
 
-import { MENU } from "../../constants";
+// import { MENU } from "../../constants";
+import { Menu } from "../../contexts/menuEnum";
 import ScrollToTop from "./../common/ScrollToTop";
 import Footer from "../common/Footer";
 
@@ -44,7 +45,7 @@ const Layout: React.FC<LayoutProps> = ({ children, ...rest }) => {
       <SideBar
         active={active}
         isTablet={isTabletOrMobile}
-        menu={MENU}
+        menu={Object.values(Menu)}
       ></SideBar>
       <div className={cx("main-wrapper", { active })} onClick={closeToggle}>
         <TopBar

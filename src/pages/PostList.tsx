@@ -9,6 +9,7 @@ import PostCard from "../components/common/PostCard";
 import { useNavigate } from "react-router-dom";
 import Stack from "@mui/material/Stack";
 import Pagination from "@mui/material/Pagination";
+import { Menu } from "../contexts/menuEnum";
 
 // ?page=1
 const PostList: React.FC = () => {
@@ -16,7 +17,7 @@ const PostList: React.FC = () => {
 
   const { changeMenu } = useGlobal();
   useEffect(() => {
-    changeMenu("POSTS");
+    changeMenu(Menu.POSTS);
   }, [changeMenu]);
 
   const params = useSearchParams();

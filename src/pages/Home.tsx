@@ -2,6 +2,7 @@ import { ComponentPropsWithoutRef, useEffect } from "react";
 import useGlobal from "../hooks/useGlobal";
 import withLayout from "../hoc/withLayout";
 import { Link } from "react-router-dom";
+import { Menu } from "../contexts/menuEnum";
 
 interface HomeProps extends ComponentPropsWithoutRef<"div"> {}
 
@@ -9,7 +10,7 @@ const Home: React.FC<HomeProps> = () => {
   const { changeMenu } = useGlobal();
 
   useEffect(() => {
-    changeMenu("HOME");
+    changeMenu(Menu.HOME);
   }, [changeMenu]);
 
   return (

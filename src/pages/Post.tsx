@@ -73,6 +73,7 @@ const Post: React.FC = () => {
     const isConfirmed = window.confirm("Delete Post?");
     if (isConfirmed) {
       await mutation.mutateAsync(postId);
+      window.alert("Deleted!");
       onPrevPageButtonClick();
     }
   };

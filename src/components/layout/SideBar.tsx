@@ -2,8 +2,8 @@ import { ComponentPropsWithoutRef, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import styles from "./SideBar.module.scss";
 import cn from "classnames/bind";
-import { SelectedMenu } from "../../constants";
 import useGlobal from "../../hooks/useGlobal";
+import { Menu } from "../../contexts/menuEnum";
 const cx = cn.bind(styles);
 
 interface SideBarProps extends ComponentPropsWithoutRef<"aside"> {
@@ -86,7 +86,7 @@ const SideBar: React.FC<SideBarProps> = ({ active, menu }) => {
                 style={style}
                 className={cx("item-link")}
                 to={`/${item.toLowerCase()}`}
-                onClick={() => changeMenu(item as SelectedMenu)}
+                onClick={() => changeMenu(item as Menu)}
               >
                 {item}
               </Link>

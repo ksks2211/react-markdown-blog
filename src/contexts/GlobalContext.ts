@@ -1,11 +1,11 @@
-import { SelectedMenu } from "../constants";
 import { createContext } from "react";
+import { Menu } from "./menuEnum";
 
 interface GlobalContextType {
-  selectedMenu: SelectedMenu;
+  selectedMenu: Menu;
   isLoggedIn: boolean;
   username: string;
-  changeMenu: (e: SelectedMenu) => void;
+  changeMenu: (e: Menu) => void;
   setIsLoggedIn: (v: boolean) => void;
   setUsername: (n: string) => void;
   logout: () => void;

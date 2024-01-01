@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-import { SelectedMenu } from "../constants";
 import GlobalContext from "./GlobalContext";
-import { isValidToken, removeTokenFromBrowser } from "../api/auth";
+import { getUsername, isValidToken, removeTokenFromBrowser } from "../api/auth";
+import { Menu } from "./menuEnum";
 
 interface GlobalProviderProps {
   children: React.ReactNode;
 }
 
 const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
-  const [selectedMenu, setSelectedMenu] = useState<SelectedMenu>("HOME");
+  const [selectedMenu, setSelectedMenu] = useState<Menu>(Menu.HOME);
   const [isLoggedIn, setIsLoggedIn] = useState(isValidToken());
-  const [username, setUsername] = useState<string>("");
+  const [username, setUsername] = useState<string>(getUsername());
 
   useEffect(() => {
     setIsLoggedIn(isValidToken());

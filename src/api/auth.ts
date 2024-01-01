@@ -3,7 +3,11 @@ import jwt_decode from "jwt-decode";
 import { UnauthorizedError } from "../errors";
 
 interface JWT {
+  sub: string;
   exp: number;
+  iss: string;
+  auths: string[];
+  id: number;
 }
 
 const TOKEN_KEY = "jwt_token";
@@ -33,6 +37,7 @@ export const isValidToken = () => {
         removeTokenFromBrowser();
         return false;
       } else {
+        sessionStorage.setItem("username", decoded.sub);
         return true;
       }
     } catch (error) {
@@ -40,8 +45,12 @@ export const isValidToken = () => {
       return false;
     }
   }
-
   return false;
+};
+
+export const getUsername = () => {
+  const username = sessionStorage.getItem("username") || "";
+  return username;
 };
 
 const blogApi = axios.create({
@@ -53,7 +62,7 @@ blogApi.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.error("Error occured in blogApi");
+    console.error("Error occurred in blogApi");
     if (error.response && error.response.status === 401) {
       removeTokenFromBrowser();
       throw new UnauthorizedError(error);

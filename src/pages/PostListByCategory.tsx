@@ -7,12 +7,13 @@ import { formatDateFromNow } from "../helpers/dateUtils";
 import PostCard from "../components/common/PostCard";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
+import { Menu } from "../contexts/menuEnum";
 
 const PostListByCategory: React.FC = () => {
   const { changeMenu } = useGlobal();
 
   useEffect(() => {
-    changeMenu("CATEGORIES");
+    changeMenu(Menu.CATEGORIES);
   }, [changeMenu]);
 
   const { id } = useParams();

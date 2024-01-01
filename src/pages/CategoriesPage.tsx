@@ -3,11 +3,12 @@ import withLayout from "../hoc/withLayout";
 import useGlobal from "../hooks/useGlobal";
 import useCategories from "../hooks/useCategories";
 import CategoriesCard from "../components/common/CategoriesCard";
+import { Menu } from "../contexts/menuEnum";
 
 const CategoriesPage: React.FC = () => {
   const { changeMenu } = useGlobal();
   useEffect(() => {
-    changeMenu("CATEGORIES");
+    changeMenu(Menu.CATEGORIES);
   }, [changeMenu]);
 
   const { data, isLoading, error } = useCategories();
