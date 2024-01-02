@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { Menu } from "./menuEnum";
+import Menu from "./Menu";
 
 interface GlobalContextType {
   selectedMenu: Menu;

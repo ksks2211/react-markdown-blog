@@ -1,18 +1,13 @@
-import { ComponentPropsWithoutRef, useEffect } from "react";
-import useGlobal from "../hooks/useGlobal";
+import { ComponentPropsWithoutRef } from "react";
+import { useChangeMenu } from "../hooks/useGlobal";
 import withLayout from "../hoc/withLayout";
 import { Link } from "react-router-dom";
-import { Menu } from "../contexts/menuEnum";
+import Menu from "../contexts/Menu";
 
 interface HomeProps extends ComponentPropsWithoutRef<"div"> {}
 
 const Home: React.FC<HomeProps> = () => {
-  const { changeMenu } = useGlobal();
-
-  useEffect(() => {
-    changeMenu(Menu.HOME);
-  }, [changeMenu]);
-
+  useChangeMenu(Menu.HOME);
   return (
     <p>
       This is home -- Selected Menu

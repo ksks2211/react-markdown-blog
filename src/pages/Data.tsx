@@ -1,13 +1,9 @@
-import { useEffect } from "react";
 import withLayout from "../hoc/withLayout";
-import useGlobal from "../hooks/useGlobal";
-import { Menu } from "../contexts/menuEnum";
+import { useChangeMenu } from "../hooks/useGlobal";
+import Menu from "../contexts/Menu";
 
 const Data: React.FC = () => {
-  const { changeMenu } = useGlobal();
-  useEffect(() => {
-    changeMenu(Menu.DATA);
-  }, [changeMenu]);
+  useChangeMenu(Menu.DATA);
 
   return <p>This is Data</p>;
 };

@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
-import useCreateUser from "../hooks/useCreateUser";
+import { useCreateUser } from "../hooks/useAccount";
 import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {

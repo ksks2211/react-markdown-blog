@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import withLayout from "../hoc/withLayout";
 import useGlobal from "../hooks/useGlobal";
-import usePosts from "../hooks/usePosts";
-import useSearchParams from "../hooks/useSearchParams";
+import { useGetPostList } from "../hooks/usePost";
+import { useSearchParams } from "../hooks/useParameter";
 import toInteger from "lodash-es/toInteger";
 import { formatDateFromNow } from "../helpers/dateUtils";
-import PostCard from "../components/common/PostCard";
+import PostCard from "../components/PostCard";
 import { useNavigate } from "react-router-dom";
 import Stack from "@mui/material/Stack";
 import Pagination from "@mui/material/Pagination";
-import { Menu } from "../contexts/menuEnum";
+import Menu from "../contexts/Menu";
 
 // ?page=1
 const PostList: React.FC = () => {
@@ -22,7 +22,7 @@ const PostList: React.FC = () => {
 
   const params = useSearchParams();
   const [page, setPage] = useState(toInteger(params.get("page") || "1"));
-  const { data, isLoading, error } = usePosts(page);
+  const { data, isLoading, error } = useGetPostList({ page });
 
   if (isLoading) return <div>Loading...</div>;
   if (error || data === undefined) {

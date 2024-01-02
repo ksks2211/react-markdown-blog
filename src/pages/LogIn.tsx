@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
-import TopFullBar from "../components/layout/TopFullBar";
+import TopFullBar from "../layout/TopFullBar";
 import styles from "./Login.module.scss";
 import cn from "classnames/bind";
 import { AiFillLock } from "react-icons/ai";
 import { BiSolidUser } from "react-icons/bi";
-import useToken from "../hooks/useToken";
+import { useJsonWebToken } from "../hooks/useToken";
 import { Link } from "react-router-dom";
 const cx = cn.bind(styles);
 
@@ -15,7 +15,7 @@ export default function LogIn() {
   const [errorMessage, setErrorMessage] = useState<string | undefined>(
     undefined
   );
-  const tokenMutation = useToken(setErrorMessage);
+  const tokenMutation = useJsonWebToken({ setErrorMessage });
 
   useEffect(() => {
     if (errorMessage) {

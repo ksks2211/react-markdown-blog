@@ -1,36 +1,37 @@
 import { useEffect, useRef, useState } from "react";
-import useGlobal from "../hooks/useGlobal";
-import usePost from "../hooks/usePost";
+import { useChangeMenu, useUsername } from "../hooks/useGlobal";
+import { useGetPost } from "../hooks/usePost";
 import { useParams, useLocation, useNavigate, Link } from "react-router-dom";
 import withLayout from "../hoc/withLayout";
 import { formatDate } from "../helpers/dateUtils";
-import MarkdownRenderer from "../components/common/MarkdownRenderer";
+import MarkdownRenderer from "../components/MarkdownRenderer";
 import styles from "./Post.module.scss";
 import cn from "classnames/bind";
 import { MdArrowBack, MdDelete } from "react-icons/md";
-import UtterancesComments from "../components/common/UtterancesComments";
+import UtterancesComments from "../components/UtterancesComments";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import usePrevAndNextPosts from "../hooks/usePrevAndNextPosts";
+import { usePrevAndNextPosts } from "../hooks/usePost";
 import throttle from "lodash-es/throttle";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
-import useDeletePost from "../hooks/useDeletePost";
+import { useDeletePost } from "../hooks/usePost";
+import Menu from "../contexts/Menu";
 
 const cx = cn.bind(styles);
 
 const Post: React.FC = () => {
-  const { changeMenu, username } = useGlobal();
   const { id } = useParams();
+  const username = useUsername();
   const mutation = useDeletePost();
+  useChangeMenu(Menu.POSTS);
 
   if (id === undefined) {
     throw new Error(`Incorrect Post Id`);
   }
 
   const postId = parseInt(id);
-
   const ref = useRef<HTMLDivElement>(null);
 
   const location = useLocation();
@@ -38,8 +39,6 @@ const Post: React.FC = () => {
   const [loadMore, setLoadMore] = useState(false);
 
   useEffect(() => {
-    changeMenu("POSTS");
-
     const checkLoadMore = () => {
       if (ref.current === null) return;
       if (window.scrollY > ref.current.offsetHeight * 0.5) {
@@ -57,7 +56,7 @@ const Post: React.FC = () => {
 
     window.addEventListener("scroll", throttle(checkLoadMore, 300));
     return () => window.removeEventListener("scroll", checkLoadMore);
-  }, [changeMenu]);
+  }, []);
 
   const onPrevPageButtonClick = () => {
     // If you have the state and it has fromPage
@@ -82,13 +81,13 @@ const Post: React.FC = () => {
     data: post,
     isLoading: isLoadingPost,
     error: postError,
-  } = usePost(id || 0);
+  } = useGetPost({ postId: id || 0 });
 
   const {
     data: prevAndNextPosts,
     error: morePostsError,
     isLoading: isLoadingMorePosts,
-  } = usePrevAndNextPosts(id, loadMore);
+  } = usePrevAndNextPosts({ postId: id, enabled: loadMore });
 
   // Loading ...
   if (isLoadingPost) return <div>Loading...</div>;

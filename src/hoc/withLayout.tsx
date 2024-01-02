@@ -1,5 +1,5 @@
 import { ComponentType, FunctionComponent } from "react";
-import Layout from "../components/layout/Layout";
+import Layout from "../layout/Layout";
 
 /**
  * This is a higher-order component (HOC) that wraps a given component with the Layout.

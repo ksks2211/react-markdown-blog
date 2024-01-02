@@ -1,7 +1,11 @@
-import { removeTokenFromBrowser, setTokenToBrowser } from "../api/auth";
+import {
+  removeTokenFromBrowser,
+  setTokenToBrowser,
+} from "../services/storageService";
 import { useMutation } from "react-query";
 import useGlobal from "./useGlobal";
-import { getTokenFromServer } from "../api";
+import { getJsonWebTokenFromServer } from "../services/authService";
+import { getRefreshTokenFromServer } from "../services/authService";
 
 interface LoginData {
   username: string;
@@ -17,12 +21,16 @@ export interface Token {
   username: string;
 }
 
-export default function useToken(setErrorMessage: SetErrorMessage) {
+export function useJsonWebToken({
+  setErrorMessage,
+}: {
+  setErrorMessage: SetErrorMessage;
+}) {
   const { setIsLoggedIn, setUsername } = useGlobal();
 
   return useMutation<Token, Error, LoginData, unknown>({
     mutationFn: ({ username, password }) =>
-      getTokenFromServer(username, password),
+      getJsonWebTokenFromServer({ username, password }),
     onSuccess: ({ token, username }) => {
       setTokenToBrowser(token);
       setUsername(username);
@@ -32,6 +40,22 @@ export default function useToken(setErrorMessage: SetErrorMessage) {
       setErrorMessage(error.message);
       removeTokenFromBrowser();
       setIsLoggedIn(false);
+    },
+  });
+}
+export function useRefreshToken() {
+  const { setIsLoggedIn } = useGlobal();
+
+  return useMutation<Token, Error>({
+    retry: false,
+    mutationFn: getRefreshTokenFromServer,
+    onSuccess: (data) => {
+      const token = data.token;
+      setTokenToBrowser(token);
+      setIsLoggedIn(true);
+    },
+    onError: (error) => {
+      console.error(error);
     },
   });
 }

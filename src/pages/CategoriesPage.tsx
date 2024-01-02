@@ -1,17 +1,13 @@
-import { useEffect } from "react";
 import withLayout from "../hoc/withLayout";
-import useGlobal from "../hooks/useGlobal";
-import useCategories from "../hooks/useCategories";
-import CategoriesCard from "../components/common/CategoriesCard";
-import { Menu } from "../contexts/menuEnum";
+import { useChangeMenu } from "../hooks/useGlobal";
+import { useGetCategories } from "../hooks/useCategory";
+import CategoriesCard from "../containers/CategoriesCard";
+import Menu from "../contexts/Menu";
 
 const CategoriesPage: React.FC = () => {
-  const { changeMenu } = useGlobal();
-  useEffect(() => {
-    changeMenu(Menu.CATEGORIES);
-  }, [changeMenu]);
+  useChangeMenu(Menu.CATEGORIES);
 
-  const { data, isLoading, error } = useCategories();
+  const { data, isLoading, error } = useGetCategories();
 
   if (isLoading) return <div>Loading...</div>;
   if (error) throw error;

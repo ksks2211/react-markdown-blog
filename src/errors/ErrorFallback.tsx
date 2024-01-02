@@ -2,11 +2,13 @@ import { AxiosError } from "axios";
 import { NotFoundError, UnauthorizedError } from ".";
 import { Link } from "react-router-dom";
 
-interface FallbackProps {
-  error: Error;
-}
+import { ComponentType } from "react";
+import { FallbackProps } from "react-error-boundary";
 
-const ErrorFallback = ({ error }: FallbackProps) => {
+const ErrorFallback: ComponentType<FallbackProps> = ({
+  error,
+  resetErrorBoundary,
+}) => {
   let cause = "";
 
   if (error instanceof NotFoundError) {
@@ -28,6 +30,7 @@ const ErrorFallback = ({ error }: FallbackProps) => {
     <div role="alert">
       <p>Something went wrong:{cause}</p>
       <pre>{error.message}</pre>
+      <button onClick={resetErrorBoundary}>Try again</button>
       <Link to="/login">Go Back to Log In</Link>
     </div>
   );

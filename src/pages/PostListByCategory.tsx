@@ -1,29 +1,19 @@
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import useGlobal from "../hooks/useGlobal";
+import { useChangeMenu } from "../hooks/useGlobal";
 import withLayout from "../hoc/withLayout";
-import usePostsByCategory from "../hooks/usePostsByCategory";
+import { useGetPostListByCategory } from "../hooks/usePost";
 import { formatDateFromNow } from "../helpers/dateUtils";
-import PostCard from "../components/common/PostCard";
+import PostCard from "../components/PostCard";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-import { Menu } from "../contexts/menuEnum";
+import Menu from "../contexts/Menu";
+import { usePathParamId } from "../hooks/useParameter";
 
 const PostListByCategory: React.FC = () => {
-  const { changeMenu } = useGlobal();
-
-  useEffect(() => {
-    changeMenu(Menu.CATEGORIES);
-  }, [changeMenu]);
-
-  const { id } = useParams();
-
-  if (id === undefined) {
-    throw new Error(`Incorrect Category Id`);
-  }
+  const id = usePathParamId();
+  useChangeMenu(Menu.CATEGORIES);
 
   const { data, isLoading, error, hasNextPage, fetchNextPage } =
-    usePostsByCategory(id);
+    useGetPostListByCategory({ categoryId: id });
 
   const loadMorePosts = async () => {
     await fetchNextPage();
