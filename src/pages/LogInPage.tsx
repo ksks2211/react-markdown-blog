@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import TopFullBar from "../layout/TopFullBar";
-import styles from "./Login.module.scss";
+import styles from "./LogInPage.module.scss";
 import cn from "classnames/bind";
 import { AiFillLock } from "react-icons/ai";
 import { BiSolidUser } from "react-icons/bi";
@@ -24,7 +24,7 @@ export default function LogIn() {
     }
   }, [errorMessage]);
 
-  const submitForm = async (e: FormEvent<HTMLFormElement>) => {
+  const handleLogInFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await tokenMutation.mutateAsync({ username, password });
   };
@@ -36,7 +36,7 @@ export default function LogIn() {
       </TopFullBar>
       <div className={cx("LoginForm")}>
         <div className={cx("login-card")}>
-          <form onSubmit={submitForm}>
+          <form onSubmit={handleLogInFormSubmit}>
             <div className={cx("input-group", "username")}>
               <BiSolidUser className={cx("left-icon")} />
               <input

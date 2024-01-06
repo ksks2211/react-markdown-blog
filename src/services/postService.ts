@@ -1,4 +1,5 @@
 import blogApi from "../api/blogApi";
+import { PostCreateForm } from "../types/post.types";
 
 // Posts
 export async function getPostById(postId: number) {
@@ -28,8 +29,14 @@ export async function deletePostById(postId: number) {
   await blogApi.delete(`/posts/${postId}`);
   return postId;
 }
-// Categories + Posts
 
+export async function createPost(postForm: PostCreateForm) {
+  const { data } = await blogApi.post("/posts", postForm);
+
+  return data;
+}
+
+// Categories + Posts
 export async function getPostsByCategories({
   page,
   categoryId,

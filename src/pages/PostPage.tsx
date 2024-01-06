@@ -1,42 +1,45 @@
 import { useEffect, useRef, useState } from "react";
-import { useChangeMenu, useUsername } from "../hooks/useGlobal";
-import { useGetPost } from "../hooks/usePost";
-import { useParams, useLocation, useNavigate, Link } from "react-router-dom";
-import withLayout from "../hoc/withLayout";
-import { formatDate } from "../helpers/dateUtils";
-import MarkdownRenderer from "../components/MarkdownRenderer";
-import styles from "./Post.module.scss";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import cn from "classnames/bind";
-import { MdArrowBack, MdDelete } from "react-icons/md";
-import UtterancesComments from "../components/UtterancesComments";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
-import { usePrevAndNextPosts } from "../hooks/usePost";
 import throttle from "lodash-es/throttle";
+
+import "react-loading-skeleton/dist/skeleton.css";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
-import { useDeletePost } from "../hooks/usePost";
-import Menu from "../contexts/Menu";
+import Skeleton from "react-loading-skeleton";
+
+import { useChangeMenu, useUsername } from "../hooks/useGlobal";
+import { useDeletePost } from "../hooks/usePostMutation";
+import { usePrevAndNextPosts, useGetPost } from "../hooks/usePostQuery";
+
+import { usePathParamId } from "../hooks/useParameter";
+
+import withLayout from "../hoc/withLayout";
+import { formatDate } from "../helpers/dateUtils";
+import MarkdownRenderer from "../components/MarkdownRenderer/MarkdownRenderer";
+import styles from "./PostPage.module.scss";
+import { MdArrowBack, MdDelete } from "react-icons/md";
+import UtterancesComments from "../components/UtterancesComments";
+
+import Menu from "../contexts/Menu.enum";
+import Loader from "../components/Loader";
+import ErrorFallback from "../errors/ErrorFallback";
 
 const cx = cn.bind(styles);
 
 const Post: React.FC = () => {
-  const { id } = useParams();
+  const id = usePathParamId();
   const username = useUsername();
   const mutation = useDeletePost();
   useChangeMenu(Menu.POSTS);
 
-  if (id === undefined) {
-    throw new Error(`Incorrect Post Id`);
-  }
-
-  const postId = parseInt(id);
   const ref = useRef<HTMLDivElement>(null);
-
   const location = useLocation();
   const navigate = useNavigate();
   const [loadMore, setLoadMore] = useState(false);
+
+  const postId = parseInt(id);
 
   useEffect(() => {
     const checkLoadMore = () => {
@@ -58,7 +61,7 @@ const Post: React.FC = () => {
     return () => window.removeEventListener("scroll", checkLoadMore);
   }, []);
 
-  const onPrevPageButtonClick = () => {
+  const handleBackToPrevPage = () => {
     // If you have the state and it has fromPage
     if (location.state && location.state.fromPage) {
       navigate(`/posts${location.state.fromPage}`);
@@ -68,12 +71,12 @@ const Post: React.FC = () => {
     }
   };
 
-  const onDeletePostButtonClick = async () => {
+  const handlePostDelete = async () => {
     const isConfirmed = window.confirm("Delete Post?");
     if (isConfirmed) {
       await mutation.mutateAsync(postId);
       window.alert("Deleted!");
-      onPrevPageButtonClick();
+      handleBackToPrevPage();
     }
   };
 
@@ -81,28 +84,44 @@ const Post: React.FC = () => {
     data: post,
     isLoading: isLoadingPost,
     error: postError,
+    refetch: refetchPost,
   } = useGetPost({ postId: id || 0 });
 
   const {
     data: prevAndNextPosts,
     error: morePostsError,
     isLoading: isLoadingMorePosts,
+    refetch: refetchPrevAndNext,
   } = usePrevAndNextPosts({ postId: id, enabled: loadMore });
 
   // Loading ...
-  if (isLoadingPost) return <div>Loading...</div>;
+  if (isLoadingPost) return <Loader />;
 
   // Error
-  if (postError instanceof Error) throw postError;
-  if (post === undefined) throw new Error(`Failed To Get Post ${id}`);
+  if (postError instanceof Error)
+    <ErrorFallback error={postError} resetErrorBoundary={refetchPost} />;
+
+  if (post === undefined)
+    return (
+      <ErrorFallback
+        error={new Error(`Failed To Get Post ${id}`)}
+        resetErrorBoundary={refetchPost}
+      />
+    );
+
   // if (morePostsError instanceof Error) throw morePostsError;
+
+  if (loadMore && morePostsError instanceof Error)
+    return (
+      <ErrorFallback
+        error={morePostsError}
+        resetErrorBoundary={refetchPrevAndNext}
+      />
+    );
 
   const createdAt = formatDate(post.createdAt);
   const updatedAt = formatDate(post.updatedAt);
-
   const isMyPost = username === post.writer;
-
-  if (loadMore && morePostsError instanceof Error) throw morePostsError;
 
   return (
     <div className={cx("Post")}>
@@ -110,7 +129,7 @@ const Post: React.FC = () => {
         <div className={cx("back-btn")}>
           <MdArrowBack
             className={cx("back-icon")}
-            onClick={onPrevPageButtonClick}
+            onClick={handleBackToPrevPage}
           />
         </div>
 
@@ -118,10 +137,7 @@ const Post: React.FC = () => {
           <h1 className={cx("title")}>
             {post.title}
             {isMyPost && (
-              <div
-                className={cx("delete-btn")}
-                onClick={onDeletePostButtonClick}
-              >
+              <div className={cx("delete-btn")} onClick={handlePostDelete}>
                 <MdDelete />
               </div>
             )}

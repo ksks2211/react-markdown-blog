@@ -8,7 +8,7 @@ import useDeviceDetect from "../hooks/useDeviceDetect";
 import useGlobal from "../hooks/useGlobal";
 
 // import { MENU } from "../../constants";
-import Menu from "../contexts/Menu";
+import Menu from "../contexts/Menu.enum";
 import ScrollToTop from "../components/ScrollToTop";
 import Footer from "../components/Footer";
 

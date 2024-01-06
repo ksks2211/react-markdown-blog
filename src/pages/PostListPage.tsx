@@ -1,30 +1,26 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import withLayout from "../hoc/withLayout";
-import useGlobal from "../hooks/useGlobal";
-import { useGetPostList } from "../hooks/usePost";
-import { useSearchParams } from "../hooks/useParameter";
+import { useChangeMenu } from "../hooks/useGlobal";
+import { useGetPostList } from "../hooks/usePostQuery";
 import toInteger from "lodash-es/toInteger";
 import { formatDateFromNow } from "../helpers/dateUtils";
 import PostCard from "../components/PostCard";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Stack from "@mui/material/Stack";
 import Pagination from "@mui/material/Pagination";
-import Menu from "../contexts/Menu";
+import Menu from "../contexts/Menu.enum";
+import Loader from "../components/Loader";
 
 // ?page=1
 const PostList: React.FC = () => {
   const navigate = useNavigate();
+  useChangeMenu(Menu.POSTS);
 
-  const { changeMenu } = useGlobal();
-  useEffect(() => {
-    changeMenu(Menu.POSTS);
-  }, [changeMenu]);
-
-  const params = useSearchParams();
+  const [params] = useSearchParams();
   const [page, setPage] = useState(toInteger(params.get("page") || "1"));
   const { data, isLoading, error } = useGetPostList({ page });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loader />;
   if (error || data === undefined) {
     if (error) throw error;
     else throw new Error(`Failed To Get Posts Page ${page}`);

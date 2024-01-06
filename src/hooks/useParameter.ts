@@ -1,9 +1,4 @@
-import { useLocation, useParams } from "react-router-dom";
-
-export function useSearchParams(): URLSearchParams {
-  const location = useLocation();
-  return new URLSearchParams(location.search);
-}
+import { useParams } from "react-router-dom";
 
 export function usePathParamId(): string {
   const { id } = useParams();

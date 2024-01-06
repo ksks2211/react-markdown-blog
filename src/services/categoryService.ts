@@ -4,7 +4,6 @@ import { ChangeCategoryForm } from "../types/category.types";
 // Categories
 export const getCategories = async () => {
   const { data } = await blogApi.get("/categories");
-  console.log(data);
   return data;
 };
 

@@ -72,11 +72,11 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
     rowRef.current?.classList.toggle(cx("closed"));
   };
 
-  const removeCategory = async () => {
+  const handleRemoveCategory = async () => {
     await deleteCategoryMutation.mutateAsync(categoryId);
   };
 
-  const submitAdd = async (value: string) => {
+  const handleAddCategory = async (value: string) => {
     const categoryArray = fullCategoryName.split("/");
     categoryArray.splice(1, 1);
     categoryArray.push(value);
@@ -84,7 +84,7 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
     await createCategoryMutation.mutateAsync(newCategory);
   };
 
-  const submitChange = async (newCategory: string) => {
+  const handleUpdateCategory = async (newCategory: string) => {
     await changeCategoryMutation.mutateAsync({ newCategory, categoryId });
   };
 
@@ -106,7 +106,7 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
             {disabled || <span className={cx("count")}>{numOfPosts}</span>}
 
             <Link
-              className={cx("dirname", { disabled })}
+              className={cx("dirname")}
               to={`/categories/${categoryId}`}
               onClick={(e) => e.stopPropagation()}
             >
@@ -128,7 +128,7 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
             {removable && (
               <MdDelete
                 className={cx("icon", "icon-sm", "delete-icon")}
-                onClick={removeCategory}
+                onClick={handleRemoveCategory}
               />
             )}
           </div>
@@ -150,7 +150,7 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
           prompt={`Add new category`}
           open={createModalOpen}
           onClose={closeCreateModal}
-          onSubmit={submitAdd}
+          onSubmit={handleAddCategory}
           label={fullCategoryName}
         />
       )}
@@ -160,7 +160,7 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
           prompt={"Change category"}
           open={updateModalOpen}
           onClose={closeUpdateModal}
-          onSubmit={submitChange}
+          onSubmit={handleUpdateCategory}
           label={fullCategoryName}
           placeholder={`/${fullCategoryName.split("/").slice(2).join("/")}`}
         />

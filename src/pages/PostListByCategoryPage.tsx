@@ -1,12 +1,14 @@
 import { useChangeMenu } from "../hooks/useGlobal";
 import withLayout from "../hoc/withLayout";
-import { useGetPostListByCategory } from "../hooks/usePost";
+import { useGetPostListByCategory } from "../hooks/usePostQuery";
 import { formatDateFromNow } from "../helpers/dateUtils";
 import PostCard from "../components/PostCard";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-import Menu from "../contexts/Menu";
+import Menu from "../contexts/Menu.enum";
 import { usePathParamId } from "../hooks/useParameter";
+import { Link } from "react-router-dom";
+import Loader from "../components/Loader";
 
 const PostListByCategory: React.FC = () => {
   const id = usePathParamId();
@@ -15,20 +17,25 @@ const PostListByCategory: React.FC = () => {
   const { data, isLoading, error, hasNextPage, fetchNextPage } =
     useGetPostListByCategory({ categoryId: id });
 
+  const addr = `/posts/create?category=${id}`;
+
   const loadMorePosts = async () => {
     await fetchNextPage();
   };
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error || data === undefined) {
-    if (error) throw error;
-    else throw new Error(`Failed To Get Posts with Category ${id}`);
+  if (isLoading) return <Loader />;
+  if (error) throw error;
+  if (data === undefined) {
+    throw new Error(`Failed To Get Posts with Category ${id}`);
   }
 
   const { postList } = data.pages[0];
 
   return (
     <div>
+      <div>
+        <Link to={addr}>Create Post</Link>
+      </div>
       {postList.map((post) => (
         <PostCard
           key={post.id}

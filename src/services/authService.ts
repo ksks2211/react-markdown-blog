@@ -1,10 +1,10 @@
-import axios from "axios";
+import { isAxiosError } from "axios";
 import blogApi from "../api/blogApi";
 
 import {
   RegisterUserForm,
   LogInForm,
-  AuthErrorResponse,
+  AuthErrorInfo,
 } from "../types/auth.types";
 
 export async function isAvailableUsername(username: string) {
@@ -45,8 +45,8 @@ export async function getJsonWebTokenFromServer({
     const res = await blogApi.post("/auth/log-in", { username, password });
     return res.data;
   } catch (error) {
-    if (axios.isAxiosError(error) && error.response) {
-      const errorResponse = error.response.data as AuthErrorResponse;
+    if (isAxiosError(error) && error.response) {
+      const errorResponse = error.response.data as AuthErrorInfo;
       throw new Error(errorResponse.message);
     } else {
       throw new Error("Login Failed");

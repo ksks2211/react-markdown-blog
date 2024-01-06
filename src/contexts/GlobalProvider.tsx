@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import GlobalContext from "./GlobalContext";
-import { getUsername, isValidToken } from "../services/storageService";
-import { removeTokenFromBrowser } from "../services/storageService";
-import Menu from "./Menu";
+import {
+  getUsername,
+  isValidToken,
+  removeTokenFromBrowser,
+} from "../services/storageService";
+import Menu from "./Menu.enum";
 
 interface GlobalProviderProps {
   children: React.ReactNode;

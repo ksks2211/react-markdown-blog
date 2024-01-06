@@ -1,6 +1,6 @@
 import withLayout from "../hoc/withLayout";
 import { useChangeMenu } from "../hooks/useGlobal";
-import Menu from "../contexts/Menu";
+import Menu from "../contexts/Menu.enum";
 
 const Data: React.FC = () => {
   useChangeMenu(Menu.DATA);

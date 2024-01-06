@@ -1,21 +1,27 @@
+import React, { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
-import Home from "../pages/Home";
-import Posts from "../pages/PostList";
-import Categories from "../pages/CategoriesPage";
-import Data from "../pages/Data";
-import Post from "../pages/Post";
-import PostsByCategory from "../pages/PostListByCategory";
+
+const Home = lazy(() => import("../pages/HomePage"));
+const Posts = lazy(() => import("../pages/PostListPage"));
+const Categories = lazy(() => import("../pages/CategoriesPage"));
+const Data = lazy(() => import("../pages/DataPage"));
+const Post = lazy(() => import("../pages/PostPage"));
+const PostsByCategory = lazy(() => import("../pages/PostListByCategoryPage"));
+const PostCreate = lazy(() => import("../pages/PostCreatePage"));
 
 const PrivateRoutes: React.FC = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/home" element={<Home />} />
-      <Route path="/posts" element={<Posts />}></Route>
-      <Route path="/posts/:id" element={<Post />}></Route>
-      <Route path="/categories" element={<Categories />} />
-      <Route path="/categories/:id" element={<PostsByCategory />} />
-      <Route path="/data" element={<Data />} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/posts" element={<Posts />} />
+        <Route path="/posts/create" element={<PostCreate />} />
+        <Route path="/posts/:id" element={<Post />} />
+        <Route path="/categories" element={<Categories />} />
+        <Route path="/categories/:id" element={<PostsByCategory />} />
+        <Route path="/data" element={<Data />} />
+      </Suspense>
     </Routes>
   );
 };

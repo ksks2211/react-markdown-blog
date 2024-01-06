@@ -1,8 +1,8 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import useGlobal from "../hooks/useGlobal";
-import LogIn from "../pages/LogIn";
+import LogIn from "../pages/LogInPage";
 import PrivateRoutes from "./PrivateRoutes";
-import SignUp from "../pages/SignUp";
+import SignUp from "../pages/SignUpPage";
 
 const GlobalRoutes = () => {
   const { isLoggedIn } = useGlobal();

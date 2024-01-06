@@ -1,18 +1,12 @@
+import { toInteger, unionBy } from "lodash-es";
+import { useQuery, useQueryClient, useInfiniteQuery } from "react-query";
 import {
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "react-query";
-import {
-  deletePostById,
   getPostById,
   getPosts,
   getPostsByCategories,
   getPrevAndNextPosts,
 } from "../services/postService";
 import { Post, Posts, PrevAndNextPosts } from "../types/post.types";
-import { toInteger, unionBy } from "lodash-es";
 
 export function useGetPost({ postId }: { postId: number | string }) {
   const pid = toInteger(postId);
@@ -68,16 +62,6 @@ export function useGetPostListByCategory({
       },
     }
   );
-}
-export function useDeletePost() {
-  const queryClient = useQueryClient();
-
-  return useMutation<number, Error, number, unknown>({
-    mutationFn: deletePostById,
-    onSuccess: (pid) => {
-      queryClient.invalidateQueries(["post", pid]);
-    },
-  });
 }
 export function usePrevAndNextPosts({
   postId,

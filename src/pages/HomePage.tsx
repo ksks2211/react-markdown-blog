@@ -2,7 +2,7 @@ import { ComponentPropsWithoutRef } from "react";
 import { useChangeMenu } from "../hooks/useGlobal";
 import withLayout from "../hoc/withLayout";
 import { Link } from "react-router-dom";
-import Menu from "../contexts/Menu";
+import Menu from "../contexts/Menu.enum";
 
 interface HomeProps extends ComponentPropsWithoutRef<"div"> {}
 

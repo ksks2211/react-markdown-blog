@@ -3,8 +3,8 @@ import { UnauthorizedError } from "../errors";
 import {
   getTokenFromBrowser,
   removeTokenFromBrowser,
+  isValidToken,
 } from "../services/storageService";
-import { isValidToken } from "../services/storageService";
 
 const API_ADDR = import.meta.env.VITE_API_ADDR as string;
 

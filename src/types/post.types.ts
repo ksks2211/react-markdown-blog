@@ -10,6 +10,15 @@ export interface Post {
   description: string;
 }
 
+export type PostCreateForm = Pick<
+  Post,
+  "title" | "content" | "description" | "tags" | "category"
+>;
+
+export type PostCreatedInfo = {
+  id: number;
+};
+
 type PostPreview = Pick<
   Post,
   "id" | "title" | "createdAt" | "updatedAt" | "writer" | "description"
@@ -20,11 +29,12 @@ export interface Posts {
   postList: PostPreview[];
 }
 
-type PostPreviewExistence =
+type NextPost =
   | { next: PostPreview; hasNext: true }
   | { next?: never; hasNext: false };
-type PostPrevExistence =
+
+type PrevPost =
   | { prev: PostPreview; hasPrev: true }
   | { prev?: never; hasPrev: false };
 
-export type PrevAndNextPosts = PostPreviewExistence & PostPrevExistence;
+export type PrevAndNextPosts = NextPost & PrevPost;

@@ -1,7 +1,6 @@
-import Menu from "../contexts/Menu";
-// useGlobal.ts
-
 import { useContext, useEffect } from "react";
+
+import Menu from "../contexts/Menu.enum";
 import GlobalContext from "../contexts/GlobalContext";
 
 const useGlobal = () => {

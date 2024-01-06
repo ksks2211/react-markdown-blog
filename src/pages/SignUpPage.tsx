@@ -4,34 +4,25 @@ import TextField from "@mui/material/TextField";
 import { useState } from "react";
 import { useCreateUser } from "../hooks/useAccount";
 import { useNavigate } from "react-router-dom";
+import { RegisterUserForm } from "../types/auth.types";
 
 export default function SignUp() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const navigate = useNavigate();
+  const [state, setState] = useState<RegisterUserForm>({
+    username: "",
+    password: "",
+    email: "",
+  });
 
+  const navigate = useNavigate();
   const mutation = useCreateUser();
 
-  const handleUsernameInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setUsername(event.target.value);
+  const { username, password, email } = state;
+
+  const handleUserFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setState((prev) => ({ ...prev, [event.target.name]: event.target.value }));
   };
 
-  const handlePasswordInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setPassword(event.target.value);
-  };
-
-  const handleEmailInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setEmail(event.target.value);
-  };
-
-  const submit = async () => {
+  const handleSubmit = async () => {
     try {
       await mutation.mutateAsync({ username, password, email });
       alert("Registered");
@@ -49,27 +40,30 @@ export default function SignUp() {
       <Box>
         <TextField
           value={username}
-          onChange={handleUsernameInputChange}
+          name="username"
+          onChange={handleUserFormChange}
           variant="outlined"
           label={"Username"}
           placeholder={"Username"}
         />
         <TextField
           value={password}
+          name="password"
           type="password"
-          onChange={handlePasswordInputChange}
+          onChange={handleUserFormChange}
           variant="outlined"
           label={"Password"}
           placeholder={"Password"}
         />
         <TextField
+          name="email"
           value={email}
-          onChange={handleEmailInputChange}
+          onChange={handleUserFormChange}
           variant="outlined"
           label={"Email"}
           placeholder={"Email"}
         />
-        <Button variant="contained" color="primary" onClick={submit}>
+        <Button variant="contained" color="primary" onClick={handleSubmit}>
           Submit
         </Button>
       </Box>

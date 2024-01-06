@@ -54,6 +54,7 @@ $directory-title-color : #6189be;
     &>.category-details{
       display:flex;
       align-items: center;
+      height:100%;
       .icon {
         color: $directory-card-text-color;
         font-size: 1.3rem;
@@ -73,40 +74,40 @@ $directory-title-color : #6189be;
         background-color: lighten(rgba($directory-title-color,.8),10%);
         border: 1px solid;
         border-radius: 50%;
-        width:1.3rem;
-        height:1.3rem;
-        font-size: .4rem;
+        width:1.4rem;
+        height:1.4rem;
+        font-size: .7rem;
         color:#fff;
         transform: translateX(.6rem) translateY(-.6rem);
       }
   
 
       .dirname{
+
+
         color: darken($directory-title-color, 20%);
         font-size: 1.1rem;
         font-weight: 400;
-        padding-left: .56rem;
-        padding-right:1.2rem;
+        margin-left: .2rem;
+        margin-right:1.1rem;
+
+        padding:0 0.5rem;
         overflow-x: hidden;
         text-overflow: ellipsis;        
         overflow:hidden;
         white-space: nowrap;
 
+        height:100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+     
+
         &:hover,
-        &.bold {
-          transform: scale(1.2);
-          color: darken($directory-title-color, 40%);
+        &.bold {          
+          color: darken($directory-title-color, 70%);
         }
-
-        // &:hover {
-        //   max-width: 100%;
-        //   z-index: 100;
-        // }
-
-        &.disabled{
-          pointer-events: none;
-        }
-
       }
 
 

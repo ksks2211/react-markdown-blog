@@ -1,11 +1,15 @@
+import { useMutation } from "react-query";
+
 import {
   removeTokenFromBrowser,
   setTokenToBrowser,
 } from "../services/storageService";
-import { useMutation } from "react-query";
 import useGlobal from "./useGlobal";
-import { getJsonWebTokenFromServer } from "../services/authService";
-import { getRefreshTokenFromServer } from "../services/authService";
+import {
+  getJsonWebTokenFromServer,
+  getRefreshTokenFromServer,
+} from "../services/authService";
+import { JWTInfo } from "../types/auth.types";
 
 interface LoginData {
   username: string;
@@ -14,13 +18,6 @@ interface LoginData {
 
 type SetErrorMessage = (e: string | undefined) => void;
 
-export interface Token {
-  statusCode: number;
-  message: string;
-  token: string;
-  username: string;
-}
-
 export function useJsonWebToken({
   setErrorMessage,
 }: {
@@ -28,7 +25,7 @@ export function useJsonWebToken({
 }) {
   const { setIsLoggedIn, setUsername } = useGlobal();
 
-  return useMutation<Token, Error, LoginData, unknown>({
+  return useMutation<JWTInfo, Error, LoginData, unknown>({
     mutationFn: ({ username, password }) =>
       getJsonWebTokenFromServer({ username, password }),
     onSuccess: ({ token, username }) => {
@@ -43,10 +40,11 @@ export function useJsonWebToken({
     },
   });
 }
+
 export function useRefreshToken() {
   const { setIsLoggedIn } = useGlobal();
 
-  return useMutation<Token, Error>({
+  return useMutation<JWTInfo, Error>({
     retry: false,
     mutationFn: getRefreshTokenFromServer,
     onSuccess: (data) => {

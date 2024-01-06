@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import styles from "./SideBar.module.scss";
 import cn from "classnames/bind";
 import useGlobal from "../hooks/useGlobal";
-import Menu from "../contexts/Menu";
+import Menu from "../contexts/Menu.enum";
 const cx = cn.bind(styles);
 
 interface SideBarProps extends ComponentPropsWithoutRef<"aside"> {
