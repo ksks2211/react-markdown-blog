@@ -7,6 +7,7 @@ import Layout from "../layout/Layout";
  * @param WrappedComponent - The component to wrap.
  * @returns The wrapped component.
  */
+
 function withLayout<T extends JSX.IntrinsicAttributes>(
   WrappedComponent: ComponentType<T>
 ): FunctionComponent<T> {

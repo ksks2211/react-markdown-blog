@@ -1,5 +1,6 @@
 import React, { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
+import Loader from "../components/Loader";
 
 const Home = lazy(() => import("../pages/HomePage"));
 const Posts = lazy(() => import("../pages/PostListPage"));
@@ -11,8 +12,8 @@ const PostCreate = lazy(() => import("../pages/PostCreatePage"));
 
 const PrivateRoutes: React.FC = () => {
   return (
-    <Routes>
-      <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<Loader />}>
+      <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
         <Route path="/posts" element={<Posts />} />
@@ -21,8 +22,8 @@ const PrivateRoutes: React.FC = () => {
         <Route path="/categories" element={<Categories />} />
         <Route path="/categories/:id" element={<PostsByCategory />} />
         <Route path="/data" element={<Data />} />
-      </Suspense>
-    </Routes>
+      </Routes>
+    </Suspense>
   );
 };
 

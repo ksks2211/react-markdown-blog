@@ -4,6 +4,7 @@ import {
   getUsername,
   isValidToken,
   removeTokenFromBrowser,
+  getDisplayName,
 } from "../services/storageService";
 import Menu from "./Menu.enum";
 
@@ -15,6 +16,7 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   const [selectedMenu, setSelectedMenu] = useState<Menu>(Menu.HOME);
   const [isLoggedIn, setIsLoggedIn] = useState(isValidToken());
   const [username, setUsername] = useState<string>(getUsername());
+  const [displayName, setDisplayName] = useState<string>(getDisplayName());
 
   useEffect(() => {
     setIsLoggedIn(isValidToken());
@@ -24,6 +26,7 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     removeTokenFromBrowser();
     setIsLoggedIn(false);
     setUsername("");
+    setDisplayName("");
   };
 
   const globalValue = {
@@ -34,6 +37,8 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     isLoggedIn,
     setIsLoggedIn,
     logout,
+    displayName,
+    setDisplayName,
   };
   return (
     <GlobalContext.Provider value={globalValue}>

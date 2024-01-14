@@ -53,7 +53,17 @@ export async function getJsonWebTokenFromServer({
     }
   }
 }
+
 export const getRefreshTokenFromServer = async () => {
-  const { data } = await blogApi.get("/refresh");
+  const { data } = await blogApi.get("/refresh", {
+    withCredentials: true,
+  });
+  return data;
+};
+
+export const getJsonWebTokenWithOAuth2 = async (params: URLSearchParams) => {
+  const { data } = await blogApi.get("/login/oauth2/code/google", {
+    params,
+  });
   return data;
 };

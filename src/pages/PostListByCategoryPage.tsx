@@ -19,7 +19,7 @@ const PostListByCategory: React.FC = () => {
 
   const addr = `/posts/create?category=${id}`;
 
-  const loadMorePosts = async () => {
+  const handleLoadMorePosts = async () => {
     await fetchNextPage();
   };
 
@@ -52,7 +52,7 @@ const PostListByCategory: React.FC = () => {
           variant="contained"
           color="success"
           disabled={!hasNextPage}
-          onClick={loadMorePosts}
+          onClick={handleLoadMorePosts}
         >
           More
         </Button>

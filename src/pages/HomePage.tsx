@@ -3,13 +3,21 @@ import { useChangeMenu } from "../hooks/useGlobal";
 import withLayout from "../hoc/withLayout";
 import { Link } from "react-router-dom";
 import Menu from "../contexts/Menu.enum";
+import { useLoginWithRefreshToken } from "../hooks/useToken";
 
 interface HomeProps extends ComponentPropsWithoutRef<"div"> {}
 
 const Home: React.FC<HomeProps> = () => {
   useChangeMenu(Menu.HOME);
+
+  const tokenMutation = useLoginWithRefreshToken();
+
+  const handleRefresh = async () => {
+    await tokenMutation.mutateAsync();
+  };
+
   return (
-    <p>
+    <div>
       This is home -- Selected Menu
       <Link to="/login">Log In</Link>
       {/* <TextInputModal
@@ -19,7 +27,8 @@ const Home: React.FC<HomeProps> = () => {
         onSubmit={() => {}}
         label={"Hello World"}
       /> */}
-    </p>
+      <div onClick={handleRefresh}>Refresh</div>
+    </div>
   );
 };
 

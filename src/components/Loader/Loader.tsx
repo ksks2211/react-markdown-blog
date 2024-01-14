@@ -77,7 +77,7 @@ interface LoaderProps {
 
 // Base styles for the card
 const basedLoaderStyles = css`
-  position: absolute;
+  position: fixed;
   width: 100vw;
   height: 100vh;
   top: 0;
@@ -98,7 +98,7 @@ const StyledLoader = styled.div<LoaderProps>`
   }
 `;
 
-const Loader = ({ width = 12 }: { width?: number }) => {
+const Loader = ({ width = 4 }: { width?: number }) => {
   const size = width / 2;
 
   return (

@@ -41,3 +41,8 @@ export const getUsername = () => {
   const username = sessionStorage.getItem("username") || "";
   return username;
 };
+
+export const getDisplayName = () => {
+  const username = sessionStorage.getItem("displayName") || "";
+  return username;
+};

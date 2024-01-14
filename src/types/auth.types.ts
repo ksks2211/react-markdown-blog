@@ -12,13 +12,14 @@ export interface JWT {
   sub: string;
   exp: number;
   iss: string;
+  iat: number;
   auths: string[];
   id: number;
+  displayName: string;
 }
 
 // Server Response
 export interface AuthErrorInfo {
-  statusCode: number;
   message: string;
 }
 
@@ -27,4 +28,5 @@ export interface JWTInfo {
   message: string;
   token: string;
   username: string;
+  displayName: string;
 }

@@ -7,9 +7,10 @@ import {
 import useGlobal from "./useGlobal";
 import {
   getJsonWebTokenFromServer,
+  getJsonWebTokenWithOAuth2,
   getRefreshTokenFromServer,
 } from "../services/authService";
-import { JWTInfo } from "../types/auth.types";
+import { JWTInfo, LogInForm } from "../types/auth.types";
 
 interface LoginData {
   username: string;
@@ -18,19 +19,28 @@ interface LoginData {
 
 type SetErrorMessage = (e: string | undefined) => void;
 
-export function useJsonWebToken({
+export function useLoginWithOptionalRefresh({
   setErrorMessage,
 }: {
   setErrorMessage: SetErrorMessage;
 }) {
-  const { setIsLoggedIn, setUsername } = useGlobal();
+  const { setIsLoggedIn, setUsername, setDisplayName } = useGlobal();
 
-  return useMutation<JWTInfo, Error, LoginData, unknown>({
+  const loginMutation = useMutation<
+    JWTInfo,
+    Error,
+    LoginData & { needRefreshToken: boolean }
+  >({
     mutationFn: ({ username, password }) =>
       getJsonWebTokenFromServer({ username, password }),
-    onSuccess: ({ token, username }) => {
+    onSuccess: ({ token, displayName }, variable) => {
+      if (variable.needRefreshToken) {
+        // refreshTokenMutation.mutate
+      }
+
       setTokenToBrowser(token);
-      setUsername(username);
+      setUsername(variable.username);
+      setDisplayName(displayName);
       setIsLoggedIn(true);
     },
     onError: (error) => {
@@ -39,9 +49,18 @@ export function useJsonWebToken({
       setIsLoggedIn(false);
     },
   });
+
+  const performLoginAsync = (
+    loginForm: LogInForm,
+    needRefreshToken = false
+  ) => {
+    return loginMutation.mutateAsync({ ...loginForm, needRefreshToken });
+  };
+
+  return { performLoginAsync };
 }
 
-export function useRefreshToken() {
+export function useLoginWithRefreshToken() {
   const { setIsLoggedIn } = useGlobal();
 
   return useMutation<JWTInfo, Error>({
@@ -54,6 +73,26 @@ export function useRefreshToken() {
     },
     onError: (error) => {
       console.error(error);
+    },
+  });
+}
+
+export function useLoginWithOAuth2() {
+  const { setIsLoggedIn, setUsername, setDisplayName } = useGlobal();
+
+  return useMutation<JWTInfo, Error, URLSearchParams, unknown>({
+    retry: false,
+    mutationFn: (params) => getJsonWebTokenWithOAuth2(params),
+    onSuccess: ({ token, username, displayName }) => {
+      setTokenToBrowser(token);
+      setUsername(username);
+      setDisplayName(displayName);
+      setIsLoggedIn(true);
+    },
+    onError: (e) => {
+      console.error(e.message);
+      removeTokenFromBrowser();
+      setIsLoggedIn(false);
     },
   });
 }

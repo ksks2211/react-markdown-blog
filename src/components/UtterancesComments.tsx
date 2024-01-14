@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import "./UtterencesComments.scss";
-const UtterancesComments = () => {
+
+function UtterancesComments() {
   const ref = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -27,6 +28,6 @@ const UtterancesComments = () => {
   }, []);
 
   return <div ref={ref} />;
-};
+}
 
 export default UtterancesComments;
