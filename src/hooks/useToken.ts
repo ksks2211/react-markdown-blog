@@ -7,8 +7,8 @@ import {
 import useGlobal from "./useGlobal";
 import {
   getJsonWebTokenFromServer,
-  getJsonWebTokenWithOAuth2,
-  getRefreshTokenFromServer,
+  getJwtByOAuth2,
+  getJwtByRefreshToken,
 } from "../services/authService";
 import { JWTInfo, LogInForm } from "../types/auth.types";
 
@@ -65,7 +65,7 @@ export function useLoginWithRefreshToken() {
 
   return useMutation<JWTInfo, Error>({
     retry: false,
-    mutationFn: getRefreshTokenFromServer,
+    mutationFn: getJwtByRefreshToken,
     onSuccess: (data) => {
       const token = data.token;
       setTokenToBrowser(token);
@@ -82,7 +82,7 @@ export function useLoginWithOAuth2() {
 
   return useMutation<JWTInfo, Error, URLSearchParams, unknown>({
     retry: false,
-    mutationFn: (params) => getJsonWebTokenWithOAuth2(params),
+    mutationFn: (params) => getJwtByOAuth2(params),
     onSuccess: ({ token, username, displayName }) => {
       setTokenToBrowser(token);
       setUsername(username);

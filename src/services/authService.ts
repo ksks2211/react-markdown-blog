@@ -13,7 +13,7 @@ export async function isAvailableUsername(username: string) {
 
   try {
     const res = await blogApi.get(
-      `/auth/is-username-taken?${query.toString()}`
+      `/api/auth/is-username-taken?${query.toString()}`
     );
     if (res.status === 200) return true;
   } catch (e) {
@@ -28,7 +28,7 @@ export async function createUser({
   password,
   email,
 }: RegisterUserForm) {
-  const { data } = await blogApi.post("/auth/register", {
+  const { data } = await blogApi.post("/api/auth/register", {
     username,
     password,
     email,
@@ -42,7 +42,7 @@ export async function getJsonWebTokenFromServer({
   password,
 }: LogInForm) {
   try {
-    const res = await blogApi.post("/auth/log-in", { username, password });
+    const res = await blogApi.post("/api/auth/login", { username, password });
     return res.data;
   } catch (error) {
     if (isAxiosError(error) && error.response) {
@@ -54,14 +54,14 @@ export async function getJsonWebTokenFromServer({
   }
 }
 
-export const getRefreshTokenFromServer = async () => {
-  const { data } = await blogApi.get("/refresh", {
+export const getJwtByRefreshToken = async () => {
+  const { data } = await blogApi.get("/api/token/renew", {
     withCredentials: true,
   });
   return data;
 };
 
-export const getJsonWebTokenWithOAuth2 = async (params: URLSearchParams) => {
+export const getJwtByOAuth2 = async (params: URLSearchParams) => {
   const { data } = await blogApi.get("/login/oauth2/code/google", {
     params,
   });

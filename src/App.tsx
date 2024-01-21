@@ -6,24 +6,20 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import GlobalProvider from "./contexts/GlobalProvider";
 import GlobalRoutes from "./routes/GlobalRoutes";
+import { ThemeProvider, CssBaseline } from "@mui/material";
+import { theme } from "./theme";
 
 const queryClient = new QueryClient();
-
 function App() {
-  // const oauth2Params = new URLSearchParams(param);
-  // const askedLogin = oauth2Params.get("asked-login");
-  // if (askedLogin !== null) oauth2Params.delete("asked-login");
-
-  // if (askedLogin) {
-  //   return <div>{oauth2Params}</div>;
-  // }
-
   return (
     <QueryClientProvider client={queryClient}>
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <BrowserRouter>
           <GlobalProvider>
-            <GlobalRoutes />
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              <GlobalRoutes />
+            </ThemeProvider>
           </GlobalProvider>
         </BrowserRouter>
       </ErrorBoundary>

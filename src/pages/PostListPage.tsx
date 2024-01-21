@@ -1,15 +1,16 @@
 import { useState } from "react";
-import withLayout from "../hoc/withLayout";
 import { useChangeMenu } from "../hooks/useGlobal";
 import { useGetPostList } from "../hooks/usePostQuery";
 import toInteger from "lodash-es/toInteger";
 import { formatDateFromNow } from "../helpers/dateUtils";
-import PostCard from "../components/PostCard";
+import PostCard from "../components/common/PostCard";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Stack from "@mui/material/Stack";
 import Pagination from "@mui/material/Pagination";
 import Menu from "../contexts/Menu.enum";
-import Loader from "../components/Loader";
+import Loader from "../components/common/Loader";
+import withLayout from "../hoc/withLayout";
+import { scrollToTheTop } from "../helpers/scrollUtils";
 
 // ?page=1
 const PostList: React.FC = () => {
@@ -32,6 +33,7 @@ const PostList: React.FC = () => {
     e.preventDefault();
     navigate(`/posts?page=${pageNum}`);
     setPage(pageNum);
+    scrollToTheTop();
   };
 
   return (

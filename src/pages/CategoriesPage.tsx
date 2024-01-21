@@ -1,10 +1,10 @@
-import withLayout from "../hoc/withLayout";
 import { useChangeMenu } from "../hooks/useGlobal";
 import { useGetCategories } from "../hooks/useCategory";
-import CategoriesCard from "../containers/CategoriesCard";
+import CategoriesCard from "../components/containers/CategoriesCard";
 import Menu from "../contexts/Menu.enum";
 import ErrorFallback from "../errors/ErrorFallback";
-import Loader from "../components/Loader";
+import Loader from "../components/common/Loader";
+import withLayout from "../hoc/withLayout";
 
 const CategoriesPage: React.FC = () => {
   useChangeMenu(Menu.CATEGORIES);

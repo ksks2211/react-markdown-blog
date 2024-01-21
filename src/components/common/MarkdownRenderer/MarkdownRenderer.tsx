@@ -14,14 +14,6 @@ const Code: CodeComponent = ({ children, className, ...props }) => {
   const language = match?.[1] || "text";
   const codeString = String(children).replace(/\n$/, "");
 
-  // const handleCopyClick = async () => {
-  //   try {
-  //     await navigator.clipboard.writeText(codeString);
-  //   } catch (err) {
-  //     console.error("Failed to copy", err);
-  //   }
-  // };
-
   return (
     <>
       <SyntaxHighLighter
@@ -31,10 +23,6 @@ const Code: CodeComponent = ({ children, className, ...props }) => {
         style={dracula}
         customStyle={{ marginBottom: "0", borderRadius: "0" }}
       ></SyntaxHighLighter>
-
-      {/* <button style={{ width: "100%" }} onClick={handleCopyClick}>
-        btn={language}
-      </button> */}
     </>
   );
 };

@@ -4,7 +4,7 @@ import TextField from "@mui/material/TextField";
 import { useState } from "react";
 import { useCreateUser } from "../hooks/useUser";
 import { useNavigate } from "react-router-dom";
-import { RegisterUserForm } from "../types/auth.types";
+import type { RegisterUserForm } from "../types/auth.types";
 
 export default function SignUp() {
   const [state, setState] = useState<RegisterUserForm>({

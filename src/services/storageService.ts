@@ -1,5 +1,4 @@
-import { JWT } from "../types/auth.types";
-
+import type { JWT } from "../types/auth.types";
 import jwtDecode from "jwt-decode";
 
 const TOKEN_KEY = "jwt_token";
@@ -15,6 +14,7 @@ export const getTokenFromBrowser = () => {
 export const removeTokenFromBrowser = () => {
   localStorage.removeItem(TOKEN_KEY);
 };
+
 export const isValidToken = () => {
   const token = getTokenFromBrowser();
   if (token) {
@@ -27,6 +27,7 @@ export const isValidToken = () => {
         return false;
       } else {
         sessionStorage.setItem("username", decoded.sub);
+        sessionStorage.setItem("displayName", decoded.displayName);
         return true;
       }
     } catch (error) {

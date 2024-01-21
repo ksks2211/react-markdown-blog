@@ -1,5 +1,5 @@
 @import 'reset-css';
-@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500&display=swap');
 
 
 html{
@@ -11,23 +11,14 @@ html{
 *{
   margin:0;
   box-sizing: border-box;
-  // &::-webkit-scrollbar{
-  //   // display: none;
-  //   transition: opacity 0.5s;
-  //   width: 4px; /* Width of the vertical scrollbar */
-  // }
 
-  // &::-webkit-scrollbar-thumb{    
-  //   background-color: transparent; /* Color of the scroll thumb */
-  //   border-radius: 2px; /* Rounded corners on the thumb */
-  // }
-
-  // &::-webkit-scrollbar-thumb:hover{
-  //   background-color: #939393;/* Rounded corners on the thumb */
-  // }
 }
 
 a {
   text-decoration: none;
   color: darkgray;
+
+  &:hover{
+    color: darken(darkgray,30%);
+  }
 }

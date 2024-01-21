@@ -1,5 +1,4 @@
 import { useSearchParams } from "react-router-dom";
-import withLayout from "../hoc/withLayout";
 import Menu from "../contexts/Menu.enum";
 import { useChangeMenu } from "../hooks/useGlobal";
 import { PostCreateForm } from "../types/post.types";
@@ -9,6 +8,7 @@ import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Button from "@mui/material/Button";
 import { useCreatePost } from "../hooks/usePostMutation";
+import withLayout from "../hoc/withLayout";
 
 const initialState = {
   title: "",

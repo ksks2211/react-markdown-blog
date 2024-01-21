@@ -1,23 +1,29 @@
-import { ComponentType, FunctionComponent } from "react";
-import Layout from "../layout/Layout";
+import Layout from "../components/layouts/Layout";
 
-/**
- * This is a higher-order component (HOC) that wraps a given component with the Layout.
- *
- * @param WrappedComponent - The component to wrap.
- * @returns The wrapped component.
- */
+import Main, { MainContainerProps } from "../components/layouts/Main";
+import { RightSidebarContainer } from "../components/containers/RightSidebarContainer";
+import { NavBarContainer } from "../components/containers/NavBarContainer";
+import { FooterContainer } from "../components/containers/FooterContainer";
+import HeaderContainer from "../components/containers/HeaderContainer";
 
-function withLayout<T extends JSX.IntrinsicAttributes>(
-  WrappedComponent: ComponentType<T>
-): FunctionComponent<T> {
-  return function WrappedWithLayout(props: T) {
+export default function withLayout<T extends MainContainerProps>(
+  MainComponent: React.ComponentType
+) {
+  return function WrappedWithLayout(wrapperProps: T) {
+    const MainContainer: React.FC<MainContainerProps> = (props) => {
+      return (
+        <Main MainComponent={MainComponent} {...props} {...wrapperProps}></Main>
+      );
+    };
+
     return (
-      <Layout>
-        <WrappedComponent {...props} />
-      </Layout>
+      <Layout
+        MainComponent={MainContainer}
+        RightSidebarComponent={RightSidebarContainer}
+        FooterComponent={FooterContainer}
+        HeaderComponent={HeaderContainer}
+        LeftSidebarComponent={NavBarContainer}
+      />
     );
   };
 }
-
-export default withLayout;

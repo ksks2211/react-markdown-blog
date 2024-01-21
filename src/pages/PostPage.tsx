@@ -14,17 +14,16 @@ import { useDeletePost } from "../hooks/usePostMutation";
 import { usePrevAndNextPosts, useGetPost } from "../hooks/usePostQuery";
 
 import { usePathParamId } from "../hooks/useParameter";
-
-import withLayout from "../hoc/withLayout";
 import { formatDate } from "../helpers/dateUtils";
-import MarkdownRenderer from "../components/MarkdownRenderer/MarkdownRenderer";
+import MarkdownRenderer from "../components/common/MarkdownRenderer/MarkdownRenderer";
 import styles from "./PostPage.module.scss";
 import { MdArrowBack, MdDelete } from "react-icons/md";
-import UtterancesComments from "../components/UtterancesComments";
+import UtterancesComments from "../components/common/UtterancesComments";
 
 import Menu from "../contexts/Menu.enum";
-import Loader from "../components/Loader";
+import Loader from "../components/common/Loader";
 import ErrorFallback from "../errors/ErrorFallback";
+import withLayout from "../hoc/withLayout";
 
 const cx = cn.bind(styles);
 

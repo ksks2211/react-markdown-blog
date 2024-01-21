@@ -1,9 +1,11 @@
 import blogApi from "../api/blogApi";
-import { ChangeCategoryForm } from "../types/category.types";
+import type { ChangeCategoryForm } from "../types/category.types";
+
+const urlPrefix = "/api/categories";
 
 // Categories
 export const getCategories = async () => {
-  const { data } = await blogApi.get("/categories");
+  const { data } = await blogApi.get(urlPrefix);
   return data;
 };
 
@@ -12,18 +14,18 @@ export async function createCategory({
 }: {
   newCategory: string;
 }): Promise<void> {
-  await blogApi.post("/categories", { category: newCategory });
+  await blogApi.post(urlPrefix, { category: newCategory });
 }
 
 export async function deleteCategory(categoryId: string) {
-  await blogApi.delete(`/categories/${categoryId}`);
+  await blogApi.delete(`${urlPrefix}/${categoryId}`);
 }
 
 export async function changeCategory({
   categoryId,
   newCategory,
 }: ChangeCategoryForm) {
-  await blogApi.put(`/categories/${categoryId}`, {
+  await blogApi.put(`${urlPrefix}/${categoryId}`, {
     category: newCategory,
   });
 }

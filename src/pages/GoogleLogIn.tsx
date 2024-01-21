@@ -1,6 +1,6 @@
 import { Navigate, useSearchParams } from "react-router-dom";
 import { useLoginWithOAuth2 } from "../hooks/useToken";
-import Loader from "../components/Loader";
+import Loader from "../components/common/Loader";
 import ErrorFallback from "../errors/ErrorFallback";
 
 function GoogleLogIn() {

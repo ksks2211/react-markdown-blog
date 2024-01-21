@@ -1,5 +1,5 @@
 import { ComponentPropsWithRef, ComponentPropsWithoutRef } from "react";
-import { Categories, SubCategory } from "../../types/category.types";
+import { Categories, SubCategory } from "../../../types/category.types";
 
 export interface CategoryRowProps extends ComponentPropsWithRef<"div"> {
   categoryName: string;

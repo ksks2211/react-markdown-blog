@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
-import TopFullBar from "../layout/TopFullBar";
+import TopFullBar from "../components/common/TopFullBar";
 import styles from "./LogInPage.module.scss";
 import cn from "classnames/bind";
 import { AiFillLock } from "react-icons/ai";

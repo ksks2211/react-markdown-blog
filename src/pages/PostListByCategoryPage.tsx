@@ -1,14 +1,14 @@
 import { useChangeMenu } from "../hooks/useGlobal";
-import withLayout from "../hoc/withLayout";
 import { useGetPostListByCategory } from "../hooks/usePostQuery";
 import { formatDateFromNow } from "../helpers/dateUtils";
-import PostCard from "../components/PostCard";
+import PostCard from "../components/common/PostCard";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Menu from "../contexts/Menu.enum";
 import { usePathParamId } from "../hooks/useParameter";
 import { Link } from "react-router-dom";
-import Loader from "../components/Loader";
+import Loader from "../components/common/Loader";
+import withLayout from "../hoc/withLayout";
 
 const PostListByCategory: React.FC = () => {
   const id = usePathParamId();

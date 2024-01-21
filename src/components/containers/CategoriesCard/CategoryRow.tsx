@@ -2,13 +2,16 @@ import {
   useDeleteCategory,
   useCreateCategory,
   useChangeCategory,
-} from "../../hooks/useCategory";
+} from "../../../hooks/useCategory";
 
 import { useRef, useState } from "react";
 
 import { Link } from "react-router-dom";
-import { convertSlashesToDashes, removeDash } from "../../helpers/stringUtils";
-import TextInputModal from "../../components/TextInputModal";
+import {
+  convertSlashesToDashes,
+  removeDash,
+} from "../../../helpers/stringUtils";
+import TextInputModal from "../../common/TextInputModal";
 import { CategoryRowProps } from "./CategoriesCard.types";
 import { cx } from "./config";
 
