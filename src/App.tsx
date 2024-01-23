@@ -7,7 +7,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import GlobalProvider from "./contexts/GlobalProvider";
 import GlobalRoutes from "./routes/GlobalRoutes";
 import { ThemeProvider, CssBaseline } from "@mui/material";
-import { theme } from "./theme";
+import theme from "./theme";
 
 const queryClient = new QueryClient();
 function App() {

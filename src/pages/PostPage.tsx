@@ -24,6 +24,7 @@ import Menu from "../contexts/Menu.enum";
 import Loader from "../components/common/Loader";
 import ErrorFallback from "../errors/ErrorFallback";
 import withLayout from "../hoc/withLayout";
+import { scrollToTheTop } from "../helpers/scrollUtils";
 
 const cx = cn.bind(styles);
 
@@ -41,6 +42,8 @@ const Post: React.FC = () => {
   const postId = parseInt(id);
 
   useEffect(() => {
+    scrollToTheTop();
+
     const checkLoadMore = () => {
       if (ref.current === null) return;
       if (window.scrollY > ref.current.offsetHeight * 0.5) {
@@ -58,7 +61,7 @@ const Post: React.FC = () => {
 
     window.addEventListener("scroll", throttle(checkLoadMore, 300));
     return () => window.removeEventListener("scroll", checkLoadMore);
-  }, []);
+  }, [postId]);
 
   const handleBackToPrevPage = () => {
     // If you have the state and it has fromPage
@@ -211,7 +214,7 @@ const Post: React.FC = () => {
       ) : (
         ""
       )}
-      <UtterancesComments />
+      <UtterancesComments postId={postId} />
     </div>
   );
 };

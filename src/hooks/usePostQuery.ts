@@ -6,7 +6,7 @@ import {
   getPostsByCategories,
   getPrevAndNextPosts,
 } from "../services/postService";
-import { Post, Posts, PrevAndNextPosts } from "../types/post.types";
+import type { Post, Posts, PrevAndNextPosts } from "@customTypes/post.types";
 
 export function useGetPost({ postId }: { postId: number | string }) {
   const pid = toInteger(postId);

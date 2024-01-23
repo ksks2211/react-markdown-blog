@@ -57,6 +57,8 @@ interface LayoutProps {
   RightSidebarComponent: React.FC<RightSidebarProps>;
   FooterComponent: React.FC<FooterProps>;
   MainComponent: React.FC<MainContainerProps>;
+  sidebarOpen: boolean;
+  setSidebarOpen: (v: boolean) => void;
 }
 
 export default function Layout({
@@ -65,8 +67,9 @@ export default function Layout({
   RightSidebarComponent,
   FooterComponent,
   MainComponent,
+  sidebarOpen,
+  setSidebarOpen,
 }: LayoutProps) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [headerVisible, setHeaderVisible] = useState(true);
   const [prevScrollY, setPrevScrollY] = useState(window.scrollY);
   const { isLg } = useBreakpoints();
@@ -74,12 +77,14 @@ export default function Layout({
   const theme = useTheme();
 
   useEffect(() => {
+    console.log(setSidebarOpen);
+
     if (isLg) {
       setSidebarOpen(true);
     } else {
       setSidebarOpen(false);
     }
-  }, [isLg]);
+  }, [isLg, setSidebarOpen]);
 
   const handleSidebarToggle = useCallback(() => {
     if (isLg) {
@@ -87,7 +92,7 @@ export default function Layout({
     } else {
       setSidebarOpen(!sidebarOpen);
     }
-  }, [sidebarOpen, isLg]);
+  }, [isLg, setSidebarOpen, sidebarOpen]);
 
   useEffect(() => {
     const handleScroll = () => {

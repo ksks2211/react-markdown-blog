@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import useGlobal from "../hooks/useGlobal";
-import LogIn from "../pages/LogInPage";
+import LogIn from "../pages/LogInPage/LogInPage";
 import PrivateRoutes from "./PrivateRoutes";
 import SignUp from "../pages/SignUpPage";
 import GoogleLogIn from "../pages/GoogleLogIn";

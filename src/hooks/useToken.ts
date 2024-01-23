@@ -17,7 +17,7 @@ interface LoginData {
   password: string;
 }
 
-type SetErrorMessage = (e: string | undefined) => void;
+type SetErrorMessage = (e: string | null) => void;
 
 export function useLoginWithOptionalRefresh({
   setErrorMessage,
@@ -50,14 +50,14 @@ export function useLoginWithOptionalRefresh({
     },
   });
 
-  const performLoginAsync = (
+  const performLoginAsync = async (
     loginForm: LogInForm,
     needRefreshToken = false
   ) => {
     return loginMutation.mutateAsync({ ...loginForm, needRefreshToken });
   };
 
-  return { performLoginAsync };
+  return { loginMutation, performLoginAsync };
 }
 
 export function useLoginWithRefreshToken() {

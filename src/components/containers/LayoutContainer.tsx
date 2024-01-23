@@ -9,6 +9,7 @@ import { capitalizeFirst } from "../../helpers/stringUtils";
 import useBreakpoints from "../../hooks/useBreakPoints";
 import Menu from "../../contexts/Menu.enum";
 import Main, { MainContainerProps } from "../layouts/Main";
+import { useState } from "react";
 
 export type HeaderContainerProps = Omit<HeaderProps, "title" | "isLg">;
 const HeaderContainer: React.FC<HeaderContainerProps> = (props) => {
@@ -50,6 +51,8 @@ interface LayoutContainerProps {
 export default function LayoutContainer({
   MainComponent,
 }: LayoutContainerProps) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   const MainContainer: React.FC<MainContainerProps> = (props) => {
     return <Main MainComponent={MainComponent} {...props}></Main>;
   };
@@ -61,6 +64,8 @@ export default function LayoutContainer({
       FooterComponent={FooterContainer}
       HeaderComponent={HeaderContainer}
       LeftSidebarComponent={NavBarContainer}
+      setSidebarOpen={setSidebarOpen}
+      sidebarOpen={sidebarOpen}
     />
   );
 }

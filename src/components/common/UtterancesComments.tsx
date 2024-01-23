@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import "./UtterencesComments.scss";
 
-function UtterancesComments() {
+function UtterancesComments({ postId }: { postId: number }) {
   const ref = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -25,9 +25,8 @@ function UtterancesComments() {
         ref.current?.append(script);
       }
     }, 300);
-  }, []);
-
-  return <div ref={ref} />;
+  }, [postId]);
+  return <div ref={ref} key={postId} />;
 }
 
 export default UtterancesComments;

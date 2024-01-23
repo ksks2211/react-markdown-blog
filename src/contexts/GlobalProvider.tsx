@@ -17,6 +17,7 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(isValidToken());
   const [username, setUsername] = useState<string>(getUsername());
   const [displayName, setDisplayName] = useState<string>(getDisplayName());
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     setIsLoggedIn(isValidToken());
@@ -39,6 +40,8 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     logout,
     displayName,
     setDisplayName,
+    sidebarOpen,
+    setSidebarOpen,
   };
   return (
     <GlobalContext.Provider value={globalValue}>

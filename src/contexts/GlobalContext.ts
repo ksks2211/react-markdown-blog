@@ -11,6 +11,8 @@ interface GlobalContextType {
   setUsername: (n: string) => void;
   setDisplayName: (n: string) => void;
   logout: () => void;
+  sidebarOpen: boolean;
+  setSidebarOpen: (v: boolean) => void;
 }
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined);

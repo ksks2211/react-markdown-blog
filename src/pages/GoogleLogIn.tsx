@@ -1,7 +1,6 @@
 import { Navigate, useSearchParams } from "react-router-dom";
 import { useLoginWithOAuth2 } from "../hooks/useToken";
 import Loader from "../components/common/Loader";
-import ErrorFallback from "../errors/ErrorFallback";
 
 function GoogleLogIn() {
   const [oauth2Params] = useSearchParams();
@@ -10,12 +9,8 @@ function GoogleLogIn() {
   mutation.mutate(oauth2Params);
 
   if (mutation.isError) {
-    return (
-      <ErrorFallback
-        error={mutation.error}
-        resetErrorBoundary={() => mutation.mutate(oauth2Params)}
-      />
-    );
+    const message = encodeURIComponent(mutation.error.message);
+    return <Navigate to={`/login?error=${message}`} />;
   }
 
   if (mutation.isSuccess) {
