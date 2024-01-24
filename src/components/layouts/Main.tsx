@@ -10,8 +10,8 @@ export interface MainProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const StyledMain = styled("main")`
-  margin: 1rem 2rem;
-  color: #0b0101;
+  width: 100%;
+  min-width: 100%;
 `;
 
 const Main: React.FC<MainProps> = ({ MainComponent, ...rest }) => {

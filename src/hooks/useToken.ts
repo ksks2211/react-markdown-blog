@@ -6,11 +6,12 @@ import {
 } from "../services/storageService";
 import useGlobal from "./useGlobal";
 import {
+  deleteRefreshTokenIfExists,
   getJsonWebTokenFromServer,
   getJwtByOAuth2,
   getJwtByRefreshToken,
 } from "../services/authService";
-import { JWTInfo, LogInForm } from "../types/auth.types";
+import type { JWTInfo, LogInForm } from "@customTypes/auth.types";
 
 interface LoginData {
   username: string;
@@ -94,5 +95,12 @@ export function useLoginWithOAuth2() {
       removeTokenFromBrowser();
       setIsLoggedIn(false);
     },
+  });
+}
+
+export function useLogout() {
+  return useMutation<void, Error, void, unknown>({
+    retry: false,
+    mutationFn: deleteRefreshTokenIfExists,
   });
 }

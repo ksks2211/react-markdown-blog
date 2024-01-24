@@ -1,14 +1,16 @@
 import { AxiosError } from "axios";
 import { NotFoundError, UnauthorizedError } from ".";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { ComponentType } from "react";
 import { FallbackProps } from "react-error-boundary";
+import { isValidToken } from "../services/storageService";
 
 const ErrorFallback: ComponentType<FallbackProps> = ({
   error,
   resetErrorBoundary,
 }) => {
+  const navigate = useNavigate();
   let cause = "";
 
   if (error instanceof NotFoundError) {
@@ -22,6 +24,11 @@ const ErrorFallback: ComponentType<FallbackProps> = ({
 
   if (error instanceof UnauthorizedError) {
     cause = "Unauthorized Error";
+    navigate(`/login`);
+  }
+
+  if (!isValidToken()) {
+    navigate(`/login`);
   }
 
   // ... other custom error types

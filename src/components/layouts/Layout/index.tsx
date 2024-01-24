@@ -77,8 +77,6 @@ export default function Layout({
   const theme = useTheme();
 
   useEffect(() => {
-    console.log(setSidebarOpen);
-
     if (isLg) {
       setSidebarOpen(true);
     } else {

@@ -25,8 +25,67 @@ import Loader from "../components/common/Loader";
 import ErrorFallback from "../errors/ErrorFallback";
 import withLayout from "../hoc/withLayout";
 import { scrollToTheTop } from "../helpers/scrollUtils";
+import { styled, useTheme } from "@mui/material";
+import { rgba, darken } from "polished";
 
 const cx = cn.bind(styles);
+
+const StyledPostPage = styled("div")`
+  margin: 2rem 2rem 0;
+
+  ${(props) => props.theme.breakpoints.up("md")} {
+    margin: 4rem 5rem 0;
+  }
+`;
+
+const StyledPrevPageBtn = styled("div")`
+  height: 2rem;
+  display: flex;
+  align-items: center;
+
+  svg {
+    border-radius: 0.2rem;
+    color: #fff;
+    font-size: 1.6rem;
+    background-color: ${(props) => props.theme.global.mainColor};
+    cursor: pointer;
+    transition: 0.2s ease-out;
+    transform: scale(1.3);
+
+    &:hover {
+      background-color: ${(props) =>
+        darken(0.05, props.theme.global.mainColor)};
+    }
+  }
+`;
+
+const StyledPrevAndNextPostBtn = styled("div")`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: row;
+
+  a {
+    display: flex;
+    flex-flow: column;
+    width: 50%;
+    border: 1px solid ${(props) => props.theme.global.btnColor};
+    height: 6rem;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: 0.4s ease-out;
+
+    &:hover {
+      background-color: ${(props) => props.theme.global.btnColor};
+      color: #fff;
+
+      span {
+        color: #fff !important;
+      }
+    }
+  }
+`;
 
 const Post: React.FC = () => {
   const id = usePathParamId();
@@ -38,6 +97,9 @@ const Post: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [loadMore, setLoadMore] = useState(false);
+  const theme = useTheme();
+
+  const backgroundColor = rgba(theme.palette.info.light, 0.03);
 
   const postId = parseInt(id);
 
@@ -46,21 +108,26 @@ const Post: React.FC = () => {
 
     const checkLoadMore = () => {
       if (ref.current === null) return;
-      if (window.scrollY > ref.current.offsetHeight * 0.5) {
+      if (window.scrollY > document.documentElement.scrollHeight * 0.3) {
         setLoadMore(true);
-        window.removeEventListener("scroll", checkLoadMore);
+        window.removeEventListener("scroll", handleScroll);
       }
     };
 
-    if (document.documentElement.scrollHeight <= window.innerHeight) {
+    const handleScroll = throttle(checkLoadMore, 300);
+
+    if (document.documentElement.scrollHeight <= window.innerHeight + 250) {
       setTimeout(() => {
         setLoadMore(true);
-        window.removeEventListener("scroll", checkLoadMore);
+        window.removeEventListener("scroll", handleScroll);
       }, 1000);
     }
 
-    window.addEventListener("scroll", throttle(checkLoadMore, 300));
-    return () => window.removeEventListener("scroll", checkLoadMore);
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      setLoadMore(false);
+    };
   }, [postId]);
 
   const handleBackToPrevPage = () => {
@@ -126,15 +193,15 @@ const Post: React.FC = () => {
   const isMyPost = username === post.writer;
 
   return (
-    <div className={cx("Post")}>
-      <div className={cx("main")} ref={ref}>
-        <div className={cx("back-btn")}>
-          <MdArrowBack
-            className={cx("back-icon")}
-            onClick={handleBackToPrevPage}
-          />
-        </div>
+    <StyledPostPage className={cx("Post")}>
+      <StyledPrevPageBtn className={cx("back-btn")}>
+        <MdArrowBack
+          className={cx("back-icon")}
+          onClick={handleBackToPrevPage}
+        />
+      </StyledPrevPageBtn>
 
+      <div className={cx("main")} ref={ref}>
         <div className={cx("post-metadata")}>
           <h1 className={cx("title")}>
             {post.title}
@@ -180,7 +247,16 @@ const Post: React.FC = () => {
             justifyContent="end"
           >
             {post.tags.map((tag) => (
-              <Chip label={tag} variant="outlined" key={tag} color="primary" />
+              <Chip
+                label={tag}
+                variant="outlined"
+                key={tag}
+                color="info"
+                sx={{
+                  fontWeight: "500",
+                  backgroundColor: backgroundColor,
+                }}
+              />
             ))}
           </Stack>
         </Box>
@@ -189,7 +265,7 @@ const Post: React.FC = () => {
       {!loadMore || isLoadingMorePosts ? (
         <Skeleton style={{ width: "100%", height: "6rem" }} count={1} />
       ) : morePostsError === null && prevAndNextPosts !== undefined ? (
-        <div className={cx("btn-group")}>
+        <StyledPrevAndNextPostBtn className={cx("btn-group")}>
           <Link
             to={`/posts/${prevAndNextPosts.prev?.id}`}
             className={cx("btn-prev", "btn", {
@@ -210,12 +286,12 @@ const Post: React.FC = () => {
               {prevAndNextPosts.hasNext ? prevAndNextPosts.next.title : "None"}
             </span>
           </Link>
-        </div>
+        </StyledPrevAndNextPostBtn>
       ) : (
         ""
       )}
       <UtterancesComments postId={postId} />
-    </div>
+    </StyledPostPage>
   );
 };
 

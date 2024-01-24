@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "react-query";
 
 import { createPost, deletePostById } from "../services/postService";
-import { PostCreateForm, PostCreatedInfo } from "../types/post.types";
+import type { PostCreateForm, PostCreatedInfo } from "@customTypes/post.types";
 import { useNavigate } from "react-router-dom";
 
 export function useDeletePost() {

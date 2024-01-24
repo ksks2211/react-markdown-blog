@@ -63,7 +63,7 @@ const TextInputModal: React.FC<ModalProps> = ({
           label={label}
           placeholder={placeholder}
         />
-        <Box mt={2} display="flex" justifyContent="flex-end">
+        <Box mt={1} display="flex" justifyContent="flex-end">
           <Button color="primary" onClick={onClose}>
             Close
           </Button>

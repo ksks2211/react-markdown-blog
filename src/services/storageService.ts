@@ -13,6 +13,7 @@ export const getTokenFromBrowser = () => {
 
 export const removeTokenFromBrowser = () => {
   localStorage.removeItem(TOKEN_KEY);
+  sessionStorage.clear();
 };
 
 export const isValidToken = () => {

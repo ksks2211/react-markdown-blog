@@ -72,6 +72,7 @@ export const StyledLoginForm = styled("form")`
 
   .greetings {
     width: 100%;
+    color: ${(props) => props.theme.palette.grey[800]};
     font-size: 1.6rem;
     font-weight: 700;
     padding-top: 1rem;

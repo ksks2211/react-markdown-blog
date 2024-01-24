@@ -19,6 +19,31 @@ import { FaRegFolder, FaRegFolderOpen, FaPen } from "react-icons/fa";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { MdDelete } from "react-icons/md";
+import { styled } from "@mui/material";
+
+const StyledRowWithSubRows = styled("div")<{ depth: number }>`
+  position: relative;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  /* max-height: 1500px; */
+  transition: height 0.4s;
+
+  & > & {
+    border-top: 1px solid rgba(0, 0, 0, 0.125);
+  }
+`;
+
+const StyledRow = styled("div")<{ rowOpen: boolean }>`
+  transition: 0.4s;
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: ${(props) => (props.rowOpen ? "3rem" : "0")};
+  /* content-visibility: ${(props) =>
+    props.rowOpen ? "visible" : "hidden"}; */
+`;
 
 export const CategoryRow: React.FC<CategoryRowProps> = ({
   categoryName,
@@ -28,7 +53,10 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
   depth,
   numOfCategories,
   parentCategoryName,
-  closed,
+  rows,
+  rowOpen,
+  subRowsOpen,
+  setSubRowsOpen,
   // ...props
 }) => {
   const fullCategoryName = `${parentCategoryName}/${categoryName}`;
@@ -37,6 +65,7 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
   const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
 
   const categoryId = convertSlashesToDashes(fullCategoryName);
+  const categoryPath = depth !== 1 ? `/${categoryId}` : "";
   const deleteCategoryMutation = useDeleteCategory();
   const createCategoryMutation = useCreateCategory();
   const changeCategoryMutation = useChangeCategory();
@@ -59,20 +88,44 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
 
   const canToggle = numOfCategories !== 0;
   const marked = depth === 1;
-  //
   const disabled = numOfPosts === 0;
 
   // Category removable
   const removable = disabled && !canToggle;
 
-  if (depth === 1) {
-    closed = false;
-  }
-
   const rowRef = useRef<HTMLDivElement>(null);
 
   const toggleCategory = () => {
     rowRef.current?.classList.toggle(cx("closed"));
+
+    if (!subRowsOpen) {
+      Object.keys(rows).forEach((key) => {
+        const rowRef = rows[key];
+
+        if (fullCategoryName.startsWith(key) && fullCategoryName !== key) {
+          // cur parent rows
+          rowRef.setRowOpen(true);
+          rowRef.setSubRowsOpen(true);
+        } else if (parentCategoryName === rowRef.parentName) {
+          // sibling rows
+          rowRef.setRowOpen(true);
+          rowRef.setSubRowsOpen(false);
+        } else {
+          // other rows
+          rowRef.setRowOpen(false);
+          rowRef.setSubRowsOpen(false);
+        }
+
+        // child row
+        if (rowRef.parentName === fullCategoryName) {
+          rowRef.setRowOpen(true);
+          rowRef.setSubRowsOpen(false);
+        }
+      });
+      setSubRowsOpen(true);
+    } else {
+      setSubRowsOpen(false);
+    }
   };
 
   const handleRemoveCategory = async () => {
@@ -93,8 +146,12 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
 
   return (
     <>
-      <div className={cx("row-container")}>
-        <div className={cx("row-wrapper", { closed, marked })} ref={rowRef}>
+      <StyledRowWithSubRows depth={depth} className={cx("rows-container")}>
+        <StyledRow
+          rowOpen={rowOpen}
+          className={cx("row-wrapper", { closed: !subRowsOpen, marked })}
+          ref={rowRef}
+        >
           <div
             style={{
               display: "inline-flex",
@@ -104,15 +161,14 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
           />
 
           <div className={cx("category-details")}>
-            {<FaRegFolderOpen className={cx("icon", "open-folder")} />}
-            {<FaRegFolder className={cx("icon", "closed-folder")} />}
+            {subRowsOpen ? (
+              <FaRegFolderOpen className={cx("icon")} />
+            ) : (
+              <FaRegFolder className={cx("icon")} />
+            )}
             {disabled || <span className={cx("count")}>{numOfPosts}</span>}
 
-            <Link
-              className={cx("dirname")}
-              to={`/categories/${categoryId}`}
-              onClick={(e) => e.stopPropagation()}
-            >
+            <Link className={cx("dirname")} to={`/categories${categoryPath}`}>
               {removeDash(categoryName)}
             </Link>
 
@@ -143,10 +199,10 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
               <RiArrowDropDownLine className={cx("dropdown-icon")} />
             </div>
           )}
-        </div>
+        </StyledRow>
 
         {children}
-      </div>
+      </StyledRowWithSubRows>
 
       {createModalOpen && (
         <TextInputModal

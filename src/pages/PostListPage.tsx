@@ -11,6 +11,11 @@ import Menu from "../contexts/Menu.enum";
 import Loader from "../components/common/Loader";
 import withLayout from "../hoc/withLayout";
 import { scrollToTheTop } from "../helpers/scrollUtils";
+import { styled } from "@mui/material";
+
+const StyledPostList = styled("div")`
+  margin: 2.5rem 2.5rem 0;
+`;
 
 // ?page=1
 const PostList: React.FC = () => {
@@ -37,7 +42,7 @@ const PostList: React.FC = () => {
   };
 
   return (
-    <div>
+    <StyledPostList>
       {/* Total Pages : {totalPages} */}
       <div>
         {postList.map((post) => (
@@ -52,9 +57,7 @@ const PostList: React.FC = () => {
         ))}
       </div>
 
-      {/* <Paginator currentPage={page} lastPage={totalPages} /> */}
-
-      <Stack justifyContent="center" alignItems="center" spacing={2}>
+      <Stack justifyContent="center" alignItems="center" spacing={0}>
         <Pagination
           variant="outlined"
           color="primary"
@@ -63,7 +66,7 @@ const PostList: React.FC = () => {
           onChange={handlePage}
         />
       </Stack>
-    </div>
+    </StyledPostList>
   );
 };
 

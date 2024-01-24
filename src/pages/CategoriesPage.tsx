@@ -5,6 +5,11 @@ import Menu from "../contexts/Menu.enum";
 import ErrorFallback from "../errors/ErrorFallback";
 import Loader from "../components/common/Loader";
 import withLayout from "../hoc/withLayout";
+import { styled } from "@mui/material";
+
+const StyledCategoriesPage = styled("div")`
+  padding: 3rem;
+`;
 
 const CategoriesPage: React.FC = () => {
   useChangeMenu(Menu.CATEGORIES);
@@ -17,9 +22,9 @@ const CategoriesPage: React.FC = () => {
   if (data === undefined) throw new Error(`Failed To Get Categories`);
 
   return (
-    <div>
+    <StyledCategoriesPage>
       <CategoriesCard rootCategory={data} />
-    </div>
+    </StyledCategoriesPage>
   );
 };
 

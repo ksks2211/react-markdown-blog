@@ -3,9 +3,9 @@ import Menu from "../contexts/Menu.enum";
 import withLayout from "../hoc/withLayout";
 
 const Data: React.FC = () => {
-  useChangeMenu(Menu.DATA);
+  useChangeMenu(Menu.TAGS);
 
-  return <p>This is Data</p>;
+  return <p>This is TAG</p>;
 };
 
 const DataWithLayout = withLayout(Data);

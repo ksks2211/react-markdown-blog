@@ -7,37 +7,9 @@ $directory-title-color : #6189be;
 
 .CategoriesCard {
 
-
-  border: 1px solid rgba(0, 0, 0, .125);
-  border-radius: .25rem;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.19), 0 2px 2px rgba(0, 0, 0, 0.10);
-  padding: 0;
-
-  display: flex;
-  flex-flow: column;
-
-  color: darken($directory-card-text-color, 20%);
-
-
-  .row-container {
-    max-height: 1500px;
-    transition: .4s;
-
-  }
-
-
-
   .row-wrapper {
-    max-height: 5555px;
-    transition: .4s;
-    // line-height: 3rem;
-    width: 100%;
-    position: relative;
 
-    display: flex;
-    align-items: center;
-    height:3rem;
-    
+  
     &.marked {
       background-color: rgba(0, 0, 0, .075);
     }
@@ -50,7 +22,6 @@ $directory-title-color : #6189be;
       display: none;
     }
 
-
     &>.category-details{
       display:flex;
       align-items: center;
@@ -60,9 +31,7 @@ $directory-title-color : #6189be;
         font-size: 1.3rem;
       }
 
-      
-
-
+    
       &>.count{
         position: absolute;
         top: 0;
@@ -83,7 +52,6 @@ $directory-title-color : #6189be;
   
 
       .dirname{
-
 
         color: darken($directory-title-color, 20%);
         font-size: 1.1rem;
@@ -110,8 +78,6 @@ $directory-title-color : #6189be;
         }
       }
 
-
-
       .icon-sm{
         font-size: 1.2rem;
         margin-right:.4rem;
@@ -119,11 +85,6 @@ $directory-title-color : #6189be;
         &:hover{
           color:darken($directory-card-text-color,15%);
         }
-      }
-      .add-icon{
-      }
-
-      .delete-icon{
       }
 
     }
@@ -141,11 +102,19 @@ $directory-title-color : #6189be;
       color: #837c7c;
     }
 
-    &.closed~.row-container {
-      max-height: 0;
-      opacity: 0;
-      // overflow: hidden;
-      border: 0;
+
+
+    &.closed~.rows-container {
+      .row-wrapper{
+        // max-height: 0;
+        opacity: 0;
+        transition:.3s;
+        content-visibility: hidden;
+        margin-bottom:-3rem;
+        border: none !important;;
+
+      }
+      border: none !important;;
     }
 
 
@@ -158,7 +127,6 @@ $directory-title-color : #6189be;
       display: flex;
       align-items: center;
       justify-content: center;
-      // pointer-events: none;
       cursor: pointer;
     }
 
@@ -168,12 +136,12 @@ $directory-title-color : #6189be;
     }
 
     &>.dropdown>.dropdown-icon {
-      // pointer-events: none;
       z-index: 10;
       transform: rotate(0deg);
       font-size: 1.7rem;
       border-radius: 50%;
-      transition: .4s;
+      transition: transform .4s;
+      
     }
 
     &.closed>.dropdown>.dropdown-icon {
@@ -182,13 +150,6 @@ $directory-title-color : #6189be;
 
 
   }
-
-  .row-container>.row-container {
-    border-top: 1px solid rgba(0, 0, 0, .125);
-  }
-
-
-
 
 
 

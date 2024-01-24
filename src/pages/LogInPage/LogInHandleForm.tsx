@@ -1,4 +1,4 @@
-import type { FormEvent } from "react";
+import { useRef, type FormEvent } from "react";
 import { AiFillLock } from "react-icons/ai";
 import { BiSolidUser } from "react-icons/bi";
 import { useLoginWithOptionalRefresh } from "../../hooks/useToken";
@@ -25,6 +25,8 @@ export function LogInInputForm({
   const { performLoginAsync, loginMutation } = useLoginWithOptionalRefresh({
     setErrorMessage,
   });
+
+  const usernameRef = useRef<HTMLInputElement | null>(null);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -54,7 +56,13 @@ export function LogInInputForm({
     onSubmit: async (value: LogInForm, { setSubmitting, resetForm }) => {
       setSubmitting(false);
       await handleLogInFormSubmit(value);
+
+      // Log-in fail
       resetForm();
+
+      if (usernameRef && usernameRef.current) {
+        usernameRef.current.focus();
+      }
     },
   });
 
@@ -75,8 +83,8 @@ export function LogInInputForm({
         <input
           type="text"
           placeholder="Username"
+          ref={usernameRef}
           {...formik.getFieldProps("username")}
-          required
         />
       </div>
 
@@ -87,7 +95,6 @@ export function LogInInputForm({
           placeholder="Password"
           onKeyDown={handleKeyDown}
           {...formik.getFieldProps("password")}
-          required
         />
       </div>
 

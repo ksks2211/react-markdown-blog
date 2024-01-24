@@ -7,6 +7,7 @@ import {
   getDisplayName,
 } from "../services/storageService";
 import Menu from "./Menu.enum";
+import { useLogout } from "../hooks/useToken";
 
 interface GlobalProviderProps {
   children: React.ReactNode;
@@ -18,12 +19,14 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   const [username, setUsername] = useState<string>(getUsername());
   const [displayName, setDisplayName] = useState<string>(getDisplayName());
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const mutation = useLogout();
 
   useEffect(() => {
     setIsLoggedIn(isValidToken());
   }, []);
 
-  const logout = () => {
+  const logout = async () => {
+    await mutation.mutateAsync();
     removeTokenFromBrowser();
     setIsLoggedIn(false);
     setUsername("");

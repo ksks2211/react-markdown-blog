@@ -1,5 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { Categories, ChangeCategoryForm } from "../types/category.types";
+import type {
+  Categories,
+  ChangeCategoryForm,
+} from "@customTypes/category.types";
 import {
   changeCategory,
   createCategory,

@@ -1,5 +1,5 @@
-import axios from "axios";
-import { UnauthorizedError } from "../errors";
+import axios, { isAxiosError } from "axios";
+import { NotFoundError, UnauthorizedError } from "../errors";
 import {
   getTokenFromBrowser,
   removeTokenFromBrowser,
@@ -19,9 +19,16 @@ blogApi.interceptors.response.use(
   },
   (error) => {
     console.error("Error occurred in blogApi");
+
+    if (isAxiosError(error)) {
+      console.error(error.cause);
+    }
+
     if (error.response && error.response.status === 401) {
       removeTokenFromBrowser();
-      throw new UnauthorizedError(error);
+      throw new UnauthorizedError(error.message || "Unauthorized Error");
+    } else if (error.response && error.response.status === 404) {
+      throw new NotFoundError(error.message || "Not Found Error");
     }
     throw error;
   }

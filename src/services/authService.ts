@@ -67,3 +67,11 @@ export const getJwtByOAuth2 = async (params: URLSearchParams) => {
   });
   return data;
 };
+
+export const deleteRefreshTokenIfExists = async () => {
+  try {
+    await blogApi.delete("/api/token/refresh");
+  } catch (e) {
+    console.error(e);
+  }
+};
