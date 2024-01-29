@@ -106,14 +106,10 @@ $directory-title-color : #6189be;
 
     &.closed~.rows-container {
       .row-wrapper{
-        // max-height: 0;
         opacity: 0;
-        transition:.3s;
-        content-visibility: hidden;
         margin-bottom:-3rem;
-        border: none !important;;
-
       }
+      
       border: none !important;;
     }
 

@@ -1,15 +1,15 @@
 import { useMutation } from "react-query";
 import { createUser } from "../services/authService";
+import type { RegisterUserForm } from "@customTypes/auth.types";
 
-interface CreateUserForm {
-  username: string;
-  password: string;
-  email: string;
-}
-
-export function useCreateUser() {
-  return useMutation<void, Error, CreateUserForm, unknown>({
+export function useCreateUser(setErrorMessage: (msg: string | null) => void) {
+  return useMutation<void, Error, RegisterUserForm, unknown>({
     mutationFn: ({ username, password, email }) =>
       createUser({ username, password, email }),
+    onError: (error) => {
+      console.log(error);
+      console.log(error.message);
+      setErrorMessage(error.message);
+    },
   });
 }

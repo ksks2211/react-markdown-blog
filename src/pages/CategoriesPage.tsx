@@ -9,6 +9,11 @@ import { styled } from "@mui/material";
 
 const StyledCategoriesPage = styled("div")`
   padding: 3rem;
+
+  ${(props) => props.theme.breakpoints.up("md")} {
+    padding: 3.5rem;
+    padding-right: 7rem;
+  }
 `;
 
 const CategoriesPage: React.FC = () => {

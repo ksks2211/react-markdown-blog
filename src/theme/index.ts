@@ -1,4 +1,4 @@
-import { createTheme } from "@mui/material";
+import { createTheme, css } from "@mui/material";
 
 const theme = createTheme({
   global: {
@@ -15,22 +15,33 @@ const theme = createTheme({
   },
 });
 
+const globalStyles = css`
+  :root {
+    --header-height: ${theme.global.headerHeight};
+    --sidebar-width: ${theme.global.sidebarWidth};
+    --right-sidebar-color: ${theme.global.rightSidebarColor};
+    --header-color: ${theme.global.headerColor};
+    --left-sidebar-color: ${theme.global.leftSidebarColor};
+    --content-color: ${theme.global.contentColor};
+    --footer-color: ${theme.global.footerColor};
+    --main-color: ${theme.global.mainColor};
+    --btn-color: ${theme.global.btnColor};
+    --submit-btn-color: ${theme.global.submitBtnColor};
+  }
+
+  @keyframes fadeInTooltip {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+`;
+
 theme.components = theme.components || {};
 theme.components.MuiCssBaseline = {
-  styleOverrides: `
-    :root {
-      --header-height: ${theme.global.headerHeight};
-      --sidebar-width: ${theme.global.sidebarWidth};
-      --right-sidebar-color:${theme.global.rightSidebarColor};
-      --header-color:${theme.global.headerColor};
-      --left-sidebar-color:${theme.global.leftSidebarColor};
-      --content-color:${theme.global.contentColor};
-      --footer-color:${theme.global.footerColor};
-      --main-color:${theme.global.mainColor};
-      --btn-color:${theme.global.btnColor};
-      --submit-btn-color:${theme.global.submitBtnColor}
-    }
-  `,
+  styleOverrides: globalStyles.styles,
 };
 
 export default theme;

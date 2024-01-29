@@ -1,32 +1,29 @@
-import { useRef, type FormEvent } from "react";
-import { AiFillLock } from "react-icons/ai";
-import { BiSolidUser } from "react-icons/bi";
-import { useLoginWithOptionalRefresh } from "../../hooks/useToken";
-import type { LogInForm } from "@customTypes/auth.types";
-import profile from "../../assets/profile.png";
-import google from "../../assets/google.svg";
-import {
-  StyledLoginForm,
-  LoginButton,
-  GoogleButton,
-  StyledWarningWrapper,
-} from "./LogInHandleForm.styles";
-import CircularProgress from "@mui/material/CircularProgress";
-import debounce from "lodash-es/debounce";
-
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { StyledLogo } from "./LogInPage.styles";
+import { useCreateUser } from "../../hooks/useUser";
+import type { RegisterUserForm } from "@customTypes/auth.types";
+import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
+import {
+  LoginButton,
+  StyledLoginForm,
+  StyledWarningWrapper,
+} from "../LogInPage/LogInHandleForm.styles";
+import profile from "../../assets/profile.png";
+import { BiSolidUser } from "react-icons/bi";
+import { AiFillLock, AiOutlineMail } from "react-icons/ai";
 
-export function LogInInputForm({
+import CircularProgress from "@mui/material/CircularProgress";
+import { StyledLogo } from "../LogInPage/LogInPage.styles";
+
+export function SignUpForm({
   setErrorMessage,
 }: {
   setErrorMessage: (msg: string | null) => void;
 }) {
-  const { performLoginAsync, loginMutation } = useLoginWithOptionalRefresh({
-    setErrorMessage,
-  });
+  const navigate = useNavigate();
 
+  const mutation = useCreateUser(setErrorMessage);
   const usernameRef = useRef<HTMLInputElement>(null);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -35,16 +32,19 @@ export function LogInInputForm({
     }
   };
 
-  const handleLogInFormSubmit = async (value: LogInForm) => {
-    if (!loginMutation.isLoading) {
-      await performLoginAsync(value, false);
-    }
+  const handleSignUpForm = async (value: RegisterUserForm) => {
+    console.log("Handle Sign Up");
+
+    await mutation.mutateAsync(value);
+    alert("Registered");
+    navigate("/login");
   };
 
   const formik = useFormik({
     initialValues: {
       username: "",
       password: "",
+      email: "",
     },
     validationSchema: Yup.object({
       username: Yup.string()
@@ -53,10 +53,12 @@ export function LogInInputForm({
       password: Yup.string()
         .min(5, "Password is longer than 5 letters")
         .required("Password Required"),
+      email: Yup.string().email("Email Address is needed").notRequired(),
     }),
-    onSubmit: async (value: LogInForm, { setSubmitting, resetForm }) => {
+    onSubmit: async (value: RegisterUserForm, { setSubmitting, resetForm }) => {
       setSubmitting(false);
-      await handleLogInFormSubmit(value);
+
+      await handleSignUpForm(value);
 
       // Log-in fail
       resetForm();
@@ -67,17 +69,12 @@ export function LogInInputForm({
     },
   });
 
-  const handleGoogle = debounce((e: FormEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    location.href = "http://localhost:8080/oauth2/authorization/google";
-  }, 1200);
-
   return (
     <StyledLoginForm onSubmit={formik.handleSubmit}>
-      <StyledLogo className="logo">
+      <StyledLogo>
         <img src={profile} alt="logo" />
       </StyledLogo>
-      <div className="greetings">Welcome!</div>
+      <div className="greetings">Register!</div>
 
       <div id="username-field" className="input-field">
         <BiSolidUser className="icon" />
@@ -101,6 +98,17 @@ export function LogInInputForm({
         />
       </div>
 
+      <div id="email-field" className="input-field">
+        <AiOutlineMail className="icon" />
+        <input
+          type="email"
+          placeholder="email"
+          onKeyDown={handleKeyDown}
+          autoComplete="off"
+          {...formik.getFieldProps("email")}
+        />
+      </div>
+
       <StyledWarningWrapper>
         {formik.touched.username && formik.errors.username ? (
           <div>{formik.errors.username}</div>
@@ -108,6 +116,10 @@ export function LogInInputForm({
 
         {formik.touched.password && formik.errors.password ? (
           <div>{formik.errors.password}</div>
+        ) : null}
+
+        {formik.touched.email && formik.errors.email ? (
+          <div>{formik.errors.email}</div>
         ) : null}
       </StyledWarningWrapper>
 
@@ -117,7 +129,7 @@ export function LogInInputForm({
           formik.handleSubmit();
         }}
       >
-        {loginMutation.isLoading ? (
+        {mutation.isLoading ? (
           <CircularProgress
             size={20}
             thickness={4.2}
@@ -126,14 +138,9 @@ export function LogInInputForm({
             }}
           />
         ) : (
-          "Login"
+          "Sign Up"
         )}
       </LoginButton>
-
-      <GoogleButton onClick={handleGoogle}>
-        <img src={google} alt="google" />
-        Continue with Google
-      </GoogleButton>
     </StyledLoginForm>
   );
 }

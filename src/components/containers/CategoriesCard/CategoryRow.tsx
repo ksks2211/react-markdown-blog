@@ -34,15 +34,13 @@ const StyledRowWithSubRows = styled("div")<{ depth: number }>`
   }
 `;
 
-const StyledRow = styled("div")<{ rowOpen: boolean }>`
+const StyledRow = styled("div")`
   transition: 0.4s;
   width: 100%;
   position: relative;
   display: flex;
   align-items: center;
-  height: ${(props) => (props.rowOpen ? "3rem" : "0")};
-  /* content-visibility: ${(props) =>
-    props.rowOpen ? "visible" : "hidden"}; */
+  height: 3rem;
 `;
 
 export const CategoryRow: React.FC<CategoryRowProps> = ({
@@ -54,7 +52,7 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
   numOfCategories,
   parentCategoryName,
   rows,
-  rowOpen,
+  // rowOpen,
   subRowsOpen,
   setSubRowsOpen,
   // ...props
@@ -96,29 +94,20 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
   const rowRef = useRef<HTMLDivElement>(null);
 
   const toggleCategory = () => {
-    rowRef.current?.classList.toggle(cx("closed"));
-
     if (!subRowsOpen) {
       Object.keys(rows).forEach((key) => {
         const rowRef = rows[key];
 
         if (fullCategoryName.startsWith(key) && fullCategoryName !== key) {
-          // cur parent rows
-          rowRef.setRowOpen(true);
           rowRef.setSubRowsOpen(true);
         } else if (parentCategoryName === rowRef.parentName) {
-          // sibling rows
-          rowRef.setRowOpen(true);
           rowRef.setSubRowsOpen(false);
         } else {
-          // other rows
-          rowRef.setRowOpen(false);
           rowRef.setSubRowsOpen(false);
         }
 
         // child row
         if (rowRef.parentName === fullCategoryName) {
-          rowRef.setRowOpen(true);
           rowRef.setSubRowsOpen(false);
         }
       });
@@ -148,7 +137,6 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
     <>
       <StyledRowWithSubRows depth={depth} className={cx("rows-container")}>
         <StyledRow
-          rowOpen={rowOpen}
           className={cx("row-wrapper", { closed: !subRowsOpen, marked })}
           ref={rowRef}
         >

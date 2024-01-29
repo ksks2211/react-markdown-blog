@@ -1,11 +1,11 @@
 import { ComponentPropsWithRef, ComponentPropsWithoutRef } from "react";
-import { Categories, SubCategory } from "../../../types/category.types";
+import type { Categories, SubCategory } from "@customTypes/category.types";
 
 export interface RowType {
   [fullName: string]: {
-    rowOpen: boolean;
+    // rowOpen: boolean;
     subRowsOpen: boolean;
-    setRowOpen: (v: boolean) => void;
+    // setRowOpen: (v: boolean) => void;
     setSubRowsOpen: (v: boolean) => void;
     parentName: string;
   };
@@ -19,9 +19,7 @@ export interface CategoryRowProps extends ComponentPropsWithRef<"div"> {
   numOfAllPosts: number;
   numOfCategories: number;
   rows: RowType;
-  rowOpen: boolean;
   subRowsOpen: boolean;
-  setRowOpen: (v: boolean) => void;
   setSubRowsOpen: (v: boolean) => void;
 }
 
@@ -35,7 +33,6 @@ export interface NestedCategoryProps extends ComponentPropsWithoutRef<"div"> {
 }
 
 export interface CategoriesCardProps {
-  // rootDir: RootDirectory;
   rootCategory: Categories;
   parentCategory?: string;
 }

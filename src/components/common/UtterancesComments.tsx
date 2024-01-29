@@ -14,19 +14,27 @@ function UtterancesComments({ postId }: { postId: number }) {
       theme: "github-light",
       crossOrigin: "anonymous",
       defer: true,
+      async: true,
     };
 
     Object.entries(config).forEach(([key, value]) => {
       script.setAttribute(key, value as string);
     });
 
+    const container = ref.current;
+
     setTimeout(() => {
-      if (ref.current?.childNodes.length === 0) {
-        ref.current?.append(script);
+      if (container?.childNodes.length === 0) {
+        container?.append(script);
       }
     }, 300);
+
+    return () => {
+      script.remove();
+      if (container) container.innerHTML = "";
+    };
   }, [postId]);
-  return <div className="utterances" ref={ref} key={postId} />;
+  return <div className="utterances" ref={ref} key={postId}></div>;
 }
 
 export default UtterancesComments;

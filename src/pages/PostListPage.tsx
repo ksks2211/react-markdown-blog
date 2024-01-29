@@ -12,9 +12,11 @@ import Loader from "../components/common/Loader";
 import withLayout from "../hoc/withLayout";
 import { scrollToTheTop } from "../helpers/scrollUtils";
 import { styled } from "@mui/material";
+import { StyledPostPage, StyledPrevPageBtn } from "./PostPage/PostPage.styles";
+import { IoMdAdd } from "react-icons/io";
 
 const StyledPostList = styled("div")`
-  margin: 2.5rem 2.5rem 0;
+  margin-top: 1.5rem;
 `;
 
 // ?page=1
@@ -41,10 +43,16 @@ const PostList: React.FC = () => {
     scrollToTheTop();
   };
 
+  const handleAddPost = () => {
+    navigate("/posts/create");
+  };
+
   return (
-    <StyledPostList>
-      {/* Total Pages : {totalPages} */}
-      <div>
+    <StyledPostPage>
+      <StyledPrevPageBtn>
+        <IoMdAdd onClick={handleAddPost} />
+      </StyledPrevPageBtn>
+      <StyledPostList>
         {postList.map((post) => (
           <PostCard
             key={post.id}
@@ -55,7 +63,7 @@ const PostList: React.FC = () => {
             createdAtFromNow={formatDateFromNow(post.createdAt)}
           />
         ))}
-      </div>
+      </StyledPostList>
 
       <Stack justifyContent="center" alignItems="center" spacing={0}>
         <Pagination
@@ -66,7 +74,7 @@ const PostList: React.FC = () => {
           onChange={handlePage}
         />
       </Stack>
-    </StyledPostList>
+    </StyledPostPage>
   );
 };
 

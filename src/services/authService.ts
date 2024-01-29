@@ -28,11 +28,14 @@ export async function createUser({
   password,
   email,
 }: RegisterUserForm) {
+  console.log("Create User");
   const { data } = await blogApi.post("/api/auth/register", {
     username,
     password,
     email,
   });
+
+  console.log("Created");
   return data;
 }
 // JWT

@@ -58,18 +58,6 @@ export const StyledLoginForm = styled("form")`
   flex-direction: column;
   /* justify-content: center; */
 
-  .logo {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 1.5rem;
-    img {
-      width: 2.6rem;
-      height: 2.6rem;
-    }
-  }
-
   .greetings {
     width: 100%;
     color: ${(props) => props.theme.palette.grey[800]};

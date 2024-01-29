@@ -134,7 +134,7 @@ export const StyledLogoutButton = styled("button")<{ content: string }>`
 
   &:hover::after {
     background: ${(props) => props.theme.palette.grey[400]};
-    color: "white";
+    color: ${(props) => props.theme.palette.grey[800]};
     position: absolute;
     content: "${(props) => props.content}";
     white-space: nowrap;
@@ -148,15 +148,6 @@ export const StyledLogoutButton = styled("button")<{ content: string }>`
     animation-delay: 0.5s;
     animation: fadeInTooltip 0.5s ease-in-out forwards;
     opacity: 1;
-  }
-
-  @keyframes fadeInTooltip {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
   }
 
   svg {

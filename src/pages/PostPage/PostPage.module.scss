@@ -1,42 +1,11 @@
-@import '../assets/styles/variables';
+@import '../../assets/styles/variables';
 $btn-color : #53a8b6;
 $delete-btn-color : #fd5959;
 
 .Post {
 
   .main {
-
-    margin-bottom: 3rem;
-
-
-
     .post-metadata {
-
-      padding: 1rem 0 2rem;
-
-      .title {
-        font-size: 1.8rem;
-        font-weight: 600;
-        margin-bottom: 1.2rem;
-        display: flex;
-        justify-content: space-between;
-
-        .delete-btn {
-          font-size: 1.2rem;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          margin-left: 1.2rem;
-          cursor: pointer;
-          color: $delete-btn-color;
-
-          &:hover {
-            color: darken($delete-btn-color, 15)
-          }
-        }
-      }
-
-
 
       .meta {
         font-size: .75rem;

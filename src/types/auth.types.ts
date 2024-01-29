@@ -5,7 +5,7 @@ export type LogInForm = {
 export type RegisterUserForm = {
   username: string;
   password: string;
-  email: string;
+  email?: string;
 };
 
 export interface JWT {

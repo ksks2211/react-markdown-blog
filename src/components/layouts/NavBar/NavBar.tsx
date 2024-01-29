@@ -9,23 +9,7 @@ import {
 } from "./NavBar.styles";
 import { FiLogOut } from "react-icons/fi";
 
-import type { IconType } from "react-icons";
-
-interface MenuAndIcon {
-  [key: string]: IconType;
-}
-
-export type NavBarContainerProps = Pick<NavBarProps, "className">;
-export interface NavBarProps extends React.HTMLAttributes<HTMLDivElement> {
-  className?: string;
-  isLg: boolean;
-  menu: MenuAndIcon;
-  selectedMenu: Menu;
-  changeMenu: (menu: Menu) => void;
-  logout: () => void;
-  displayName: string;
-  profileUrl?: string;
-}
+import { NavBarProps } from "./NavBar.types";
 
 const NavBar: React.FC<NavBarProps> = (props) => {
   const profileUrl =

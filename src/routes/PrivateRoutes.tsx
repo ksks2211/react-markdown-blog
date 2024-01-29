@@ -7,9 +7,9 @@ const Home = lazy(() => import("../pages/HomePage"));
 const Posts = lazy(() => import("../pages/PostListPage"));
 const Categories = lazy(() => import("../pages/CategoriesPage"));
 const Tags = lazy(() => import("../pages/TagsPage"));
-const Post = lazy(() => import("../pages/PostPage"));
+const Post = lazy(() => import("../pages/PostPage/PostPage"));
 const PostsByCategory = lazy(() => import("../pages/PostListByCategoryPage"));
-const PostCreate = lazy(() => import("../pages/PostCreatePage"));
+const PostCreate = lazy(() => import("../pages/PostCreatePage/PostCreatePage"));
 
 const PrivateRoutes: React.FC = () => {
   scrollToTheTop();

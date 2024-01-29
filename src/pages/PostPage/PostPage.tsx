@@ -9,126 +9,89 @@ import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import Skeleton from "react-loading-skeleton";
 
-import { useChangeMenu, useUsername } from "../hooks/useGlobal";
-import { useDeletePost } from "../hooks/usePostMutation";
-import { usePrevAndNextPosts, useGetPost } from "../hooks/usePostQuery";
+import { useChangeMenu, useUsername } from "../../hooks/useGlobal";
+import { useDeletePost } from "../../hooks/usePostMutation";
+import { usePrevAndNextPosts, useGetPost } from "../../hooks/usePostQuery";
 
-import { usePathParamId } from "../hooks/useParameter";
-import { formatDate } from "../helpers/dateUtils";
-import MarkdownRenderer from "../components/common/MarkdownRenderer/MarkdownRenderer";
+import { usePathParamId } from "../../hooks/useParameter";
+import { formatDate } from "../../helpers/dateUtils";
+import MarkdownRenderer from "../../components/common/MarkdownRenderer/MarkdownRenderer";
 import styles from "./PostPage.module.scss";
 import { MdArrowBack, MdDelete } from "react-icons/md";
-import UtterancesComments from "../components/common/UtterancesComments";
+import UtterancesComments from "../../components/common/UtterancesComments";
 
-import Menu from "../contexts/Menu.enum";
-import Loader from "../components/common/Loader";
-import ErrorFallback from "../errors/ErrorFallback";
-import withLayout from "../hoc/withLayout";
-import { scrollToTheTop } from "../helpers/scrollUtils";
-import { styled, useTheme } from "@mui/material";
-import { rgba, darken } from "polished";
+import Menu from "../../contexts/Menu.enum";
+import Loader from "../../components/common/Loader";
+import ErrorFallback from "../../errors/ErrorFallback";
+import withLayout from "../../hoc/withLayout";
+import { scrollToTheTop } from "../../helpers/scrollUtils";
+import { useTheme } from "@mui/material";
+import { rgba } from "polished";
+import {
+  StyledPostPage,
+  StyledPrevPageBtn,
+  StyledMainPost,
+  StyledPostMeta,
+  StyledPrevAndNextPostBtn,
+} from "./PostPage.styles";
 
 const cx = cn.bind(styles);
-
-const StyledPostPage = styled("div")`
-  margin: 2rem 2rem 0;
-
-  ${(props) => props.theme.breakpoints.up("md")} {
-    margin: 4rem 5rem 0;
-  }
-`;
-
-const StyledPrevPageBtn = styled("div")`
-  height: 2rem;
-  display: flex;
-  align-items: center;
-
-  svg {
-    border-radius: 0.2rem;
-    color: #fff;
-    font-size: 1.6rem;
-    background-color: ${(props) => props.theme.global.mainColor};
-    cursor: pointer;
-    transition: 0.2s ease-out;
-    transform: scale(1.3);
-
-    &:hover {
-      background-color: ${(props) =>
-        darken(0.05, props.theme.global.mainColor)};
-    }
-  }
-`;
-
-const StyledPrevAndNextPostBtn = styled("div")`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-flow: row;
-
-  a {
-    display: flex;
-    flex-flow: column;
-    width: 50%;
-    border: 1px solid ${(props) => props.theme.global.btnColor};
-    height: 6rem;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    transition: 0.4s ease-out;
-
-    &:hover {
-      background-color: ${(props) => props.theme.global.btnColor};
-      color: #fff;
-
-      span {
-        color: #fff !important;
-      }
-    }
-  }
-`;
 
 const Post: React.FC = () => {
   const id = usePathParamId();
   const username = useUsername();
   const mutation = useDeletePost();
+
   useChangeMenu(Menu.POSTS);
 
-  const ref = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
+
+  const mdRef = useRef<HTMLDivElement>(null);
+
   const location = useLocation();
+
   const navigate = useNavigate();
   const [loadMore, setLoadMore] = useState(false);
   const theme = useTheme();
-
-  const backgroundColor = rgba(theme.palette.info.light, 0.03);
 
   const postId = parseInt(id);
 
   useEffect(() => {
     scrollToTheTop();
 
+    if (
+      mainRef.current !== null &&
+      mainRef.current.scrollHeight +
+        mainRef.current.getBoundingClientRect().y +
+        40 <=
+        window.innerHeight
+    ) {
+      setLoadMore(true);
+    }
+
+    setTimeout(() => {
+      setLoadMore(true);
+    }, 7000);
+
     const checkLoadMore = () => {
-      if (ref.current === null) return;
       if (window.scrollY > document.documentElement.scrollHeight * 0.3) {
         setLoadMore(true);
-        window.removeEventListener("scroll", handleScroll);
       }
     };
-
     const handleScroll = throttle(checkLoadMore, 300);
-
-    if (document.documentElement.scrollHeight <= window.innerHeight + 250) {
-      setTimeout(() => {
-        setLoadMore(true);
-        window.removeEventListener("scroll", handleScroll);
-      }, 1000);
-    }
 
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      setLoadMore(false);
     };
   }, [postId]);
+
+  useEffect(() => {
+    if (mdRef.current) {
+      const text = mdRef.current.innerText;
+      console.log(text);
+    }
+  }, []);
 
   const handleBackToPrevPage = () => {
     // If you have the state and it has fromPage
@@ -194,15 +157,12 @@ const Post: React.FC = () => {
 
   return (
     <StyledPostPage className={cx("Post")}>
-      <StyledPrevPageBtn className={cx("back-btn")}>
-        <MdArrowBack
-          className={cx("back-icon")}
-          onClick={handleBackToPrevPage}
-        />
+      <StyledPrevPageBtn>
+        <MdArrowBack onClick={handleBackToPrevPage} />
       </StyledPrevPageBtn>
 
-      <div className={cx("main")} ref={ref}>
-        <div className={cx("post-metadata")}>
+      <StyledMainPost className={cx("main")} ref={mainRef}>
+        <StyledPostMeta className={cx("post-metadata")}>
           <h1 className={cx("title")}>
             {post.title}
             {isMyPost && (
@@ -233,13 +193,13 @@ const Post: React.FC = () => {
               {post.category.split("/").slice(1).join("/")}
             </span>
           </div>
-        </div>
+        </StyledPostMeta>
 
-        <div>
+        <div ref={mdRef}>
           <MarkdownRenderer content={post.content} />
         </div>
 
-        <Box mt={10}>
+        <Box pt={4} pb={4}>
           <Stack
             flexWrap="wrap"
             direction="row"
@@ -254,13 +214,13 @@ const Post: React.FC = () => {
                 color="info"
                 sx={{
                   fontWeight: "500",
-                  backgroundColor: backgroundColor,
+                  backgroundColor: rgba(theme.palette.info.light, 0.03),
                 }}
               />
             ))}
           </Stack>
         </Box>
-      </div>
+      </StyledMainPost>
 
       {!loadMore || isLoadingMorePosts ? (
         <Skeleton style={{ width: "100%", height: "6rem" }} count={1} />

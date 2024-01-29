@@ -4,6 +4,30 @@ export const StyledLoginWrapper = styled("div")`
   position: relative;
   display: flex;
   justify-content: center;
+  min-width: 20rem;
+`;
+
+export const StyledLogo = styled("div")`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.5rem;
+
+  img {
+    width: 2.8rem;
+    height: 2.8rem;
+    animation: rotation 10s infinite linear;
+  }
+
+  @keyframes rotation {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
 `;
 
 export const StyledLoginCard = styled("div")`
@@ -12,9 +36,9 @@ export const StyledLoginCard = styled("div")`
   box-shadow: 0 7px 14px rgba(231, 177, 177, 0.25),
     0 5px 5px rgba(0, 0, 0, 0.22);
 
-  margin-top: 2.6rem;
+  margin-top: 4rem;
   min-width: 65vw;
-  min-height: 70vh;
+  min-height: 68vh;
   display: flex;
   justify-content: center;
   border-radius: 2.6rem;

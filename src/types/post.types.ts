@@ -7,7 +7,7 @@ export interface Post {
   createdAt: string;
   updatedAt: string;
   category: string;
-  description: string;
+  description?: string;
 }
 
 export type PostCreateForm = Pick<

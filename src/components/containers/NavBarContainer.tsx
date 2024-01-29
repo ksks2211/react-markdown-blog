@@ -1,9 +1,12 @@
-import NavBar, { NavBarContainerProps } from "../layouts/NavBar";
+import NavBar from "../layouts/NavBar";
 import useGlobal from "../../hooks/useGlobal";
 import useBreakpoints from "../../hooks/useBreakPoints";
 import Menu from "../../contexts/Menu.enum";
 
 import { GoHome, GoFile, GoTag, GoFileDirectory } from "react-icons/go";
+import type { NavBarProps } from "../layouts/NavBar/NavBar.types";
+
+export type NavBarContainerProps = Pick<NavBarProps, "className">;
 
 export const NavBarContainer: React.FC<NavBarContainerProps> = (props) => {
   const global = useGlobal();

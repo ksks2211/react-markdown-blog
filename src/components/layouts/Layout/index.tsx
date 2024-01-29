@@ -11,11 +11,11 @@ import {
   StyledMainWrapper,
 } from "./Layout.styles";
 import { FooterProps } from "../Footer";
-import { NavBarContainerProps } from "../NavBar";
+import { NavBarContainerProps } from "../NavBar/NavBar.types";
 import { RightSidebarProps } from "../RightSidebar";
 import ScrollToTop from "../../common/ScrollToTop";
-import { HeaderContainerProps } from "../../containers/LayoutContainer";
 import { MainContainerProps } from "../Main";
+import { HeaderContainerProps } from "../../containers/HeaderContainer";
 
 const headerStyle = ({ headerVisible }: { headerVisible: boolean }) => css`
   min-height: var(--header-height);

@@ -21,16 +21,26 @@ blogApi.interceptors.response.use(
     console.error("Error occurred in blogApi");
 
     if (isAxiosError(error)) {
-      console.error(error.cause);
+      console.error(error);
     }
 
-    if (error.response && error.response.status === 401) {
+    // no response error
+    if (!error.response) throw error;
+
+    //
+    const { response } = error;
+
+    if (response.status === 401) {
       removeTokenFromBrowser();
-      throw new UnauthorizedError(error.message || "Unauthorized Error");
-    } else if (error.response && error.response.status === 404) {
-      throw new NotFoundError(error.message || "Not Found Error");
+      throw new UnauthorizedError(
+        response.data.message || "Unauthorized Error"
+      );
+    } else if (response.status === 404) {
+      throw new NotFoundError(response.data.message || "Not Found Error");
+    } else if (response.status === 409) {
+      throw new Error(response.data.message);
     }
-    throw error;
+    throw new Error(response.data.message);
   }
 );
 
