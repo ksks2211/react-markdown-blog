@@ -1,4 +1,4 @@
-import type { JWT } from "../types/auth.types";
+import type { JWT } from "@customTypes/auth.types";
 import jwtDecode from "jwt-decode";
 
 const TOKEN_KEY = "jwt_token";

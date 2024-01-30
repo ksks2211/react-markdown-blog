@@ -4,7 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { ComponentType } from "react";
 import { FallbackProps } from "react-error-boundary";
-import { isValidToken } from "../services/storageService";
+import {
+  isValidToken,
+  removeTokenFromBrowser,
+} from "../services/storageService";
 
 const ErrorFallback: ComponentType<FallbackProps> = ({
   error,
@@ -24,10 +27,12 @@ const ErrorFallback: ComponentType<FallbackProps> = ({
 
   if (error instanceof UnauthorizedError) {
     cause = "Unauthorized Error";
+    removeTokenFromBrowser();
     navigate(`/login`);
   }
 
   if (!isValidToken()) {
+    removeTokenFromBrowser();
     navigate(`/login`);
   }
 

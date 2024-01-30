@@ -100,7 +100,11 @@ export const StyledListItem = styled("li")<{ selected: boolean }>`
 
     svg {
       width: 1.7rem;
-      fill: ${(props) => props.theme.palette.grey[800]};
+
+      fill: ${(props) =>
+        props.selected
+          ? props.theme.global.mainColor
+          : props.theme.palette.grey[800]};
       height: 100%;
       margin-right: 0.4rem;
     }
@@ -110,7 +114,10 @@ export const StyledListItem = styled("li")<{ selected: boolean }>`
       display: block;
       text-align: center;
       display: block;
-      color: ${(props) => props.theme.palette.grey[800]};
+      color: ${(props) =>
+        props.selected
+          ? props.theme.global.mainColor
+          : props.theme.palette.grey[800]};
     }
   }
 `;

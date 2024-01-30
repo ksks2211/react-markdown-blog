@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import type {
   Categories,
+  CategoryList,
   ChangeCategoryForm,
 } from "@customTypes/category.types";
 import {
@@ -8,11 +9,17 @@ import {
   createCategory,
   deleteCategory,
   getCategories,
+  getCategoryList,
 } from "../services/categoryService";
 
 export function useGetCategories() {
   return useQuery<Categories, Error>("categories", () => getCategories());
 }
+
+export function useGetCategoryList() {
+  return useQuery<CategoryList, Error>("categoryList", () => getCategoryList());
+}
+
 export function useChangeCategory() {
   const queryClient = useQueryClient();
 

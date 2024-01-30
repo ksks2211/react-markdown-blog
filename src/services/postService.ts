@@ -1,5 +1,5 @@
 import blogApi from "../api/blogApi";
-import { PostCreateForm } from "../types/post.types";
+import type { PostCreateForm } from "@customTypes/post.types";
 
 const urlPrefix = "/api/posts";
 

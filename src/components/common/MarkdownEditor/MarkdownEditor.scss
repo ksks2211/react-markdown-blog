@@ -1,6 +1,5 @@
 div.w-md-editor-preview {
   display: block !important;
-
 }
 
 .w-md-editor,
@@ -21,11 +20,16 @@ div.w-md-editor-preview {
 
 
   width:100%;
+
+  border-radius: 1rem !important;
+
 }
 
 .w-md-editor-toolbar{
   border-bottom: 1px solid var(--editor-color) !important;
+  border-top: 1px solid var(--editor-color) !important;
 
+  border-radius: 0 !important;
 }
 .w-md-editor-bar{
   visibility: hidden;
@@ -40,8 +44,7 @@ div.w-md-editor-preview {
 }
 .w-md-editor-preview {
   font-size: 1.24rem;
-  box-shadow: -1px 0 0 0px var(--editor-color);
-
+  box-shadow: -1px 0 0 0px var(--editor-color) !important;
 }
 
 .w-md-editor-area {

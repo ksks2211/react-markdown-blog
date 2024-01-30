@@ -33,11 +33,12 @@ export function SignUpForm({
   };
 
   const handleSignUpForm = async (value: RegisterUserForm) => {
-    console.log("Handle Sign Up");
-
     await mutation.mutateAsync(value);
     alert("Registered");
-    navigate("/login");
+
+    setTimeout(() => {
+      navigate("/login");
+    }, 2000);
   };
 
   const formik = useFormik({
@@ -62,7 +63,6 @@ export function SignUpForm({
 
       // Log-in fail
       resetForm();
-
       if (usernameRef && usernameRef.current) {
         usernameRef.current.focus();
       }

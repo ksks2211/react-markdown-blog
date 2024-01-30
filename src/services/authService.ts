@@ -1,11 +1,11 @@
 import { isAxiosError } from "axios";
 import blogApi from "../api/blogApi";
 
-import {
+import type {
   RegisterUserForm,
   LogInForm,
   AuthErrorInfo,
-} from "../types/auth.types";
+} from "@customTypes/auth.types";
 
 export async function isAvailableUsername(username: string) {
   const query = new URLSearchParams();

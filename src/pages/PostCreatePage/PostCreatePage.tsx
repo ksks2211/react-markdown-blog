@@ -1,18 +1,29 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Menu from "../../contexts/Menu.enum";
 import { useChangeMenu } from "../../hooks/useGlobal";
-import { PostCreateForm } from "../../types/post.types";
-import { useState } from "react";
-import Chip from "@mui/material/Chip";
-import Button from "@mui/material/Button";
+import type { PostCreateForm } from "@customTypes/post.types";
+import { lazy, useState } from "react";
 import { useCreatePost } from "../../hooks/usePostMutation";
-import MarkdownEditor from "../../components/common/MarkdownEditor";
-import { ButtonGroup, IconButton, Stack, styled } from "@mui/material";
-import { capitalizeFirst } from "../../helpers/stringUtils";
-import { IoIosAdd } from "react-icons/io";
-import { darken } from "polished";
-import { MdArrowBack } from "react-icons/md";
+import { Stack, Chip, AlertColor } from "@mui/material";
+import { includes, isEmpty } from "lodash-es";
+import { SelectChangeEvent } from "@mui/material/Select";
 import useBreakpoints from "../../hooks/useBreakPoints";
+import {
+  StyledCreatePage,
+  StyledWrapper,
+  StyledInputGroup,
+} from "./PostCreatePage.styles";
+import Loader from "../../components/common/Loader";
+import { useGetCategoryList } from "../../hooks/useCategory";
+import ErrorFallback from "../../errors/ErrorFallback";
+import SnackbarAlert from "./SnackbarAlert";
+import FixedButtonGroup from "./FixedButtonGroup";
+import SuspenseLoader from "../../components/common/SuspenseLoader";
+import PostInputGroup from "./PostInputGroup";
+
+const MarkdownEditor = lazy(
+  () => import("../../components/common/MarkdownEditor")
+);
 
 const initialState = {
   title: "",
@@ -20,125 +31,11 @@ const initialState = {
   tags: [],
 };
 
-const StyledCreatePage = styled("div")`
-  --editor-color: ${(props) => props.theme.palette.grey[600]};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  width: 100%;
-  padding: 1rem;
-  ${(props) => props.theme.breakpoints.up("md")} {
-    padding: 1rem 3rem;
-  }
-`;
-
-const StyledInputGroup = styled("div")`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-
-  ${(props) => props.theme.breakpoints.up("md")} {
-    flex-direction: row;
-    flex-wrap: wrap;
-
-    border-top: none;
-  }
-`;
-
-const StyledWrapper = styled("div")`
-  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px,
-    rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px,
-    rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
-
-  width: 100%;
-  border-radius: 1rem;
-`;
-const StyledTitleInput = styled("div")<{ name: string }>`
-  width: 100%;
-
-  border: none;
-  position: relative;
-
-  input {
-    width: 100%;
-    height: 3.4rem;
-    font-size: 1.2rem;
-    line-height: 1.2rem;
-    border: none;
-    padding-left: 8rem;
-    &:focus {
-      outline: none;
-      border: none;
-    }
-  }
-
-  &:before {
-    content: "${(props) => capitalizeFirst(props.name)}";
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    font-size: 1.2rem;
-    color: ${(props) => darken(0.1, props.theme.palette.primary.main)};
-    width: 8rem;
-  }
-
-  border-bottom: 1px solid var(--editor-color);
-
-  &:last-of-type {
-    border-bottom: none;
-  }
-
-  ${(props) => props.theme.breakpoints.up("md")} {
-    flex: 1 1 50%;
-    flex-direction: row;
-    border-top: none;
-    border-bottom: none;
-
-    &:first-of-type {
-      border-right: 1px solid var(--editor-color);
-    }
-    &:last-of-type {
-      border-top: 1px solid var(--editor-color);
-      width: 100%;
-      flex: 1 1 100%;
-      border-right: none;
-    }
-  }
-`;
-
-const StyledIconButton = styled(IconButton)`
-  position: absolute;
-  top: 50%;
-  left: 0;
-  transform: translateY(-50%);
-  color: var(--editor-color);
-  font-size: 1.5rem;
-  margin-left: 5.5rem;
-`;
-
-const StyledButtonFixed = styled("div")`
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  height: 4rem;
-  background-color: transparent;
-
-  display: flex;
-  align-items: start;
-  justify-content: end;
-  padding: 0 3rem;
-
-  ${(props) => props.theme.breakpoints.up("md")} {
-    height: 5rem;
-    padding: 0 5.6rem;
-  }
-`;
+const initialSnackbarState = {
+  open: false,
+  severity: "error" as AlertColor,
+  msg: "",
+};
 
 const DEFAULT_CATEGORY_PARAM = "xxx-no_category";
 
@@ -150,12 +47,23 @@ function PostCreatePage() {
   const { isLg } = useBreakpoints();
   const navigate = useNavigate();
 
+  const [snackbarState, setSnackbarState] = useState(initialSnackbarState);
+
   const categoryParam = searchParams.get("category") || DEFAULT_CATEGORY_PARAM;
-  const category = `/${categoryParam.split("-").splice(1).join("/")}`;
+  const [category, setCategory] = useState(
+    `/${categoryParam.split("-").splice(1).join("/")}`
+  );
   const [state, setState] =
     useState<Omit<PostCreateForm, "category">>(initialState);
 
   const [tagInput, setTagInput] = useState("");
+
+  const { data, isLoading, error, refetch } = useGetCategoryList();
+
+  const categoryList = data?.categories || [];
+  if (!includes(categoryList, category)) {
+    categoryList.push(category);
+  }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({
@@ -171,18 +79,23 @@ function PostCreatePage() {
     });
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    console.log(state);
-    console.log({ category });
-    await mutation.mutateAsync({ ...state, category });
+  const handleSubmit = async () => {
+    if (isEmpty(state.title)) {
+      setSnackbarState({
+        open: true,
+        severity: "error",
+        msg: "Title is empty!",
+      });
+    } else {
+      await mutation.mutateAsync({ ...state, category });
+    }
   };
 
-  const handleAddTag = (tag: string) => {
-    if (tag && !state.tags.includes(tag)) {
+  const handleAddTag = () => {
+    if (tagInput && !state.tags.includes(tagInput)) {
       setState({
         ...state,
-        tags: [...state.tags, tag],
+        tags: [...state.tags, tagInput.trim()],
       });
       setTagInput("");
     }
@@ -192,39 +105,32 @@ function PostCreatePage() {
     if (categoryParam === DEFAULT_CATEGORY_PARAM) navigate("/posts");
   };
 
+  const handleCategoryChange = (e: SelectChangeEvent) => {
+    setCategory(e.target.value);
+  };
+
+  const handleTagInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTagInput(e.target.value);
+  };
+
+  if (isLoading) return <Loader />;
+  if (error)
+    return <ErrorFallback error={error} resetErrorBoundary={refetch} />;
+
   return (
-    <StyledCreatePage onSubmit={handleSubmit}>
+    <StyledCreatePage>
       <StyledWrapper>
-        <StyledInputGroup>
-          <StyledTitleInput name="title">
-            <input
-              value={state.title}
-              name="title"
-              onChange={handleChange}
-              placeholder="Title"
-            />
-          </StyledTitleInput>
-          <StyledTitleInput name="category">
-            <input value={category} name="category" disabled />
-          </StyledTitleInput>
-          <StyledTitleInput name="tags">
-            <input
-              value={tagInput}
-              onChange={(e) => setTagInput(e.target.value)}
-              name="tag-input"
-            />
-            <StyledIconButton
-              aria-label="delete"
-              size="small"
-              onClick={() => {
-                handleAddTag(tagInput);
-              }}
-              color="primary"
-            >
-              <IoIosAdd fontSize="inherit" />
-            </StyledIconButton>
-          </StyledTitleInput>
-        </StyledInputGroup>
+        <PostInputGroup
+          category={category}
+          tag={tagInput}
+          title={state.title}
+          handleTitleChange={handleChange}
+          handleAddTag={handleAddTag}
+          handleTagInput={handleTagInput}
+          categoryList={categoryList}
+          handleCategoryChange={handleCategoryChange}
+        />
+
         <StyledInputGroup>
           <Stack
             sx={{ minHeight: "3rem", flexWrap: "wrap" }}
@@ -252,24 +158,23 @@ function PostCreatePage() {
             ))}
           </Stack>
         </StyledInputGroup>
-        <MarkdownEditor value={state.content} onChange={handleContent} />
+
+        <SuspenseLoader>
+          <MarkdownEditor value={state.content} onChange={handleContent} />
+        </SuspenseLoader>
       </StyledWrapper>
 
-      <StyledButtonFixed>
-        <ButtonGroup variant="outlined" size={isLg ? "large" : "small"}>
-          <Button
-            type="button"
-            color="primary"
-            startIcon={<MdArrowBack />}
-            onClick={handlePrevPageBtn}
-          >
-            Prev
-          </Button>
-          <Button type="button" color="primary">
-            Submit
-          </Button>
-        </ButtonGroup>
-      </StyledButtonFixed>
+      <FixedButtonGroup
+        isLg={isLg}
+        isLoading={mutation.isLoading}
+        onPrevPageBtnClick={handlePrevPageBtn}
+        onSubmitBtnClick={handleSubmit}
+      />
+
+      <SnackbarAlert
+        snackbarState={snackbarState}
+        onClose={() => setSnackbarState(initialSnackbarState)}
+      />
     </StyledCreatePage>
   );
 }

@@ -1,7 +1,11 @@
-import MDEditor from "@uiw/react-md-editor";
-import MarkdownRenderer from "../MarkdownRenderer";
 import rehypeSanitize from "rehype-sanitize";
+import { Suspense, lazy } from "react";
+import Loader from "../Loader";
 import "./MarkdownEditor.scss";
+
+// eslint-disable-next-line import/no-unresolved
+const MDEditor = lazy(() => import("@uiw/react-md-editor/nohighlight"));
+const MarkdownRenderer = lazy(() => import("../MarkdownRenderer"));
 
 interface MarkdownEditorProps {
   value: string;
@@ -12,26 +16,26 @@ export default function MarkdownEditor({
   onChange,
 }: MarkdownEditorProps) {
   return (
-    <MDEditor
-      value={value}
-      onChange={(newValue) => onChange(newValue || "")}
-      preview="edit"
-      previewOptions={{
-        rehypePlugins: [[rehypeSanitize]],
-      }}
-      components={{
-        preview: (source) => {
-          //   const {preview} = state;
-
-          //   dispatch({ preview: preview === "edit" ? "preview" : "edit"
-          // })
-
-          return (<MarkdownRenderer content={source} />) as JSX.Element;
-        },
-      }}
-      // commands={customCommands}
-
-      content={value}
-    />
+    <Suspense fallback={<Loader />}>
+      <MDEditor
+        value={value}
+        onChange={(newValue) => onChange(newValue || "")}
+        preview="edit"
+        highlightEnable={false}
+        previewOptions={{
+          rehypePlugins: [[rehypeSanitize]],
+        }}
+        components={{
+          preview: (source) => {
+            return (
+              <Suspense fallback={<Loader />}>
+                <MarkdownRenderer content={source} />
+              </Suspense>
+            );
+          },
+        }}
+        content={value}
+      />
+    </Suspense>
   );
 }

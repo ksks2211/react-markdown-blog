@@ -13,35 +13,18 @@ import {
 } from "../../../helpers/stringUtils";
 import TextInputModal from "../../common/TextInputModal";
 import { CategoryRowProps } from "./CategoriesCard.types";
-import { cx } from "./config";
 
 import { FaRegFolder, FaRegFolderOpen, FaPen } from "react-icons/fa";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { MdDelete } from "react-icons/md";
-import { styled } from "@mui/material";
-
-const StyledRowWithSubRows = styled("div")<{ depth: number }>`
-  position: relative;
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  /* max-height: 1500px; */
-  transition: height 0.4s;
-
-  & > & {
-    border-top: 1px solid rgba(0, 0, 0, 0.125);
-  }
-`;
-
-const StyledRow = styled("div")`
-  transition: 0.4s;
-  width: 100%;
-  position: relative;
-  display: flex;
-  align-items: center;
-  height: 3rem;
-`;
+import {
+  StyledRowWithSubRows,
+  StyledRow,
+  StyledCategoryDropdownBtn,
+  StyledCategoryTitle,
+} from "./CategoriesCard.styles";
+import cn from "classnames";
 
 export const CategoryRow: React.FC<CategoryRowProps> = ({
   categoryName,
@@ -52,10 +35,8 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
   numOfCategories,
   parentCategoryName,
   rows,
-  // rowOpen,
   subRowsOpen,
   setSubRowsOpen,
-  // ...props
 }) => {
   const fullCategoryName = `${parentCategoryName}/${categoryName}`;
 
@@ -135,58 +116,53 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
 
   return (
     <>
-      <StyledRowWithSubRows depth={depth} className={cx("rows-container")}>
+      <StyledRowWithSubRows depth={depth} className="rows-container">
         <StyledRow
-          className={cx("row-wrapper", { closed: !subRowsOpen, marked })}
+          className={cn("row-wrapper", { "row-close": !subRowsOpen })}
           ref={rowRef}
+          marked={marked}
+          subRowsOpen={subRowsOpen}
+          depth={depth}
         >
-          <div
-            style={{
-              display: "inline-flex",
-              width: `${depth}rem`,
-              height: "100%",
-            }}
-          />
-
-          <div className={cx("category-details")}>
+          <StyledCategoryTitle>
             {subRowsOpen ? (
-              <FaRegFolderOpen className={cx("icon")} />
+              <FaRegFolderOpen className="folder-icon" />
             ) : (
-              <FaRegFolder className={cx("icon")} />
+              <FaRegFolder className="folder-icon" />
             )}
-            {disabled || <span className={cx("count")}>{numOfPosts}</span>}
+            {disabled || <span className="count">{numOfPosts}</span>}
 
-            <Link className={cx("dirname")} to={`/categories${categoryPath}`}>
+            <Link className={"category-name"} to={`/categories${categoryPath}`}>
               {removeDash(categoryName)}
             </Link>
 
             <AiFillPlusCircle
-              className={cx("icon", "icon-sm", "add-icon")}
+              className="update-icon"
               onClick={openCreateModal}
             />
 
             {!disabled && depth !== 0 && (
-              <FaPen
-                className={cx("icon", "icon-sm", "change-icon")}
-                onClick={openUpdateModal}
-              />
+              <FaPen className="update-icon" onClick={openUpdateModal} />
             )}
 
             {removable && (
               <MdDelete
-                className={cx("icon", "icon-sm", "delete-icon")}
+                className="delete-icon"
                 onClick={handleRemoveCategory}
               />
             )}
-          </div>
+          </StyledCategoryTitle>
 
-          <span className={cx("details")}>{`(${numOfAllPosts})`}</span>
+          <StyledCategoryDropdownBtn
+            subRowsOpen={subRowsOpen}
+            canToggle={canToggle}
+          >
+            <span className="category-posts-count">{`(${numOfAllPosts})`}</span>
 
-          {canToggle && (
-            <div className={cx("dropdown")} onClick={toggleCategory}>
-              <RiArrowDropDownLine className={cx("dropdown-icon")} />
+            <div className="arrow" onClick={toggleCategory}>
+              <RiArrowDropDownLine className="arrow-icon" />
             </div>
-          )}
+          </StyledCategoryDropdownBtn>
         </StyledRow>
 
         {children}

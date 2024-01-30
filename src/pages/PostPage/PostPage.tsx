@@ -1,97 +1,74 @@
-import { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
-import cn from "classnames/bind";
-import throttle from "lodash-es/throttle";
-
-import "react-loading-skeleton/dist/skeleton.css";
-import Chip from "@mui/material/Chip";
-import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
+import { lazy, useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
-
 import { useChangeMenu, useUsername } from "../../hooks/useGlobal";
 import { useDeletePost } from "../../hooks/usePostMutation";
 import { usePrevAndNextPosts, useGetPost } from "../../hooks/usePostQuery";
-
 import { usePathParamId } from "../../hooks/useParameter";
 import { formatDate } from "../../helpers/dateUtils";
-import MarkdownRenderer from "../../components/common/MarkdownRenderer/MarkdownRenderer";
-import styles from "./PostPage.module.scss";
 import { MdArrowBack, MdDelete } from "react-icons/md";
-import UtterancesComments from "../../components/common/UtterancesComments";
-
 import Menu from "../../contexts/Menu.enum";
 import Loader from "../../components/common/Loader";
 import ErrorFallback from "../../errors/ErrorFallback";
 import withLayout from "../../hoc/withLayout";
 import { scrollToTheTop } from "../../helpers/scrollUtils";
-import { useTheme } from "@mui/material";
-import { rgba } from "polished";
 import {
   StyledPostPage,
   StyledPrevPageBtn,
   StyledMainPost,
   StyledPostMeta,
-  StyledPrevAndNextPostBtn,
+  StyledTitle,
+  StyledTimeMetadata,
+  StyledPostDetails,
 } from "./PostPage.styles";
-
-const cx = cn.bind(styles);
+import UtterancesComments from "../../components/common/UtterancesComments";
+import PrevAndNextPostBtn from "./PrevAndNextPostBtn";
+import SuspenseLoader from "../../components/common/SuspenseLoader";
+import TagsBox from "./TagsBox";
+import { throttle } from "lodash-es";
+const MarkdownRenderer = lazy(
+  () => import("../../components/common/MarkdownRenderer")
+);
 
 const Post: React.FC = () => {
-  const id = usePathParamId();
+  useChangeMenu(Menu.POSTS);
+  useEffect(() => {
+    import("react-loading-skeleton/dist/skeleton.css");
+  }, []);
+
+  const postId = parseInt(usePathParamId());
+
   const username = useUsername();
   const mutation = useDeletePost();
-
-  useChangeMenu(Menu.POSTS);
-
   const mainRef = useRef<HTMLDivElement>(null);
-
-  const mdRef = useRef<HTMLDivElement>(null);
-
   const location = useLocation();
 
   const navigate = useNavigate();
   const [loadMore, setLoadMore] = useState(false);
-  const theme = useTheme();
-
-  const postId = parseInt(id);
 
   useEffect(() => {
     scrollToTheTop();
 
-    if (
-      mainRef.current !== null &&
-      mainRef.current.scrollHeight +
-        mainRef.current.getBoundingClientRect().y +
-        40 <=
-        window.innerHeight
-    ) {
-      setLoadMore(true);
-    }
-
     setTimeout(() => {
       setLoadMore(true);
-    }, 7000);
+    }, 4000);
 
-    const checkLoadMore = () => {
-      if (window.scrollY > document.documentElement.scrollHeight * 0.3) {
+    const checkLoadMore = throttle(() => {
+      if (
+        mainRef.current !== null &&
+        mainRef.current.scrollHeight +
+          mainRef.current.getBoundingClientRect().y <=
+          window.innerHeight + window.scrollY
+      ) {
         setLoadMore(true);
       }
-    };
-    const handleScroll = throttle(checkLoadMore, 300);
+    }, 400);
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", checkLoadMore);
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", checkLoadMore);
     };
   }, [postId]);
-
-  useEffect(() => {
-    if (mdRef.current) {
-      const text = mdRef.current.innerText;
-      console.log(text);
-    }
-  }, []);
 
   const handleBackToPrevPage = () => {
     // If you have the state and it has fromPage
@@ -117,14 +94,14 @@ const Post: React.FC = () => {
     isLoading: isLoadingPost,
     error: postError,
     refetch: refetchPost,
-  } = useGetPost({ postId: id || 0 });
+  } = useGetPost({ postId: postId });
 
   const {
     data: prevAndNextPosts,
     error: morePostsError,
     isLoading: isLoadingMorePosts,
     refetch: refetchPrevAndNext,
-  } = usePrevAndNextPosts({ postId: id, enabled: loadMore });
+  } = usePrevAndNextPosts({ postId: postId, enabled: loadMore });
 
   // Loading ...
   if (isLoadingPost) return <Loader />;
@@ -136,7 +113,7 @@ const Post: React.FC = () => {
   if (post === undefined)
     return (
       <ErrorFallback
-        error={new Error(`Failed To Get Post ${id}`)}
+        error={new Error(`Failed To Get Post ${postId}`)}
         resetErrorBoundary={refetchPost}
       />
     );
@@ -156,23 +133,23 @@ const Post: React.FC = () => {
   const isMyPost = username === post.writer;
 
   return (
-    <StyledPostPage className={cx("Post")}>
+    <StyledPostPage>
       <StyledPrevPageBtn>
         <MdArrowBack onClick={handleBackToPrevPage} />
       </StyledPrevPageBtn>
 
-      <StyledMainPost className={cx("main")} ref={mainRef}>
-        <StyledPostMeta className={cx("post-metadata")}>
-          <h1 className={cx("title")}>
+      <StyledMainPost ref={mainRef}>
+        <StyledPostMeta>
+          <StyledTitle>
             {post.title}
             {isMyPost && (
-              <div className={cx("delete-btn")} onClick={handlePostDelete}>
+              <div onClick={handlePostDelete} className="delete-btn">
                 <MdDelete />
               </div>
             )}
-          </h1>
+          </StyledTitle>
 
-          <div className={cx("meta", "time")}>
+          <StyledTimeMetadata>
             <time>
               <label>Posted</label>
               {createdAt}
@@ -181,9 +158,9 @@ const Post: React.FC = () => {
               <label>Last Update</label>
               {updatedAt}
             </time>
-          </div>
+          </StyledTimeMetadata>
 
-          <div className={cx("meta", "writer")}>
+          <StyledPostDetails>
             <span>
               <label>Writer</label>
               {post.writer}
@@ -192,61 +169,22 @@ const Post: React.FC = () => {
               <label>Category</label>
               {post.category.split("/").slice(1).join("/")}
             </span>
-          </div>
+          </StyledPostDetails>
         </StyledPostMeta>
 
-        <div ref={mdRef}>
-          <MarkdownRenderer content={post.content} />
+        <div>
+          <SuspenseLoader>
+            <MarkdownRenderer content={post.content} />
+          </SuspenseLoader>
         </div>
 
-        <Box pt={4} pb={4}>
-          <Stack
-            flexWrap="wrap"
-            direction="row"
-            spacing={1}
-            justifyContent="end"
-          >
-            {post.tags.map((tag) => (
-              <Chip
-                label={tag}
-                variant="outlined"
-                key={tag}
-                color="info"
-                sx={{
-                  fontWeight: "500",
-                  backgroundColor: rgba(theme.palette.info.light, 0.03),
-                }}
-              />
-            ))}
-          </Stack>
-        </Box>
+        <TagsBox tags={post.tags} />
       </StyledMainPost>
 
       {!loadMore || isLoadingMorePosts ? (
         <Skeleton style={{ width: "100%", height: "6rem" }} count={1} />
       ) : morePostsError === null && prevAndNextPosts !== undefined ? (
-        <StyledPrevAndNextPostBtn className={cx("btn-group")}>
-          <Link
-            to={`/posts/${prevAndNextPosts.prev?.id}`}
-            className={cx("btn-prev", "btn", {
-              disabled: !prevAndNextPosts.hasPrev,
-            })}
-          >
-            <span>
-              {prevAndNextPosts.hasPrev ? prevAndNextPosts.prev.title : "None"}
-            </span>
-          </Link>
-          <Link
-            to={`/posts/${prevAndNextPosts.next?.id}`}
-            className={cx("btn-next", "btn", {
-              disabled: !prevAndNextPosts.hasNext,
-            })}
-          >
-            <span>
-              {prevAndNextPosts.hasNext ? prevAndNextPosts.next.title : "None"}
-            </span>
-          </Link>
-        </StyledPrevAndNextPostBtn>
+        <PrevAndNextPostBtn prevAndNextPosts={prevAndNextPosts} />
       ) : (
         ""
       )}

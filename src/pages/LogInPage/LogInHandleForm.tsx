@@ -130,7 +130,7 @@ export function LogInInputForm({
         )}
       </LoginButton>
 
-      <GoogleButton onClick={handleGoogle}>
+      <GoogleButton type="button" onClick={handleGoogle}>
         <img src={google} alt="google" />
         Continue with Google
       </GoogleButton>

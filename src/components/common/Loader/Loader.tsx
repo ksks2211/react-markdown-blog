@@ -23,6 +23,7 @@ const StyledCircle = styled.div<CircleProps>`
   animation-direction: ${(props) => props.direction};
   animation-delay: ${(props) => (props.delay === undefined ? 0 : -1.5)}s;
   position: absolute;
+  z-index: 999;
 
   @keyframes moveFromTopLeft {
     0% {
@@ -86,6 +87,7 @@ const basedLoaderStyles = css`
   align-items: center;
   justify-content: center;
   background-color: transparent;
+  z-index: 999;
 `;
 
 const StyledLoader = styled.div<LoaderProps>`

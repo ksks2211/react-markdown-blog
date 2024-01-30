@@ -62,44 +62,70 @@ export const StyledMainPost = styled("div")`
 `;
 export const StyledPostMeta = styled("div")`
   padding: 1rem 0 2rem;
-  h1 {
-    font-size: 1.8rem;
-    font-weight: 600;
-    margin-bottom: 1.2rem;
+`;
+
+export const StyledTitle = styled("h1")`
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+  display: flex;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.12);
+  color: ${(props) => props.theme.palette.grey[800]};
+  justify-content: space-between;
+
+  // Delete btn
+  div.delete-btn {
+    font-size: 1.2rem;
     display: flex;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.12);
-    color: ${(props) => props.theme.palette.grey[800]};
-    justify-content: space-between;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
 
-    // Delete btn
-    div {
-      font-size: 1.2rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      cursor: pointer;
-
-      svg {
-        fill: ${(props) => props.theme.palette.warning.main};
-        &:hover {
-          fill: ${(props) => props.theme.palette.warning.dark};
-        }
-      }
-
-      &:hover::after {
-        position: absolute;
-        display: block;
-        content: "Delete";
-        display: block;
-        font-size: 0.75rem;
-        bottom: 75%;
-        opacity: 1;
-        animation-delay: 0.5s;
-        animation: fadeInTooltip 0.5s ease-in-out forwards;
-        color: ${(props) => props.theme.palette.warning.dark};
-        text-shadow: none;
+    svg {
+      fill: ${(props) => props.theme.palette.warning.main};
+      &:hover {
+        fill: ${(props) => props.theme.palette.warning.dark};
       }
     }
+
+    &:hover::after {
+      position: absolute;
+      display: block;
+      content: "Delete";
+      display: block;
+      font-size: 0.75rem;
+      bottom: 75%;
+      opacity: 1;
+      animation-delay: 0.5s;
+      animation: fadeInTooltip 0.5s ease-in-out forwards;
+      color: ${(props) => props.theme.palette.warning.dark};
+      text-shadow: none;
+    }
   }
+`;
+
+const StyledPostMetadata = styled("div")`
+  font-size: 0.75rem;
+  label {
+    color: rgba(100, 100, 100.7);
+    margin-right: 0.3rem;
+  }
+`;
+
+export const StyledTimeMetadata = styled(StyledPostMetadata)`
+  margin-top: 0.6rem;
+  time::after {
+    content: "•";
+    margin: 0 5px;
+  }
+
+  time:last-child::after {
+    content: "";
+  }
+`;
+
+export const StyledPostDetails = styled(StyledPostMetadata)`
+  display: flex;
+  justify-content: space-between;
 `;

@@ -1,12 +1,11 @@
 import ReactMarkdown from "react-markdown";
-import { CodeComponent } from "react-markdown/lib/ast-to-react";
+import type { CodeComponent } from "react-markdown/lib/ast-to-react";
 import { PrismLight as SyntaxHighLighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 import cn from "classnames";
 import styles from "./MarkdownRenderer.module.scss";
 import remarkGfm from "remark-gfm";
-
-import "github-markdown-css/github-markdown.css";
+import { useEffect } from "react";
 
 const Code: CodeComponent = ({ children, className, ...props }) => {
   const match = /language-(\w+)/.exec(className || "");
@@ -22,12 +21,16 @@ const Code: CodeComponent = ({ children, className, ...props }) => {
         children={codeString}
         style={dracula}
         customStyle={{ marginBottom: "0", borderRadius: "0" }}
-      ></SyntaxHighLighter>
+      />
     </>
   );
 };
 
 export default function MarkdownRenderer({ content }: { content: string }) {
+  useEffect(() => {
+    import("github-markdown-css/github-markdown.css");
+  }, []);
+
   return (
     <ReactMarkdown
       className={cn("markdown-body", styles.Markdown)}

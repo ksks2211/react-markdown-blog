@@ -13,3 +13,7 @@ export interface SubCategory {
 export interface Categories {
   [key: string]: SubCategory;
 }
+
+export interface CategoryList {
+  categories: string[];
+}

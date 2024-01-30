@@ -15,18 +15,72 @@ const PrivateRoutes: React.FC = () => {
   scrollToTheTop();
 
   return (
-    <Suspense fallback={<Loader />}>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/posts" element={<Posts />} />
-        <Route path="/posts/create" element={<PostCreate />} />
-        <Route path="/posts/:id" element={<Post />} />
-        <Route path="/categories" element={<Categories />} />
-        <Route path="/categories/:id" element={<PostsByCategory />} />
-        <Route path="/tags" element={<Tags />} />
-      </Routes>
-    </Suspense>
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <Suspense fallback={<Loader />}>
+            <Home />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/home"
+        element={
+          <Suspense fallback={<Loader />}>
+            <Home />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/posts"
+        element={
+          <Suspense fallback={<Loader />}>
+            <Posts />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/posts/create"
+        element={
+          <Suspense fallback={<Loader />}>
+            <PostCreate />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/posts/:id"
+        element={
+          <Suspense fallback={<Loader />}>
+            <Post />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/categories"
+        element={
+          <Suspense fallback={<Loader />}>
+            <Categories />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/categories/:id"
+        element={
+          <Suspense fallback={<Loader />}>
+            <PostsByCategory />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/tags"
+        element={
+          <Suspense fallback={<Loader />}>
+            <Tags />
+          </Suspense>
+        }
+      />
+    </Routes>
   );
 };
 

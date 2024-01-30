@@ -1,11 +1,16 @@
 import blogApi from "../api/blogApi";
-import type { ChangeCategoryForm } from "../types/category.types";
+import type { ChangeCategoryForm } from "@customTypes/category.types";
 
 const urlPrefix = "/api/categories";
 
 // Categories
 export const getCategories = async () => {
   const { data } = await blogApi.get(urlPrefix);
+  return data;
+};
+
+export const getCategoryList = async () => {
+  const { data } = await blogApi.get(`${urlPrefix}/list`);
   return data;
 };
 

@@ -16,16 +16,19 @@ const StyledPostCard = styled("div")`
 
   justify-content: center;
   flex-flow: column;
-  border-radius: 2rem;
+  border-radius: 1.2rem;
 
   margin-bottom: 1rem;
-  box-shadow: 0 1px 1px ${rgba(0, 0, 0, 0.12)}, 0 1px 1px ${rgba(0, 0, 0, 0.24)};
+  box-shadow: 0 1px 1px 0.5px
+      ${(props) => rgba(props.theme.palette.grey[800], 0.12)},
+    1px 0 1px 0.5px ${(props) => rgba(props.theme.palette.grey[800], 0.12)};
+
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   z-index: 10;
 
   ${(props) => props.theme.breakpoints.up("md")} {
     margin: 1rem;
-    padding: 2.2rem 5rem;
+    padding: 2.2rem 4rem;
   }
 
   &:last-child {
@@ -45,10 +48,11 @@ const StyledPostCard = styled("div")`
   }
 
   p {
-    padding: 0.4rem 0 0.4rem;
+    padding: 0.4rem 0;
     font-size: 0.9rem;
     font-weight: 500;
     color: ${(props) => props.theme.palette.grey[800]};
+    min-height: 1rem;
   }
 
   .metadata {
@@ -79,7 +83,7 @@ interface PostCardProps {
   postedBy: string;
   createdAtFromNow: string;
   title: string;
-  description: string;
+  description?: string;
 }
 
 const PostCard: React.FC<PostCardProps> = ({

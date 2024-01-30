@@ -1,9 +1,13 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import useGlobal from "../hooks/useGlobal";
-import LogIn from "../pages/LogInPage";
-import SignUp from "../pages/SignUpPage/SignUpPage";
-import PrivateRoutes from "./PrivateRoutes";
-import GoogleLogIn from "../pages/GoogleLogIn";
+
+import { Suspense, lazy } from "react";
+import Loader from "../components/common/Loader";
+
+const LogIn = lazy(() => import("../pages/LogInPage"));
+const SignUp = lazy(() => import("../pages/SignUpPage/SignUpPage"));
+const GoogleLogIn = lazy(() => import("../pages/GoogleLogIn"));
+const PrivateRoutes = lazy(() => import("./PrivateRoutes"));
 
 const GlobalRoutes = () => {
   const { isLoggedIn } = useGlobal();
@@ -12,21 +16,54 @@ const GlobalRoutes = () => {
     <Routes>
       <Route
         path="/login"
-        element={!isLoggedIn ? <LogIn /> : <Navigate to="/" />}
+        element={
+          !isLoggedIn ? (
+            <Suspense fallback={<Loader />}>
+              <LogIn />
+            </Suspense>
+          ) : (
+            <Navigate to="/" />
+          )
+        }
       />
 
       <Route
         path="/login/google"
-        element={!isLoggedIn ? <GoogleLogIn /> : <Navigate to="/" />}
+        element={
+          !isLoggedIn ? (
+            <Suspense fallback={<Loader />}>
+              <GoogleLogIn />
+            </Suspense>
+          ) : (
+            <Navigate to="/" />
+          )
+        }
       />
 
       <Route
         path="/sign-up"
-        element={!isLoggedIn ? <SignUp /> : <Navigate to="/" />}
+        element={
+          !isLoggedIn ? (
+            <Suspense fallback={<Loader />}>
+              <SignUp />
+            </Suspense>
+          ) : (
+            <Navigate to="/" />
+          )
+        }
       />
+
       <Route
         path="*"
-        element={isLoggedIn ? <PrivateRoutes /> : <Navigate to="/login" />}
+        element={
+          isLoggedIn ? (
+            <Suspense fallback={<Loader />}>
+              <PrivateRoutes />
+            </Suspense>
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
       />
     </Routes>
   );

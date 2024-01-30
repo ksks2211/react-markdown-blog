@@ -67,7 +67,7 @@ export function usePrevAndNextPosts({
   postId,
   enabled,
 }: {
-  postId: string;
+  postId: string | number;
   enabled: boolean;
 }) {
   const pid = toInteger(postId);
