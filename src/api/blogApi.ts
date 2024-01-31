@@ -1,10 +1,6 @@
 import axios, { isAxiosError } from "axios";
 import { NotFoundError, UnauthorizedError } from "../errors";
-import {
-  getTokenFromBrowser,
-  removeTokenFromBrowser,
-  isValidToken,
-} from "../services/storageService";
+import { getTokenFromBrowser, isValidToken } from "../services/storageService";
 
 const API_ADDR = import.meta.env.VITE_API_ADDR as string;
 
@@ -18,10 +14,9 @@ blogApi.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.error("Error occurred in blogApi");
-
+    console.info("Error occurred in blogApi");
     if (isAxiosError(error)) {
-      console.error(error);
+      console.warn(error);
     }
 
     // no response error
@@ -31,7 +26,6 @@ blogApi.interceptors.response.use(
     const { response } = error;
 
     if (response.status === 401) {
-      removeTokenFromBrowser();
       throw new UnauthorizedError(
         response.data.message || "Unauthorized Error"
       );

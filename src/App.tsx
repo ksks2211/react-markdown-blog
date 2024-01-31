@@ -13,16 +13,16 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ErrorBoundary FallbackComponent={ErrorFallback}>
-        <BrowserRouter>
-          <GlobalProvider>
+      <GlobalProvider>
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <BrowserRouter>
             <ThemeProvider theme={theme}>
               <CssBaseline />
               <GlobalRoutes />
             </ThemeProvider>
-          </GlobalProvider>
-        </BrowserRouter>
-      </ErrorBoundary>
+          </BrowserRouter>
+        </ErrorBoundary>
+      </GlobalProvider>
       <ReactQueryDevtools initialIsOpen />
     </QueryClientProvider>
   );

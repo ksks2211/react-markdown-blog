@@ -37,7 +37,7 @@ const initialSnackbarState = {
   msg: "",
 };
 
-const DEFAULT_CATEGORY_PARAM = "xxx-no_category";
+const DEFAULT_CATEGORY_PARAM = "/no_category";
 
 function PostCreatePage() {
   useChangeMenu(Menu.POSTS);
@@ -50,9 +50,7 @@ function PostCreatePage() {
   const [snackbarState, setSnackbarState] = useState(initialSnackbarState);
 
   const categoryParam = searchParams.get("category") || DEFAULT_CATEGORY_PARAM;
-  const [category, setCategory] = useState(
-    `/${categoryParam.split("-").splice(1).join("/")}`
-  );
+  const [category, setCategory] = useState(categoryParam);
   const [state, setState] =
     useState<Omit<PostCreateForm, "category">>(initialState);
 
@@ -103,6 +101,8 @@ function PostCreatePage() {
 
   const handlePrevPageBtn = () => {
     if (categoryParam === DEFAULT_CATEGORY_PARAM) navigate("/posts");
+    else if (searchParams.get("empty")) navigate(`/categories`);
+    else navigate(`/categories${categoryParam}`);
   };
 
   const handleCategoryChange = (e: SelectChangeEvent) => {
@@ -171,10 +171,26 @@ function PostCreatePage() {
         onSubmitBtnClick={handleSubmit}
       />
 
-      <SnackbarAlert
-        snackbarState={snackbarState}
-        onClose={() => setSnackbarState(initialSnackbarState)}
-      />
+      {mutation.isError ? (
+        <SnackbarAlert
+          snackbarState={{
+            open: true,
+            severity: "error",
+            msg: mutation.error.message,
+          }}
+          onClose={() =>
+            setSnackbarState((prev) => {
+              mutation.reset();
+              return { ...prev, open: false };
+            })
+          }
+        />
+      ) : (
+        <SnackbarAlert
+          snackbarState={snackbarState}
+          onClose={() => setSnackbarState((prev) => ({ ...prev, open: false }))}
+        />
+      )}
     </StyledCreatePage>
   );
 }

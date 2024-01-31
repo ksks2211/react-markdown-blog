@@ -6,6 +6,7 @@ import cn from "classnames";
 import styles from "./MarkdownRenderer.module.scss";
 import remarkGfm from "remark-gfm";
 import { useEffect } from "react";
+import { uniqueId } from "lodash-es";
 
 const Code: CodeComponent = ({ children, className, ...props }) => {
   const match = /language-(\w+)/.exec(className || "");
@@ -37,6 +38,30 @@ export default function MarkdownRenderer({ content }: { content: string }) {
       remarkPlugins={[remarkGfm]}
       components={{
         code: Code,
+        h1: ({ children, className, ...props }) => {
+          const id = uniqueId();
+          return (
+            <h1 id={id} className={className} {...props}>
+              {children}
+            </h1>
+          );
+        },
+        h2: ({ children, className, ...props }) => {
+          const id = uniqueId();
+          return (
+            <h2 id={id} className={className} {...props}>
+              {children}
+            </h2>
+          );
+        },
+        h3: ({ children, className, ...props }) => {
+          const id = uniqueId();
+          return (
+            <h3 id={id} className={className} {...props}>
+              {children}
+            </h3>
+          );
+        },
       }}
     >
       {content}

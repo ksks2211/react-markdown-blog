@@ -1,23 +1,50 @@
-import { useChangeMenu } from "../hooks/useGlobal";
+import useGlobal, { useChangeMenu } from "../hooks/useGlobal";
 import { useGetPostListByCategory } from "../hooks/usePostQuery";
 import { formatDateFromNow } from "../helpers/dateUtils";
 import PostCard from "../components/common/PostCard";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Menu from "../contexts/Menu.enum";
-import { usePathParamId } from "../hooks/useParameter";
-import { Link } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import Loader from "../components/common/Loader";
 import withLayout from "../hoc/withLayout";
+import { StyledPostPage, StyledPrevPageBtn } from "./PostPage/PostPage.styles";
+import { IoMdAdd } from "react-icons/io";
+import { useChangeTitle } from "../hooks/useHeaderTitle";
+import { StyledPostList } from "./PostListPage";
+import { MdArrowBack } from "react-icons/md";
+import { useEffect } from "react";
+
+const regex = /^(\/\w+){1,8}$/;
 
 const PostListByCategory: React.FC = () => {
-  const id = usePathParamId();
   useChangeMenu(Menu.CATEGORIES);
 
-  const { data, isLoading, error, hasNextPage, fetchNextPage } =
-    useGetPostListByCategory({ categoryId: id });
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { username } = useGlobal();
+  const isValidPath = regex.test(location.pathname);
+  useEffect(() => {
+    if (!isValidPath) {
+      navigate("/categories");
+    }
+  }, [isValidPath, navigate]);
 
-  const addr = `/posts/create?category=${id}`;
+  const categoryId = `${username}-${location.pathname
+    .split("/")
+    .splice(2)
+    .join("-")}`;
+
+  const category = `/${categoryId.split("-").splice(1).join("/")}`;
+  useChangeTitle(`${category}`);
+
+  const { data, isLoading, error, hasNextPage, fetchNextPage } =
+    useGetPostListByCategory({ categoryId });
+
+  const createPath = `/posts/create?category=/${location.pathname
+    .split("/")
+    .splice(2)
+    .join("/")}`;
 
   const handleLoadMorePosts = async () => {
     await fetchNextPage();
@@ -26,28 +53,46 @@ const PostListByCategory: React.FC = () => {
   if (isLoading) return <Loader />;
   if (error) throw error;
   if (data === undefined) {
-    throw new Error(`Failed To Get Posts with Category ${id}`);
+    throw new Error(`Failed To Get Posts with Category ${categoryId}`);
   }
 
   const { postList } = data.pages[0];
+  const isEmpty = postList.length === 0;
+
+  const handleAddPost = () => {
+    navigate(createPath);
+  };
+
+  const handleBackToPrevPage = () => {
+    navigate("/categories");
+  };
 
   return (
-    <div>
-      <div>
-        <Link to={addr}>Create Post</Link>
-      </div>
-      {postList.map((post) => (
-        <PostCard
-          key={post.id}
-          id={post.id}
-          title={post.title}
-          description={post.description}
-          postedBy={post.writer}
-          createdAtFromNow={formatDateFromNow(post.createdAt)}
-        />
-      ))}
-
-      <Stack direction="row" alignItems="center" justifyContent="center">
+    <StyledPostPage>
+      {isEmpty && <Navigate to={`${createPath}&`} />}
+      <StyledPrevPageBtn>
+        <MdArrowBack onClick={handleBackToPrevPage} />
+        <IoMdAdd onClick={handleAddPost} />
+      </StyledPrevPageBtn>
+      <StyledPostList>
+        {postList.map((post) => (
+          <PostCard
+            key={post.id}
+            id={post.id}
+            title={post.title}
+            description={post.description}
+            postedBy={post.writer}
+            createdAtFromNow={formatDateFromNow(post.createdAt)}
+          />
+        ))}
+      </StyledPostList>
+      <Stack
+        direction="row"
+        alignItems="end"
+        justifyContent="center"
+        marginTop="auto"
+        justifySelf="end"
+      >
         <Button
           variant="contained"
           color="success"
@@ -57,7 +102,7 @@ const PostListByCategory: React.FC = () => {
           More
         </Button>
       </Stack>
-    </div>
+    </StyledPostPage>
   );
 };
 

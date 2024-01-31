@@ -15,6 +15,18 @@ interface GlobalContextType {
   setSidebarOpen: (v: boolean) => void;
 }
 
-const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
+const GlobalContext = createContext<GlobalContextType>({
+  selectedMenu: Menu.HOME,
+  isLoggedIn: false,
+  username: "",
+  displayName: "",
+  changeMenu: () => {},
+  setIsLoggedIn: () => {},
+  setUsername: () => {},
+  setDisplayName: () => {},
+  logout: () => {},
+  sidebarOpen: false,
+  setSidebarOpen: () => {},
+});
 
 export default GlobalContext;

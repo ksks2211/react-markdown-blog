@@ -41,6 +41,7 @@ const Post: React.FC = () => {
   const username = useUsername();
   const mutation = useDeletePost();
   const mainRef = useRef<HTMLDivElement>(null);
+  const markdownRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
 
   const navigate = useNavigate();
@@ -69,6 +70,16 @@ const Post: React.FC = () => {
       window.removeEventListener("scroll", checkLoadMore);
     };
   }, [postId]);
+
+  useEffect(() => {
+    if (markdownRef.current) {
+      console.log(markdownRef.current.innerText);
+
+      const headingElements =
+        markdownRef.current.querySelectorAll("h1, h2, h3");
+      console.log(headingElements);
+    }
+  }, []);
 
   const handleBackToPrevPage = () => {
     // If you have the state and it has fromPage
@@ -172,7 +183,7 @@ const Post: React.FC = () => {
           </StyledPostDetails>
         </StyledPostMeta>
 
-        <div>
+        <div ref={markdownRef}>
           <SuspenseLoader>
             <MarkdownRenderer content={post.content} />
           </SuspenseLoader>

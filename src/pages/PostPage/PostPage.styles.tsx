@@ -6,6 +6,7 @@ export const StyledPrevPageBtn = styled("div")`
   height: 2rem;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 
   svg {
     border-radius: 0.2rem;
@@ -24,6 +25,9 @@ export const StyledPrevPageBtn = styled("div")`
 `;
 export const StyledPostPage = styled("div")`
   margin: 2rem 2rem;
+  display: flex;
+  flex-flow: column;
+  min-height: 70vh;
   ${(props) => props.theme.breakpoints.up("md")} {
     margin: 3.5rem 3.5rem 0;
   }

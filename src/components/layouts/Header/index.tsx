@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { MdOutlineSearch } from "react-icons/md";
-import { capitalizeFirst } from "../../../helpers/stringUtils";
 import HamburgerButton from "../../common/HamburgerButton";
 import { useMemo } from "react";
 import { useTheme } from "@mui/material";
@@ -44,7 +43,7 @@ const Header: React.FC<HeaderProps> = ({
             />
           </StyledToggleBtn>
         )}
-        <h2 css={titleStyle(theme)}> {capitalizeFirst(title)}</h2>
+        <h2 css={titleStyle(theme)}>{title}</h2>
         <div css={searchIconStyle}>
           <MdOutlineSearch className="search--icon" />
         </div>

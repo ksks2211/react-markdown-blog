@@ -79,10 +79,8 @@ interface LoaderProps {
 // Base styles for the card
 const basedLoaderStyles = css`
   position: fixed;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
+  top: 50%;
+  left: 50%;
   display: flex;
   align-items: center;
   justify-content: center;

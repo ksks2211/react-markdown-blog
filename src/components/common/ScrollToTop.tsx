@@ -22,12 +22,13 @@ const StyledButton = styled("button")`
   opacity: 0.5;
   transform: translateX(50%);
   transition: 0.2s;
+  z-index: 999;
 
   &:hover,
   &:active {
     color: ${darken(0.1, "#6189be")};
     opacity: 0.8;
-    transform: translateY(-30%) translateX(50%);
+    transform: translateY(-30%) translateX(50%) scale(1.2);
   }
 `;
 

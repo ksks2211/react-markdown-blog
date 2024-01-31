@@ -9,6 +9,7 @@ import { styled } from "@mui/material";
 
 const StyledCategoriesPage = styled("div")`
   padding: 3rem;
+  min-height: 80vh;
 
   ${(props) => props.theme.breakpoints.up("md")} {
     padding: 3.5rem;
@@ -27,9 +28,11 @@ const CategoriesPage: React.FC = () => {
   if (data === undefined) throw new Error(`Failed To Get Categories`);
 
   return (
-    <StyledCategoriesPage>
-      <CategoriesCard rootCategory={data} />
-    </StyledCategoriesPage>
+    <>
+      <StyledCategoriesPage>
+        <CategoriesCard rootCategory={data} />
+      </StyledCategoriesPage>
+    </>
   );
 };
 

@@ -1,5 +1,13 @@
+/** @jsxImportSource @emotion/react */
+
 import { useEffect, useRef } from "react";
-import "./UtterencesComments.scss";
+import { css } from "@mui/material";
+
+const style = css`
+  & .utterances {
+    max-width: none;
+  }
+`;
 
 function UtterancesComments({ postId }: { postId: number }) {
   const ref = useRef<HTMLInputElement>(null);
@@ -34,7 +42,7 @@ function UtterancesComments({ postId }: { postId: number }) {
       if (container) container.innerHTML = "";
     };
   }, [postId]);
-  return <div className="utterances" ref={ref} key={postId}></div>;
+  return <div css={style} ref={ref} key={postId}></div>;
 }
 
 export default UtterancesComments;

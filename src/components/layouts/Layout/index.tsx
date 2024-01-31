@@ -120,9 +120,6 @@ export default function Layout({
     top: var(--header-height);
     z-index: 99;
   `;
-  const mainContentStyle = css`
-    min-height: 110vh;
-  `;
 
   return (
     <StyledPageWrapper sidebarOpen={sidebarOpen}>
@@ -145,7 +142,7 @@ export default function Layout({
 
         <StyledLowerPartitionWrapper>
           <StyledMainWrapper>
-            <MainComponent css={mainContentStyle} />
+            <MainComponent />
             <FooterComponent></FooterComponent>
           </StyledMainWrapper>
           <RightSidebarComponent hidden={!isLg} css={rightSidebarStyle} />

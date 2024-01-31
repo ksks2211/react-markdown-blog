@@ -14,7 +14,7 @@ import { StyledPostPage, StyledPrevPageBtn } from "./PostPage/PostPage.styles";
 import { IoMdAdd } from "react-icons/io";
 import ErrorFallback from "../errors/ErrorFallback";
 
-const StyledPostList = styled("div")`
+export const StyledPostList = styled("div")`
   margin-top: 1.5rem;
 `;
 

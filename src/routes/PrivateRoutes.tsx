@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import Loader from "../components/common/Loader";
 import { scrollToTheTop } from "../helpers/scrollUtils";
+import HeaderTitleProvider from "../contexts/HeaderTitleProvider";
 
 const Home = lazy(() => import("../pages/HomePage"));
 const Posts = lazy(() => import("../pages/PostListPage"));
@@ -64,11 +65,14 @@ const PrivateRoutes: React.FC = () => {
           </Suspense>
         }
       />
+
       <Route
-        path="/categories/:id"
+        path="/categories/*"
         element={
           <Suspense fallback={<Loader />}>
-            <PostsByCategory />
+            <HeaderTitleProvider>
+              <PostsByCategory />
+            </HeaderTitleProvider>
           </Suspense>
         }
       />

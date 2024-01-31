@@ -55,7 +55,7 @@ const StyledPostCard = styled("div")`
     min-height: 1rem;
   }
 
-  .metadata {
+  .post-metadata {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -71,7 +71,7 @@ const StyledPostCard = styled("div")`
       }
     }
 
-    .writer {
+    .metadata-writer {
       font-weight: 600;
     }
   }
@@ -104,12 +104,12 @@ const PostCard: React.FC<PostCardProps> = ({
     <StyledPostCard onClick={handleRedirect}>
       <h1>{title}</h1>
       <p>{description}</p>
-      <div className="metadata">
+      <div className="post-metadata">
         <time>
           <FaRegClock />
           {createdAtFromNow}
         </time>
-        <span>PostedBy {postedBy}</span>
+        <span className="metadata-writer">PostedBy {postedBy}</span>
       </div>
     </StyledPostCard>
   );

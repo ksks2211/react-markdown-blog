@@ -1,23 +1,14 @@
-import {
-  useDeleteCategory,
-  useCreateCategory,
-  useChangeCategory,
-} from "../../../hooks/useCategory";
-
-import { useRef, useState } from "react";
-
+import { useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   convertSlashesToDashes,
   removeDash,
 } from "../../../helpers/stringUtils";
-import TextInputModal from "../../common/TextInputModal";
-import { CategoryRowProps } from "./CategoriesCard.types";
+import type { CategoryRowProps } from "./CategoriesCard.types";
 
 import { FaRegFolder, FaRegFolderOpen, FaPen } from "react-icons/fa";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { RiArrowDropDownLine } from "react-icons/ri";
-import { MdDelete } from "react-icons/md";
 import {
   StyledRowWithSubRows,
   StyledRow,
@@ -25,6 +16,25 @@ import {
   StyledCategoryTitle,
 } from "./CategoriesCard.styles";
 import cn from "classnames";
+import DeleteCategoryBtn from "./DeleteCategoryBtn";
+import AddNewCategoryModal from "./AddNewCategoryModal";
+import UpdateCategoryModal from "./UpdateCategoryModal";
+
+function getFlags(numOfCategories: number, depth: number, numOfPosts: number) {
+  const canToggle = numOfCategories !== 0;
+  const isHighlighted = depth === 1;
+  const havePosts = numOfPosts === 0;
+  const canRemove = havePosts && !canToggle;
+  const canUpdate = !havePosts && depth !== 1;
+
+  return {
+    canToggle,
+    isHighlighted,
+    havePosts,
+    canRemove,
+    canUpdate,
+  };
+}
 
 export const CategoryRow: React.FC<CategoryRowProps> = ({
   categoryName,
@@ -43,34 +53,21 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
   const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
   const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
 
+  const categoryPath = fullCategoryName.split("/").splice(2).join("/");
   const categoryId = convertSlashesToDashes(fullCategoryName);
-  const categoryPath = depth !== 1 ? `/${categoryId}` : "";
-  const deleteCategoryMutation = useDeleteCategory();
-  const createCategoryMutation = useCreateCategory();
-  const changeCategoryMutation = useChangeCategory();
 
   const openCreateModal = () => {
     setCreateModalOpen(true);
-  };
-
-  const closeCreateModal = () => {
-    setCreateModalOpen(false);
   };
 
   const openUpdateModal = () => {
     setUpdateModalOpen(true);
   };
 
-  const closeUpdateModal = () => {
-    setUpdateModalOpen(false);
-  };
-
-  const canToggle = numOfCategories !== 0;
-  const marked = depth === 1;
-  const disabled = numOfPosts === 0;
-
-  // Category removable
-  const removable = disabled && !canToggle;
+  const { canToggle, isHighlighted, havePosts, canRemove, canUpdate } = useMemo(
+    () => getFlags(numOfCategories, depth, numOfPosts),
+    [depth, numOfCategories, numOfPosts]
+  );
 
   const rowRef = useRef<HTMLDivElement>(null);
 
@@ -98,21 +95,11 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
     }
   };
 
-  const handleRemoveCategory = async () => {
-    await deleteCategoryMutation.mutateAsync(categoryId);
-  };
-
-  const handleAddCategory = async (value: string) => {
-    const categoryArray = fullCategoryName.split("/");
-    categoryArray.splice(1, 1);
-    categoryArray.push(value);
-    const newCategory = categoryArray.join("/");
-    await createCategoryMutation.mutateAsync(newCategory);
-  };
-
-  const handleUpdateCategory = async (newCategory: string) => {
-    await changeCategoryMutation.mutateAsync({ newCategory, categoryId });
-  };
+  const linkAddr = isHighlighted
+    ? "/categories"
+    : numOfPosts === 0
+    ? `/posts/create?category=/${categoryPath}&empty=true`
+    : `/categories/${categoryPath}`;
 
   return (
     <>
@@ -120,7 +107,7 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
         <StyledRow
           className={cn("row-wrapper", { "row-close": !subRowsOpen })}
           ref={rowRef}
-          marked={marked}
+          marked={isHighlighted}
           subRowsOpen={subRowsOpen}
           depth={depth}
         >
@@ -130,9 +117,9 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
             ) : (
               <FaRegFolder className="folder-icon" />
             )}
-            {disabled || <span className="count">{numOfPosts}</span>}
+            {havePosts || <span className="count">{numOfPosts}</span>}
 
-            <Link className={"category-name"} to={`/categories${categoryPath}`}>
+            <Link className={"category-name"} to={linkAddr}>
               {removeDash(categoryName)}
             </Link>
 
@@ -141,16 +128,11 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
               onClick={openCreateModal}
             />
 
-            {!disabled && depth !== 0 && (
+            {canUpdate && (
               <FaPen className="update-icon" onClick={openUpdateModal} />
             )}
 
-            {removable && (
-              <MdDelete
-                className="delete-icon"
-                onClick={handleRemoveCategory}
-              />
-            )}
+            {canRemove && <DeleteCategoryBtn categoryId={categoryId} />}
           </StyledCategoryTitle>
 
           <StyledCategoryDropdownBtn
@@ -169,23 +151,20 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
       </StyledRowWithSubRows>
 
       {createModalOpen && (
-        <TextInputModal
-          prompt={`Add new category`}
-          open={createModalOpen}
-          onClose={closeCreateModal}
-          onSubmit={handleAddCategory}
-          label={fullCategoryName}
+        <AddNewCategoryModal
+          createModalOpen={createModalOpen}
+          fullCategoryName={fullCategoryName}
+          setCreateModalOpen={setCreateModalOpen}
+          handleOpenFolderAfterAddNewCategory={() => setSubRowsOpen(true)}
         />
       )}
 
       {updateModalOpen && (
-        <TextInputModal
-          prompt={"Change category"}
-          open={updateModalOpen}
-          onClose={closeUpdateModal}
-          onSubmit={handleUpdateCategory}
-          label={fullCategoryName}
-          placeholder={`/${fullCategoryName.split("/").slice(2).join("/")}`}
+        <UpdateCategoryModal
+          categoryId={categoryId}
+          fullCategoryName={fullCategoryName}
+          setUpdateModalOpen={setUpdateModalOpen}
+          updateModalOpen={updateModalOpen}
         />
       )}
     </>

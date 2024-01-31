@@ -1,4 +1,5 @@
 import { styled } from "@mui/material";
+import Box from "@mui/material/Box";
 import { darken, rgba } from "polished";
 
 export const StyledCategoriesCard = styled("div")`
@@ -167,5 +168,22 @@ export const StyledCategoryTitle = styled("div")`
     &:hover {
       fill: ${(props) => props.theme.palette.grey[800]};
     }
+  }
+`;
+export const StyledWarning = styled(Box)`
+  color: ${(props) => props.theme.palette.error.main};
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  font-size: 0.8rem;
+  line-height: 1rem;
+
+  &::before {
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    width: 0.7rem;
+    content: "∗";
+    display: flex;
   }
 `;

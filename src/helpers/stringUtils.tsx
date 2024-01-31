@@ -7,6 +7,10 @@ export function removeDash(str: string) {
   return words.join(" ");
 }
 
+export function removeRootDir(fullCategoryName: string) {
+  return `/${fullCategoryName.split("/").slice(2).join("/")}`;
+}
+
 export function canBeParsedToInt(str: string) {
   const num = parseInt(str, 10);
   return !isNaN(num) && num.toString() === str;
