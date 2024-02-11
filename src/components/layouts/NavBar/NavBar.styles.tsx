@@ -20,7 +20,8 @@ export const StyledNavBarWrapper = styled("div")`
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 1.5rem;
+    padding-top: 4rem;
+    padding-bottom: 5.5rem;
   }
 `;
 export const StyledProfileCard = styled("div")`
