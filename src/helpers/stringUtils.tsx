@@ -1,3 +1,5 @@
+import isEmpty from "lodash-es/isEmpty";
+
 export function capitalizeFirst(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
@@ -8,7 +10,8 @@ export function removeDash(str: string) {
 }
 
 export function removeRootDir(fullCategoryName: string) {
-  return `/${fullCategoryName.split("/").slice(2).join("/")}`;
+  const removed = fullCategoryName.split("/").slice(2).join("/");
+  return isEmpty(removed) ? "" : `/${removed}`;
 }
 
 export function canBeParsedToInt(str: string) {

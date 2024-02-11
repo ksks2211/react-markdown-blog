@@ -24,8 +24,8 @@ function getFlags(numOfCategories: number, depth: number, numOfPosts: number) {
   const canToggle = numOfCategories !== 0;
   const isHighlighted = depth === 1;
   const havePosts = numOfPosts === 0;
-  const canRemove = havePosts && !canToggle;
-  const canUpdate = !havePosts && depth !== 1;
+  const canRemove = havePosts && !canToggle && !isHighlighted;
+  const canUpdate = !havePosts && !isHighlighted;
 
   return {
     canToggle,

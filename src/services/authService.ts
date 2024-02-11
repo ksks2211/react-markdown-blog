@@ -28,14 +28,11 @@ export async function createUser({
   password,
   email,
 }: RegisterUserForm) {
-  console.log("Create User");
   const { data } = await blogApi.post("/api/auth/register", {
     username,
     password,
     email,
   });
-
-  console.log("Created");
   return data;
 }
 // JWT
@@ -68,6 +65,7 @@ export const getJwtByOAuth2 = async (params: URLSearchParams) => {
   const { data } = await blogApi.get("/login/oauth2/code/google", {
     params,
   });
+  await blogApi.get("/login/complete");
   return data;
 };
 

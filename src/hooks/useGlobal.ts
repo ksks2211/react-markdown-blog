@@ -2,6 +2,7 @@ import { useContext, useEffect } from "react";
 
 import Menu from "../contexts/Menu.enum";
 import GlobalContext from "../contexts/GlobalContext";
+import { UnauthorizedError } from "../errors";
 
 const useGlobal = () => {
   const context = useContext(GlobalContext);
@@ -25,6 +26,13 @@ const useUsername = () => {
   return username;
 };
 
-export { useChangeMenu, useUsername };
+const useLogoutIfUnauthorizedError = (e: unknown) => {
+  const { logout } = useGlobal();
+  if (e instanceof UnauthorizedError) {
+    logout();
+  }
+};
+
+export { useChangeMenu, useUsername, useLogoutIfUnauthorizedError };
 
 export default useGlobal;

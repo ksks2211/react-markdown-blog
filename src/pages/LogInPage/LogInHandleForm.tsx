@@ -69,7 +69,8 @@ export function LogInInputForm({
 
   const handleGoogle = debounce((e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    location.href = "http://localhost:8080/oauth2/authorization/google";
+    const API_ADDR = import.meta.env.VITE_API_ADDR as string;
+    location.href = `${API_ADDR}/oauth2/authorization/google`;
   }, 1200);
 
   return (

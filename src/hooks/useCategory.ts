@@ -38,7 +38,6 @@ export function useCreateCategory() {
     onSuccess: () => {
       queryClient.invalidateQueries("categories");
     },
-    // onError
   });
 } //
 

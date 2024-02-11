@@ -7,8 +7,6 @@ export function useCreateUser(setErrorMessage: (msg: string | null) => void) {
     mutationFn: ({ username, password, email }) =>
       createUser({ username, password, email }),
     onError: (error) => {
-      console.log(error);
-      console.log(error.message);
       setErrorMessage(error.message);
     },
   });

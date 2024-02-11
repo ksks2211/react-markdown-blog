@@ -1,4 +1,4 @@
-import { Theme, css, styled } from "@mui/material";
+import { styled } from "@mui/material";
 
 export const StyledToggleBtn = styled("div")<{ active: boolean }>`
   transform: ${(props) =>
@@ -26,21 +26,4 @@ export const StyledHeader = styled("header")`
   --header-text-color: #837c7c;
   color: ${(props) => props.theme.palette.grey[800]};
   border-bottom: 0.8px solid rgba(0, 0, 0, 0.09);
-`;
-export const searchIconStyle = css`
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  .search--icon {
-    height: 1.7rem;
-    width: 100%;
-    opacity: 0.7;
-    &:hover {
-      opacity: 1;
-    }
-  }
-`;
-export const titleStyle = (theme: Theme) => css`
-  color: ${theme.global.mainColor};
-  font-size: 1.2rem;
 `;
