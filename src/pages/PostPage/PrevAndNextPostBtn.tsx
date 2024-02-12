@@ -9,7 +9,7 @@ interface PrevAndNextPostBtnProps {
   prevAndNextPosts: PrevAndNextPosts;
 }
 
-const StyledLink = styled(Link)<{ isPrev: boolean; disabled: boolean }>`
+const StyledLink = styled(Link)<{ disabled: boolean }>`
   display: flex;
   flex-flow: column;
   width: 50%;
@@ -92,7 +92,6 @@ export default function PrevAndNextPostBtn({
   return (
     <StyledPrevAndNextPostBtn>
       <StyledLink
-        isPrev={true}
         disabled={!prevAndNextPosts.hasPrev}
         to={`/posts/${prevAndNextPosts.prev?.id}`}
         className={cn("btn-prev", { disabled: !prevAndNextPosts.hasPrev })}
@@ -102,7 +101,6 @@ export default function PrevAndNextPostBtn({
         </span>
       </StyledLink>
       <StyledLink
-        isPrev={false}
         disabled={!prevAndNextPosts.hasNext}
         to={`/posts/${prevAndNextPosts.next?.id}`}
         className={cn("btn-next", { disabled: !prevAndNextPosts.hasNext })}

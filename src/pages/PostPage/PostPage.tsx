@@ -73,13 +73,12 @@ const Post: React.FC = () => {
 
   useEffect(() => {
     if (markdownRef.current) {
-      console.log(markdownRef.current.innerText);
-
       const headingElements =
         markdownRef.current.querySelectorAll("h1, h2, h3");
+
       console.log(headingElements);
     }
-  }, []);
+  }, [postId]);
 
   const handleBackToPrevPage = () => {
     // If you have the state and it has fromPage

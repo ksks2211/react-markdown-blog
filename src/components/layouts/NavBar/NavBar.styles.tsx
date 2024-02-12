@@ -22,6 +22,9 @@ export const StyledNavBarWrapper = styled("div")`
     justify-content: center;
     padding-top: 4rem;
     padding-bottom: 9rem;
+    ${(props) => props.theme.breakpoints.up("md")} {
+      padding-bottom: 5.5rem;
+    }
   }
 `;
 export const StyledProfileCard = styled("div")`

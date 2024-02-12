@@ -62,11 +62,12 @@ const StyledPostCard = styled("div")`
   }
 
   ${(props) => props.theme.breakpoints.up("sm")} {
-    padding: 2.2rem 4rem;
+    border-radius: 1rem;
+    padding: 2rem 3.5rem;
   }
 
   ${(props) => props.theme.breakpoints.up("md")} {
-    padding: 2.2rem 4rem;
+    padding: 3rem 5rem;
   }
 
   .post-metadata {

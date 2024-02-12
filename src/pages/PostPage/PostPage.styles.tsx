@@ -6,12 +6,10 @@ export const StyledPostPage = styled("div")`
   display: flex;
   width: 100%;
   flex-flow: column;
-
-  /* padding: 0 1rem; */
   min-height: 70vh;
 
   ${(props) => props.theme.breakpoints.up("md")} {
-    /* margin: 3.5rem 3.5rem 0; */
+    padding: 2rem 4rem 0;
   }
 `;
 
@@ -20,6 +18,11 @@ export const StyledPrevPageBtn = styled("div")`
   align-items: center;
   justify-content: space-between;
   margin: 1rem;
+
+  ${(props) => props.theme.breakpoints.up("md")} {
+    margin: 1.5rem 0 2.5rem;
+  }
+
   svg,
   .icon-btn {
     cursor: pointer;
@@ -122,4 +125,7 @@ export const StyledMainPost = styled("div")`
   padding: 0 1rem;
   margin-bottom: 1rem;
 `;
-export const StyledPostList = styled("div")``;
+
+export const StyledPostList = styled("div")`
+  width: 100%;
+`;

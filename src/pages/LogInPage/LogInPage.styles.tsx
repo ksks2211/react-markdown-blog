@@ -5,6 +5,8 @@ export const StyledLoginWrapper = styled("div")`
   display: flex;
   justify-content: center;
   min-width: 20rem;
+
+  padding-bottom: 3rem;
 `;
 
 export const StyledLogo = styled("div")`
@@ -33,8 +35,6 @@ export const StyledLogo = styled("div")`
 export const StyledLoginCard = styled("div")`
   border: 2px solid #fff;
   padding: 1.2rem 3.4rem;
-  box-shadow: 0 7px 14px rgba(231, 177, 177, 0.25),
-    0 5px 5px rgba(0, 0, 0, 0.22);
 
   margin-top: 4rem;
   min-width: 65vw;
@@ -44,7 +44,10 @@ export const StyledLoginCard = styled("div")`
   border-radius: 2.6rem;
 
   ${(props) => props.theme.breakpoints.up("sm")} {
-    min-width: 58vw;
+    box-shadow: 0 7px 14px rgba(231, 177, 177, 0.25),
+      0 5px 5px rgba(0, 0, 0, 0.22);
+
+    min-width: 45vw;
   }
 
   ${(props) => props.theme.breakpoints.up("md")} {
