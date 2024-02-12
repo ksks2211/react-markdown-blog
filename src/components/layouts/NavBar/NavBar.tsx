@@ -17,10 +17,6 @@ const NavBar: React.FC<NavBarProps> = (props) => {
     "https://raw.githubusercontent.com/ksks2211/ksks2211.github.io/main/assets/img/commons/profile.png";
   const menuList = Object.keys(props.menu);
 
-  const handleLogout = () => {
-    props.logout();
-  };
-
   return (
     <StyledNavBarWrapper {...props}>
       <StyledProfileCard>
@@ -53,7 +49,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
         })}
       </StyledList>
 
-      <div className="sidebar-bottom" onClick={handleLogout}>
+      <div className="sidebar-bottom" onClick={props.logout}>
         <StyledLogoutButton content="Log out">
           <FiLogOut />
         </StyledLogoutButton>

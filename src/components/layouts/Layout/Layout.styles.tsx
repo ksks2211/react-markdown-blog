@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
-import styled from "@emotion/styled";
+import { styled } from "@mui/material";
 
 interface SidebarOpenProps {
   sidebarOpen: boolean;
 }
-export const StyledOverlay = styled.div`
+export const StyledOverlay = styled("div")`
   cursor: pointer;
   position: absolute;
   top: 0;
@@ -24,32 +24,43 @@ export const StyledOverlay = styled.div`
     }
   }
 `;
-export const StyledPageWrapper = styled.div<SidebarOpenProps>`
+export const StyledPageWrapper = styled("div")<SidebarOpenProps>`
   background-color: var(--header-color);
   display: flex;
   flex-direction: row;
-  width: 100%;
   position: relative;
 `;
 
-type RightPartitionProps = SidebarOpenProps & { isDesktop: boolean };
+type IsDeskTopProps = { isDesktop: boolean };
 
-export const StyledRightPartitionWrapper = styled.div<RightPartitionProps>`
+type RightPartitionProps = SidebarOpenProps & IsDeskTopProps;
+
+export const StyledRightPartitionWrapper = styled("div")<RightPartitionProps>`
   background-color: var(--header-color);
   transition: margin-right 0.3s ease;
   display: flex;
-  width: 100%;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 0;
+  overflow-wrap: break-word;
+
   flex-direction: column;
   position: relative;
 `;
-export const StyledLowerPartitionWrapper = styled.main`
+export const StyledLowerPartitionWrapper = styled("div")<IsDeskTopProps>`
   background-color: var(--right-sidebar-color);
+
+  width: 100%;
   display: flex;
   flex-direction: row;
   position: relative;
 `;
-export const StyledMainWrapper = styled.div`
-  width: 100%;
+export const StyledMainWrapper = styled("div")<IsDeskTopProps>`
   display: flex;
   flex-direction: column;
+  margin: 0 auto;
+
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 0;
 `;

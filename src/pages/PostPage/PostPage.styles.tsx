@@ -2,68 +2,48 @@ import { styled } from "@mui/material";
 
 import { darken } from "polished";
 
+export const StyledPostPage = styled("div")`
+  display: flex;
+  width: 100%;
+  flex-flow: column;
+
+  /* padding: 0 1rem; */
+  min-height: 70vh;
+
+  ${(props) => props.theme.breakpoints.up("md")} {
+    /* margin: 3.5rem 3.5rem 0; */
+  }
+`;
+
 export const StyledPrevPageBtn = styled("div")`
-  height: 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  svg {
-    border-radius: 0.2rem;
-    color: #fff;
-    font-size: 1.6rem;
-    background-color: ${(props) => props.theme.global.mainColor};
+  margin: 1rem;
+  svg,
+  .icon-btn {
     cursor: pointer;
-    transition: 0.2s ease-out;
-    transform: scale(1.3);
+    color: #fff;
+    border-radius: 0.2rem;
+    font-size: 2.2rem;
+    background-color: ${(props) => props.theme.global.mainColor};
+    transition: 0.4s ease-out;
 
     &:hover {
       background-color: ${(props) =>
-        darken(0.05, props.theme.global.mainColor)};
+        darken(0.07, props.theme.global.mainColor)};
     }
   }
 `;
-export const StyledPostPage = styled("div")`
-  margin: 2rem 2rem;
-  display: flex;
-  flex-flow: column;
-  min-height: 70vh;
-  ${(props) => props.theme.breakpoints.up("md")} {
-    margin: 3.5rem 3.5rem 0;
-  }
-`;
+
 export const StyledPrevAndNextPostBtn = styled("div")`
   display: flex;
   align-items: center;
   justify-content: center;
   flex-flow: row;
-
-  a {
-    display: flex;
-    flex-flow: column;
-    width: 50%;
-    border: 1px solid ${(props) => props.theme.global.btnColor};
-    height: 6rem;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    transition: 0.4s ease-out;
-
-    &:hover {
-      background-color: ${(props) => props.theme.global.btnColor};
-      color: #fff;
-
-      span {
-        color: #fff !important;
-      }
-    }
-  }
+  padding: 0 1rem;
 `;
-export const StyledMainPost = styled("div")`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1rem;
-`;
+
 export const StyledPostMeta = styled("div")`
   padding: 1rem 0 2rem;
 `;
@@ -73,12 +53,14 @@ export const StyledTitle = styled("h1")`
   font-weight: 600;
   margin-bottom: 1.2rem;
   display: flex;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.12);
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
   color: ${(props) => props.theme.palette.grey[800]};
   justify-content: space-between;
 
   // Delete btn
   div.delete-btn {
+    flex-grow: 0;
+    flex-shrink: 0;
     font-size: 1.2rem;
     display: flex;
     align-items: center;
@@ -133,3 +115,11 @@ export const StyledPostDetails = styled(StyledPostMetadata)`
   display: flex;
   justify-content: space-between;
 `;
+
+export const StyledMainPost = styled("div")`
+  display: flex;
+  flex-direction: column;
+  padding: 0 1rem;
+  margin-bottom: 1rem;
+`;
+export const StyledPostList = styled("div")``;

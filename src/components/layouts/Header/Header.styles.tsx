@@ -1,10 +1,13 @@
 import { styled } from "@mui/material";
 
 export const StyledToggleBtn = styled("div")<{ active: boolean }>`
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transform: ${(props) =>
-    props.active ? "translateX(calc(var(--sidebar-width) - 1.6rem))" : 0};
+    props.active ? "translateX(calc(var(--sidebar-width) - 1rem))" : 0};
   transition: transform 0.3s ease;
-  padding: 0.4rem;
 `;
 export const StyledWrapper = styled("div")`
   display: flex;
@@ -12,12 +15,11 @@ export const StyledWrapper = styled("div")`
   height: 100%;
   align-items: center;
   justify-content: space-between;
-  padding: 0 2rem;
+  padding: 0 1.4rem;
   font-weight: 600;
   font-size: 1.3rem;
   ${(props) => props.theme.breakpoints.up("md")} {
     padding-right: calc(var(--sidebar-width) + 2rem);
-
     font-weight: 400;
   }
 `;

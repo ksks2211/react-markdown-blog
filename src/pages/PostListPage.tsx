@@ -9,14 +9,14 @@ import Menu from "../contexts/Menu.enum";
 import Loader from "../components/common/Loader";
 import withLayout from "../hoc/withLayout";
 import { scrollToTheTop } from "../helpers/scrollUtils";
-import { styled, Stack, Pagination } from "@mui/material";
-import { StyledPostPage, StyledPrevPageBtn } from "./PostPage/PostPage.styles";
+import { Stack, Pagination } from "@mui/material";
+import {
+  StyledPostPage,
+  StyledPrevPageBtn,
+  StyledPostList,
+} from "./PostPage/PostPage.styles";
 import { IoMdAdd } from "react-icons/io";
 import ErrorFallback from "../errors/ErrorFallback";
-
-export const StyledPostList = styled("div")`
-  margin-top: 1.5rem;
-`;
 
 // ?page=1
 const PostList: React.FC = () => {
@@ -52,7 +52,7 @@ const PostList: React.FC = () => {
   return (
     <StyledPostPage>
       <StyledPrevPageBtn>
-        <IoMdAdd onClick={handleAddPost} />
+        <IoMdAdd className="icon-btn" onClick={handleAddPost} />
       </StyledPrevPageBtn>
       <StyledPostList>
         {postList.map((post) => (
@@ -67,7 +67,12 @@ const PostList: React.FC = () => {
         ))}
       </StyledPostList>
 
-      <Stack justifyContent="center" alignItems="center" spacing={0}>
+      <Stack
+        justifyContent="center"
+        alignItems="center"
+        spacing={0}
+        sx={{ margin: "2rem 0" }}
+      >
         <Pagination
           variant="outlined"
           color="primary"

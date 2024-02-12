@@ -21,7 +21,7 @@ export const StyledNavBarWrapper = styled("div")`
     align-items: center;
     justify-content: center;
     padding-top: 4rem;
-    padding-bottom: 5.5rem;
+    padding-bottom: 9rem;
   }
 `;
 export const StyledProfileCard = styled("div")`

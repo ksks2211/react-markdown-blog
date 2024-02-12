@@ -5,54 +5,68 @@ import { rgba } from "polished";
 import { scrollToTheTop } from "../../helpers/scrollUtils";
 
 const StyledPostCard = styled("div")`
-  position: relative;
-  overflow: hidden;
+  box-shadow: 0 1px 3px 1px
+    ${(props) => rgba(props.theme.palette.grey[800], 0.12)};
+
   cursor: pointer;
 
-  box-sizing: content-box;
-
-  padding: 2.2rem;
   display: flex;
-
-  justify-content: center;
   flex-flow: column;
-  border-radius: 1.2rem;
-
-  margin-bottom: 1rem;
-  box-shadow: 0 1px 1px 0.5px
-      ${(props) => rgba(props.theme.palette.grey[800], 0.12)},
-    1px 0 1px 0.5px ${(props) => rgba(props.theme.palette.grey[800], 0.12)};
+  justify-content: center;
+  position: relative;
 
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  z-index: 10;
 
-  ${(props) => props.theme.breakpoints.up("md")} {
-    margin: 1rem;
-    padding: 2.2rem 4rem;
-  }
-
-  &:last-child {
-    margin-bottom: 4rem !important;
-  }
+  padding: 1.6rem 1.4rem;
+  margin-bottom: 1.4rem;
 
   &:hover {
-    opacity: 0.7;
-    background-color: ${(props) => rgba(props.theme.palette.grey[400], 0.14)};
+    background-color: ${(props) =>
+      rgba(props.theme.palette.success.main, 0.14)};
   }
 
-  h1 {
+  .post-title {
     width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    /* overflow-wrap: break-word; */
+    display: -webkit-box;
+
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
     color: ${(props) => props.theme.palette.grey[800]};
     font-size: 1.4rem;
+    line-height: 1.5;
     font-weight: 600;
   }
 
-  p {
+  .post-description {
     padding: 0.4rem 0;
     font-size: 0.9rem;
     font-weight: 500;
     color: ${(props) => props.theme.palette.grey[800]};
     min-height: 1rem;
+
+    white-space: normal;
+    overflow-wrap: anywhere;
+    /* overflow-wrap: break-word; */
+    display: -webkit-box;
+
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  ${(props) => props.theme.breakpoints.up("sm")} {
+    padding: 2.2rem 4rem;
+  }
+
+  ${(props) => props.theme.breakpoints.up("md")} {
+    padding: 2.2rem 4rem;
   }
 
   .post-metadata {
@@ -60,19 +74,35 @@ const StyledPostCard = styled("div")`
     align-items: center;
     justify-content: space-between;
     font-size: 0.85rem;
-    color: rgba(100, 100, 100);
-
+    color: ${(props) => props.theme.palette.grey[700]};
     time {
+      min-width: 30%;
+      max-width: 50%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
       display: inline-flex;
+      text-align: start;
       align-items: center;
-      justify-content: center;
+
+      white-space: nowrap;
       svg {
+        flex-grow: 0;
+        flex-shrink: 0;
         margin-right: 0.3rem;
       }
     }
 
     .metadata-writer {
+      justify-self: end;
+      margin-left: auto;
+      flex-grow: 0;
+      flex-shrink: 0;
+      min-width: 30%;
+      max-width: 50%;
       font-weight: 600;
+      text-align: end;
+      white-space: nowrap;
     }
   }
 `;
@@ -102,8 +132,8 @@ const PostCard: React.FC<PostCardProps> = ({
 
   return (
     <StyledPostCard onClick={handleRedirect}>
-      <h1>{title}</h1>
-      <p>{description}</p>
+      <h1 className="post-title">{title}</h1>
+      <p className="post-description">{description}</p>
       <div className="post-metadata">
         <time>
           <FaRegClock />

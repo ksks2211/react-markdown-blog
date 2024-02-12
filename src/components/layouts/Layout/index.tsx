@@ -37,6 +37,8 @@ const leftSidebarStyle = ({
 }) => css`
   height: 100vh;
   min-width: var(--sidebar-width);
+  flex-grow: 0;
+  flex-shrink: 0;
   margin-left: calc(-1 * var(--sidebar-width));
   transform: translateX(${sidebarOpen ? "var(--sidebar-width)" : 0});
   transition: margin-left.3s ease, transform 0.3s ease;
@@ -140,11 +142,12 @@ export default function Layout({
           onClick={handleSidebarToggle}
         />
 
-        <StyledLowerPartitionWrapper>
-          <StyledMainWrapper>
+        <StyledLowerPartitionWrapper isDesktop={isLg}>
+          <StyledMainWrapper isDesktop={isLg}>
             <MainComponent />
             <FooterComponent></FooterComponent>
           </StyledMainWrapper>
+
           <RightSidebarComponent hidden={!isLg} css={rightSidebarStyle} />
 
           <ScrollToTop />

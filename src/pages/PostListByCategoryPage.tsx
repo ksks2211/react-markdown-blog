@@ -11,7 +11,7 @@ import withLayout from "../hoc/withLayout";
 import { StyledPostPage, StyledPrevPageBtn } from "./PostPage/PostPage.styles";
 import { IoMdAdd } from "react-icons/io";
 import { useChangeTitle } from "../hooks/useHeaderTitle";
-import { StyledPostList } from "./PostListPage";
+import { StyledPostList } from "./PostPage/PostPage.styles";
 import { MdArrowBack } from "react-icons/md";
 import { useEffect } from "react";
 

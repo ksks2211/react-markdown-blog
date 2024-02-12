@@ -10,17 +10,53 @@ interface PrevAndNextPostBtnProps {
 }
 
 const StyledLink = styled(Link)<{ isPrev: boolean; disabled: boolean }>`
-  &::before {
-    display: flex;
-    font-size: 0.9rem;
-    transform: translateY(-0.8rem);
-  }
+  display: flex;
+  flex-flow: column;
+  width: 50%;
+  flex-grow: 0;
+  flex-shrink: 0;
+  border: 1px solid ${(props) => props.theme.global.btnColor};
+  height: 6rem;
+  align-items: center;
+  justify-content: start;
+  position: relative;
+  transition: 0.4s ease-out;
 
-  span {
+  .post-link-title {
     color: ${(props) => darken(0.2, props.theme.global.btnColor)};
     font-weight: 600;
     transition: 0.4s ease-out;
-    min-height: 1.8rem;
+
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    width: 90%;
+  }
+
+  &:hover {
+    background-color: ${(props) => props.theme.global.btnColor};
+    color: #fff;
+
+    span {
+      color: #fff !important;
+    }
+  }
+
+  &::before {
+    width: 100%;
+    display: flex;
+    margin: 0.7rem 0 0.35rem;
+    justify-content: center;
+
+    font-size: 0.9rem;
+    text-align: center;
+    flex-shrink: 0;
+    flex-grow: 0;
   }
 
   &.btn-prev {
@@ -32,13 +68,13 @@ const StyledLink = styled(Link)<{ isPrev: boolean; disabled: boolean }>`
     content: "PREV";
   }
 
+  &.btn-next::before {
+    content: "NEXT";
+  }
+
   &.btn-next {
     border-top-right-radius: 0.8rem;
     border-bottom-right-radius: 0.8rem;
-  }
-
-  &.btn-next::before {
-    content: "NEXT";
   }
 
   &.disabled {
@@ -61,7 +97,7 @@ export default function PrevAndNextPostBtn({
         to={`/posts/${prevAndNextPosts.prev?.id}`}
         className={cn("btn-prev", { disabled: !prevAndNextPosts.hasPrev })}
       >
-        <span>
+        <span className="post-link-title">
           {prevAndNextPosts.hasPrev ? prevAndNextPosts.prev.title : "None"}
         </span>
       </StyledLink>
@@ -71,7 +107,7 @@ export default function PrevAndNextPostBtn({
         to={`/posts/${prevAndNextPosts.next?.id}`}
         className={cn("btn-next", { disabled: !prevAndNextPosts.hasNext })}
       >
-        <span>
+        <span className="post-link-title">
           {prevAndNextPosts.hasNext ? prevAndNextPosts.next.title : "None"}
         </span>
       </StyledLink>

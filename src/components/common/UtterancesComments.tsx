@@ -7,6 +7,7 @@ const style = css`
   & .utterances {
     max-width: none;
   }
+  padding: 0 0.8rem;
 `;
 
 function UtterancesComments({ postId }: { postId: number }) {
