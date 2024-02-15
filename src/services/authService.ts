@@ -1,11 +1,6 @@
-import { isAxiosError } from "axios";
 import blogApi from "../api/blogApi";
 
-import type {
-  RegisterUserForm,
-  LogInForm,
-  AuthErrorInfo,
-} from "@customTypes/auth.types";
+import type { RegisterUserForm, LogInForm } from "@customTypes/auth.types";
 
 export async function isAvailableUsername(username: string) {
   const query = new URLSearchParams();
@@ -41,17 +36,8 @@ export async function getJsonWebTokenFromServer({
   username,
   password,
 }: LogInForm) {
-  try {
-    const res = await blogApi.post("/api/auth/login", { username, password });
-    return res.data;
-  } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      const errorResponse = error.response.data as AuthErrorInfo;
-      throw new Error(errorResponse.message);
-    } else {
-      throw new Error("Login Failed");
-    }
-  }
+  const res = await blogApi.post("/api/auth/login", { username, password });
+  return res.data;
 }
 
 export const getJwtByRefreshToken = async () => {

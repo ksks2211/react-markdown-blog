@@ -3,12 +3,15 @@ import Box from "@mui/material/Box";
 import { darken, rgba } from "polished";
 
 export const StyledCategoriesCard = styled("div")`
+  width: 100%;
   border-radius: 0.4rem;
-  box-shadow: 0 1px 2px ${rgba(84, 83, 83, 0.1)},
-    0 2px 1px ${rgba(0, 0, 0, 0.1)};
-  padding: 0;
+  box-shadow: -1px -1px 2px ${rgba(84, 83, 83, 0.1)},
+    2px 2px 5px ${rgba(0, 0, 0, 0.1)};
+
   display: flex;
   flex-flow: column;
+  overflow: hidden;
+
   color: ${(props) => props.theme.palette.grey[800]};
 `;
 export const StyledRowWithSubRows = styled("div")<{ depth: number }>`
@@ -31,48 +34,72 @@ export const StyledRow = styled("div")<StyledRowProps>`
   position: relative;
   display: flex;
   align-items: center;
-  height: 3rem;
-  display: flex;
+
   justify-content: start;
-  padding-left: 1rem;
+
+  height: 2.5rem;
+  display: flex;
 
   background-color: ${(props) =>
-    props.marked ? rgba(props.theme.palette.grey[800], 0.1) : "#fff"};
+    props.marked ? rgba(props.theme.palette.grey[700], 0.1) : "transparent"};
 
   &.row-close ~ .rows-container {
     & .row-wrapper {
       opacity: 0;
-      margin-bottom: -3rem;
+      margin-bottom: -2.5rem;
       visibility: hidden;
+
+      ${(props) => props.theme.breakpoints.up("md")} {
+        margin-bottom: -3rem;
+      }
     }
     border: none;
   }
 
-  &::before {
-    display: inline-flex;
-    content: "";
-    width: ${(props) => props.depth + "rem"};
-    height: 100%;
+  ${(props) => props.theme.breakpoints.up("md")} {
+    height: 3rem;
+    padding-left: 1rem;
   }
 `;
-export const StyledCategoryDropdownBtn = styled("div")<{
+
+interface DropDownBtnProps {
   subRowsOpen: boolean;
   canToggle: boolean;
-}>`
+}
+
+export const StyledCategoryDropdownBtn = styled("div")<DropDownBtnProps>`
+  min-width: 20%;
+
   justify-self: end;
-  display: flex;
-  align-items: center;
   margin-left: auto;
-  justify-content: center;
-  margin-right: 1.8rem;
-  gap: 0.3rem;
+
+  display: flex;
+  justify-content: end;
+  align-items: center;
+
   height: 100%;
 
   .category-posts-count {
+    width: 3rem;
+    flex-grow: 0;
+    flex-shrink: 0;
+    height: 100%;
     display: flex;
     align-items: center;
+    justify-content: center;
     font-size: 0.8rem;
     color: ${(props) => props.theme.palette.grey[600]};
+  }
+
+  & > .arrow {
+    flex-grow: 0;
+    flex-shrink: 0;
+    right: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0.3rem;
+    cursor: pointer;
   }
 
   & > .arrow {
@@ -94,36 +121,31 @@ export const StyledCategoryDropdownBtn = styled("div")<{
     }
   }
 
-  & > .arrow {
-    right: 1rem;
-    margin: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+  ${(props) => props.theme.breakpoints.up("md")} {
+    padding-right: 1.8rem;
   }
 `;
-export const StyledCategoryTitle = styled("div")`
+export const StyledCategoryTitle = styled("div")<{ depth: number }>`
+  min-width: 50%;
+  max-width: 80%;
+
   display: flex;
   align-items: center;
   height: 100%;
+  padding-left: ${(props) => "calc(" + props.depth + " * .25rem)"};
 
   .category-name {
-    font-size: 1.1rem;
+    max-width: 14rem;
+    font-size: 1rem;
     font-weight: 500;
-    margin-left: 0.2rem;
-    margin-right: 1.1rem;
-    padding: 0 0.5rem;
-    overflow-x: hidden;
-    text-overflow: ellipsis;
+    margin: 0 0.5rem;
     overflow: hidden;
-    white-space: nowrap;
     height: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: start;
 
-    color: ${(props) => rgba(props.theme.palette.grey[700], 0.8)};
+    color: ${(props) => rgba(props.theme.palette.grey[800], 0.9)};
 
     &:hover,
     &.bold {
@@ -132,8 +154,11 @@ export const StyledCategoryTitle = styled("div")`
   }
 
   .folder-icon {
+    margin-left: 0.75rem;
+    flex-grow: 0;
+    flex-shrink: 0;
     color: ${(props) => props.theme.palette.grey[700]};
-    font-size: 1.3rem;
+    font-size: 1rem;
   }
 
   .count {
@@ -148,13 +173,12 @@ export const StyledCategoryTitle = styled("div")`
     box-shadow: 0 0 3px ${(props) => props.theme.palette.warning.main};
 
     font-weight: 700;
-
     border-radius: 50%;
-    width: 1.4rem;
-    height: 1.4rem;
-    font-size: 0.7rem;
+    width: 1.1rem;
+    height: 1.1rem;
+    font-size: 0.6rem;
     color: #fff;
-    transform: translateX(0.6rem) translateY(-0.6rem);
+    transform: translateX(0.3rem) translateY(-0.5rem);
   }
 
   .update-icon,
@@ -167,6 +191,24 @@ export const StyledCategoryTitle = styled("div")`
 
     &:hover {
       fill: ${(props) => props.theme.palette.grey[800]};
+    }
+  }
+
+  ${(props) => props.theme.breakpoints.up("md")} {
+    .folder-icon {
+      font-size: 1.3rem;
+    }
+
+    .category-name {
+      font-size: 1.1rem;
+      margin-right: 1rem;
+    }
+
+    .count {
+      width: 1.3rem;
+      height: 1.3rem;
+
+      transform: translateX(0.2rem) translateY(-0.6rem);
     }
   }
 `;

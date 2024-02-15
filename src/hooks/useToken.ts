@@ -12,6 +12,7 @@ import {
   getJwtByRefreshToken,
 } from "../services/authService";
 import type { JWTInfo, LogInForm } from "@customTypes/auth.types";
+import { BadRequestError } from "../errors/BadRequestError";
 
 interface LoginData {
   username: string;
@@ -29,16 +30,16 @@ export function useLoginWithOptionalRefresh({
 
   const loginMutation = useMutation<
     JWTInfo,
-    Error,
+    BadRequestError,
     LoginData & { needRefreshToken: boolean }
   >({
-    mutationFn: ({ username, password }) =>
-      getJsonWebTokenFromServer({ username, password }),
+    mutationFn: ({ username, password }) => {
+      return getJsonWebTokenFromServer({ username, password });
+    },
     onSuccess: ({ token, displayName }, variable) => {
       if (variable.needRefreshToken) {
         // refreshTokenMutation.mutate
       }
-
       setTokenToBrowser(token);
       setUsername(variable.username);
       setDisplayName(displayName);
@@ -55,7 +56,10 @@ export function useLoginWithOptionalRefresh({
     loginForm: LogInForm,
     needRefreshToken = false
   ) => {
-    return loginMutation.mutateAsync({ ...loginForm, needRefreshToken });
+    return await loginMutation.mutateAsync({
+      ...loginForm,
+      needRefreshToken,
+    });
   };
 
   return { loginMutation, performLoginAsync };
@@ -73,7 +77,7 @@ export function useLoginWithRefreshToken() {
       setIsLoggedIn(true);
     },
     onError: (error) => {
-      console.error(error);
+      console.info(error);
     },
   });
 }

@@ -1,6 +1,5 @@
 import { lazy, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Skeleton from "react-loading-skeleton";
 import { useChangeMenu, useUsername } from "../../hooks/useGlobal";
 import { useDeletePost } from "../../hooks/usePostMutation";
 import { usePrevAndNextPosts, useGetPost } from "../../hooks/usePostQuery";
@@ -26,15 +25,15 @@ import PrevAndNextPostBtn from "./PrevAndNextPostBtn";
 import SuspenseLoader from "../../components/common/SuspenseLoader";
 import TagsBox from "./TagsBox";
 import { throttle } from "lodash-es";
+import Container from "@mui/material/Container";
+import Skeleton from "@mui/material/Skeleton";
+
 const MarkdownRenderer = lazy(
   () => import("../../components/common/MarkdownRenderer")
 );
 
 const Post: React.FC = () => {
   useChangeMenu(Menu.POSTS);
-  useEffect(() => {
-    import("react-loading-skeleton/dist/skeleton.css");
-  }, []);
 
   const postId = parseInt(usePathParamId());
 
@@ -192,7 +191,9 @@ const Post: React.FC = () => {
       </StyledMainPost>
 
       {!loadMore || isLoadingMorePosts ? (
-        <Skeleton style={{ width: "100%", height: "6rem" }} count={1} />
+        <Container>
+          <Skeleton width={"100%"} height={"10rem"} />
+        </Container>
       ) : morePostsError === null && prevAndNextPosts !== undefined ? (
         <PrevAndNextPostBtn prevAndNextPosts={prevAndNextPosts} />
       ) : (

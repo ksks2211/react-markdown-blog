@@ -6,7 +6,7 @@ function SlideTransition(props: SlideProps) {
   return <Slide {...props} direction="up" />;
 }
 
-interface SnackbarAlertProps {
+interface ErrorSnackbarProps {
   snackbarState: {
     open: boolean;
     severity: AlertColor;
@@ -17,7 +17,7 @@ interface SnackbarAlertProps {
 export default function SnackbarAlert({
   snackbarState,
   onClose,
-}: SnackbarAlertProps) {
+}: ErrorSnackbarProps) {
   return (
     <Snackbar
       open={snackbarState.open}

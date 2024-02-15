@@ -111,7 +111,7 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
           subRowsOpen={subRowsOpen}
           depth={depth}
         >
-          <StyledCategoryTitle>
+          <StyledCategoryTitle depth={depth}>
             {subRowsOpen ? (
               <FaRegFolderOpen className="folder-icon" />
             ) : (

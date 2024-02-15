@@ -13,23 +13,20 @@ div.w-md-editor-preview {
   height: auto !important;
   min-height: 90vh !important;
   max-height: 9999px !important;
+  border-radius: none;
+
 }
 
 .w-md-editor {
-  border-radius: 0;
-
-
+  border-radius: none;
   width:100%;
-
-  border-radius: 1rem !important;
-
 }
 
 .w-md-editor-toolbar{
   border-bottom: 1px solid var(--editor-color) !important;
   border-top: 1px solid var(--editor-color) !important;
-
   border-radius: 0 !important;
+
 }
 .w-md-editor-bar{
   visibility: hidden;

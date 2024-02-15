@@ -13,7 +13,6 @@ export const StyledCreatePage = styled("div")`
   justify-content: center;
   flex-direction: column;
   width: 100%;
-  padding: 1rem;
 
   ${(props) => props.theme.breakpoints.up("md")} {
     padding: 1rem 3rem;
@@ -37,7 +36,7 @@ export const StyledWrapper = styled("div")`
     rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
 
   width: 100%;
-  border-radius: 1rem !important;
+  overflow: hidden;
 `;
 export const StyledTitleInput = styled("div")<{ name: string }>`
   width: 100%;
@@ -57,7 +56,6 @@ export const StyledTitleInput = styled("div")<{ name: string }>`
     &:active {
       outline: none;
       border: none;
-      border-radius: 0.4rem;
 
       background-color: ${(props) =>
         rgba(props.theme.palette.primary.light, 0.07)};

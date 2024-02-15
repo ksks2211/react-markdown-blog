@@ -56,13 +56,16 @@ export function LogInInputForm({
     }),
     onSubmit: async (value: LogInForm, { setSubmitting, resetForm }) => {
       setSubmitting(false);
-      await handleLogInFormSubmit(value);
 
-      // Log-in fail
-      resetForm();
-
-      if (usernameRef && usernameRef.current) {
-        usernameRef.current.focus();
+      try {
+        await handleLogInFormSubmit(value);
+      } catch (e) {
+        // reset mutation and form
+        loginMutation.reset();
+        resetForm();
+        if (usernameRef && usernameRef.current) {
+          usernameRef.current.focus();
+        }
       }
     },
   });

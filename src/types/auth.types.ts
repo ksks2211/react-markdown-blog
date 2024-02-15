@@ -18,11 +18,6 @@ export interface JWT {
   displayName: string;
 }
 
-// Server Response
-export interface AuthErrorInfo {
-  message: string;
-}
-
 export interface JWTInfo {
   statusCode: number;
   message: string;

@@ -29,7 +29,6 @@ const StyledPostCard = styled("div")`
     width: 100%;
     white-space: normal;
     overflow-wrap: anywhere;
-    /* overflow-wrap: break-word; */
     display: -webkit-box;
 
     -webkit-box-orient: vertical;

@@ -39,6 +39,7 @@ export const NestedCategory: React.FC<NestedCategoryProps> = ({
       numOfAllPosts={numOfAllPosts}
       numOfCategories={numOfCategories}
       rows={rows}
+      className="category-row"
     >
       {Object.keys(subCategories).map((subCategoryName) => (
         <NestedCategory

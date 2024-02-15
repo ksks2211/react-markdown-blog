@@ -8,12 +8,12 @@ import withLayout from "../hoc/withLayout";
 import { styled } from "@mui/material";
 
 const StyledCategoriesPage = styled("div")`
-  padding: 3rem;
+  width: 100%;
+  padding: 3rem 0.5rem;
   min-height: 80vh;
 
   ${(props) => props.theme.breakpoints.up("md")} {
-    padding: 3.5rem;
-    padding-right: 7rem;
+    padding: 3.5rem 4rem;
   }
 `;
 
@@ -28,11 +28,9 @@ const CategoriesPage: React.FC = () => {
   if (data === undefined) throw new Error(`Failed To Get Categories`);
 
   return (
-    <>
-      <StyledCategoriesPage>
-        <CategoriesCard rootCategory={data} />
-      </StyledCategoriesPage>
-    </>
+    <StyledCategoriesPage>
+      <CategoriesCard rootCategory={data} />
+    </StyledCategoriesPage>
   );
 };
 

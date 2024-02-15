@@ -2,9 +2,9 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import Menu from "../../contexts/Menu.enum";
 import { useChangeMenu } from "../../hooks/useGlobal";
 import type { PostCreateForm } from "@customTypes/post.types";
-import { lazy, useState } from "react";
+import { lazy, useCallback, useState } from "react";
 import { useCreatePost } from "../../hooks/usePostMutation";
-import { Stack, Chip, AlertColor } from "@mui/material";
+import { Stack, Chip } from "@mui/material";
 import { includes, isEmpty } from "lodash-es";
 import { SelectChangeEvent } from "@mui/material/Select";
 import useBreakpoints from "../../hooks/useBreakPoints";
@@ -16,10 +16,11 @@ import {
 import Loader from "../../components/common/Loader";
 import { useGetCategoryList } from "../../hooks/useCategory";
 import ErrorFallback from "../../errors/ErrorFallback";
-import SnackbarAlert from "./SnackbarAlert";
+import SnackbarAlert from "../../components/common/ErrorSnackbar";
 import FixedButtonGroup from "./FixedButtonGroup";
 import SuspenseLoader from "../../components/common/SuspenseLoader";
 import PostInputGroup from "./PostInputGroup";
+import { useSnackbarState } from "../../hooks/useSnackbarState";
 
 const MarkdownEditor = lazy(
   () => import("../../components/common/MarkdownEditor")
@@ -29,12 +30,6 @@ const initialState = {
   title: "",
   content: "",
   tags: [],
-};
-
-const initialSnackbarState = {
-  open: false,
-  severity: "error" as AlertColor,
-  msg: "",
 };
 
 const DEFAULT_CATEGORY_PARAM = "/no_category";
@@ -47,7 +42,7 @@ function PostCreatePage() {
   const { isLg } = useBreakpoints();
   const navigate = useNavigate();
 
-  const [snackbarState, setSnackbarState] = useState(initialSnackbarState);
+  const { snackbarState, displaySnackbar, closeSnackbar } = useSnackbarState();
 
   const categoryParam = searchParams.get("category") || DEFAULT_CATEGORY_PARAM;
   const [category, setCategory] = useState(categoryParam);
@@ -63,55 +58,63 @@ function PostCreatePage() {
     categoryList.push(category);
   }
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setState({
-      ...state,
-      [event.target.name]: event.target.value,
-    });
-  };
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setState((prev) => ({
+        ...prev,
+        [event.target.name]: event.target.value,
+      }));
+    },
+    []
+  );
 
-  const handleContent = (value: string) => {
-    setState({
-      ...state,
+  const handleContent = useCallback((value: string) => {
+    setState((prev) => ({
+      ...prev,
       content: value,
-    });
-  };
+    }));
+  }, []);
 
   const handleSubmit = async () => {
     if (isEmpty(state.title)) {
-      setSnackbarState({
-        open: true,
-        severity: "error",
-        msg: "Title is empty!",
-      });
+      displaySnackbar("Title is empty!");
     } else {
       await mutation.mutateAsync({ ...state, category });
     }
   };
 
-  const handleAddTag = () => {
-    if (tagInput && !state.tags.includes(tagInput)) {
-      setState({
-        ...state,
-        tags: [...state.tags, tagInput.trim()],
-      });
-      setTagInput("");
-    }
-  };
+  const handleAddTag = useCallback(() => {
+    if (isEmpty(tagInput)) return;
 
-  const handlePrevPageBtn = () => {
+    setState((prev) => {
+      if (prev.tags.includes(tagInput.trim())) {
+        return prev;
+      }
+      return {
+        ...prev,
+        tags: [...prev.tags, tagInput.trim()],
+      };
+    });
+
+    setTagInput("");
+  }, [tagInput]);
+
+  const handlePrevPageBtn = useCallback(() => {
     if (categoryParam === DEFAULT_CATEGORY_PARAM) navigate("/posts");
     else if (searchParams.get("empty")) navigate(`/categories`);
     else navigate(`/categories${categoryParam}`);
-  };
+  }, [categoryParam, navigate, searchParams]);
 
-  const handleCategoryChange = (e: SelectChangeEvent) => {
+  const handleCategoryChange = useCallback((e: SelectChangeEvent) => {
     setCategory(e.target.value);
-  };
+  }, []);
 
-  const handleTagInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTagInput(e.target.value);
-  };
+  const handleTagInput = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setTagInput(e.target.value);
+    },
+    []
+  );
 
   if (isLoading) return <Loader />;
   if (error)
@@ -178,17 +181,12 @@ function PostCreatePage() {
             severity: "error",
             msg: mutation.error.message,
           }}
-          onClose={() =>
-            setSnackbarState((prev) => {
-              mutation.reset();
-              return { ...prev, open: false };
-            })
-          }
+          onClose={() => closeSnackbar(mutation.reset)}
         />
       ) : (
         <SnackbarAlert
           snackbarState={snackbarState}
-          onClose={() => setSnackbarState((prev) => ({ ...prev, open: false }))}
+          onClose={() => closeSnackbar()}
         />
       )}
     </StyledCreatePage>
