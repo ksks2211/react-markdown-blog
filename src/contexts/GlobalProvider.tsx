@@ -7,7 +7,8 @@ import {
   getDisplayName,
 } from "../services/storageService";
 import Menu from "./Menu.enum";
-import { useLogout } from "../hooks/useToken";
+import { useRemoveRefreshToken } from "../hooks/useToken";
+import throttle from "lodash-es/throttle";
 
 interface GlobalProviderProps {
   children: React.ReactNode;
@@ -19,24 +20,25 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   const [username, setUsername] = useState<string>(getUsername());
   const [displayName, setDisplayName] = useState<string>(getDisplayName());
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const mutation = useLogout();
+  const mutation = useRemoveRefreshToken();
 
   useEffect(() => {
     setIsLoggedIn(isValidToken());
   }, []);
 
-  const logout = async () => {
+  const logout = throttle(async () => {
+    setIsLoggedIn(false);
+    setUsername("");
+    setDisplayName("");
+
+    removeTokenFromBrowser();
+
     try {
       await mutation.mutateAsync();
     } catch (e) {
       console.warn(e);
     }
-
-    removeTokenFromBrowser();
-    setIsLoggedIn(false);
-    setUsername("");
-    setDisplayName("");
-  };
+  }, 3000);
 
   const globalValue = {
     selectedMenu,

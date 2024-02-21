@@ -11,7 +11,13 @@ export interface RowType {
   };
 }
 
-export interface CategoryRowProps extends ComponentPropsWithRef<"div"> {
+interface CommonProps {
+  setErrorMessage: (msg: string) => void;
+}
+
+export interface CategoryRowProps
+  extends ComponentPropsWithRef<"div">,
+    CommonProps {
   categoryName: string;
   parentCategoryName: string;
   depth: number;
@@ -23,7 +29,9 @@ export interface CategoryRowProps extends ComponentPropsWithRef<"div"> {
   setSubRowsOpen: (v: boolean) => void;
 }
 
-export interface NestedCategoryProps extends ComponentPropsWithoutRef<"div"> {
+export interface NestedCategoryProps
+  extends ComponentPropsWithoutRef<"div">,
+    CommonProps {
   categoryName: string;
   category: SubCategory;
   depth: number;
@@ -32,7 +40,7 @@ export interface NestedCategoryProps extends ComponentPropsWithoutRef<"div"> {
   setRows: React.Dispatch<React.SetStateAction<RowType>>;
 }
 
-export interface CategoriesCardProps {
+export interface CategoriesCardProps extends CommonProps {
   rootCategory: Categories;
   parentCategory?: string;
 }

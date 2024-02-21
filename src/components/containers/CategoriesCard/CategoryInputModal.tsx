@@ -1,5 +1,5 @@
 // ModalComponent.tsx
-import React from "react";
+import React, { useMemo } from "react";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
@@ -10,6 +10,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import isEmpty from "lodash-es/isEmpty";
 import { StyledWarning } from "./CategoriesCard.styles";
+import { generateKeyDownHandler } from "../../../helpers/keyboardUtils";
 
 interface ModalProps {
   prompt: string;
@@ -65,6 +66,11 @@ const TextInputModal: React.FC<ModalProps> = ({
     },
   });
 
+  const handleKeyDown = useMemo(
+    () => generateKeyDownHandler(() => formik.submitForm()),
+    [formik]
+  );
+
   return (
     <Modal
       open={open}
@@ -82,6 +88,7 @@ const TextInputModal: React.FC<ModalProps> = ({
           {prompt}
         </Typography>
         <TextField
+          autoFocus
           id="modal-description"
           {...formik.getFieldProps("category")}
           fullWidth
@@ -90,6 +97,7 @@ const TextInputModal: React.FC<ModalProps> = ({
           label={label}
           placeholder={placeholder}
           autoComplete="off"
+          onKeyDown={handleKeyDown}
         />
 
         {formik.touched.category && formik.errors.category ? (

@@ -47,6 +47,7 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
   rows,
   subRowsOpen,
   setSubRowsOpen,
+  setErrorMessage,
 }) => {
   const fullCategoryName = `${parentCategoryName}/${categoryName}`;
 
@@ -132,7 +133,12 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
               <FaPen className="update-icon" onClick={openUpdateModal} />
             )}
 
-            {canRemove && <DeleteCategoryBtn categoryId={categoryId} />}
+            {canRemove && (
+              <DeleteCategoryBtn
+                setErrorMessage={setErrorMessage}
+                categoryId={categoryId}
+              />
+            )}
           </StyledCategoryTitle>
 
           <StyledCategoryDropdownBtn
@@ -152,6 +158,7 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
 
       {createModalOpen && (
         <AddNewCategoryModal
+          setErrorMessage={setErrorMessage}
           createModalOpen={createModalOpen}
           fullCategoryName={fullCategoryName}
           setCreateModalOpen={setCreateModalOpen}
@@ -161,6 +168,7 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
 
       {updateModalOpen && (
         <UpdateCategoryModal
+          setErrorMessage={setErrorMessage}
           categoryId={categoryId}
           fullCategoryName={fullCategoryName}
           setUpdateModalOpen={setUpdateModalOpen}

@@ -1,21 +1,29 @@
 import TextInputModal from "./CategoryInputModal";
 import { useChangeCategory } from "../../../hooks/useCategory";
 import { removeRootDir } from "../../../helpers/stringUtils";
+import { useEffect } from "react";
 
 export default function UpdateCategoryModal({
   fullCategoryName,
   categoryId,
   updateModalOpen,
   setUpdateModalOpen,
+  setErrorMessage,
 }: {
   fullCategoryName: string;
   updateModalOpen: boolean;
-
+  setErrorMessage: (msg: string) => void;
   categoryId: string;
   setUpdateModalOpen: (v: boolean) => void;
 }) {
   const mutation = useChangeCategory();
   const categoryPath = removeRootDir(fullCategoryName);
+
+  useEffect(() => {
+    if (mutation.error !== null) {
+      setErrorMessage(mutation.error.message || "Category Update Failed");
+    }
+  }, [mutation.error, setErrorMessage]);
 
   const closeUpdateModal = () => {
     setUpdateModalOpen(false);

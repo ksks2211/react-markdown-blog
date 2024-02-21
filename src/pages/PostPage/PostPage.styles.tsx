@@ -1,5 +1,4 @@
 import { styled } from "@mui/material";
-
 import { darken } from "polished";
 
 export const StyledPostPage = styled("div")`
@@ -13,7 +12,7 @@ export const StyledPostPage = styled("div")`
   }
 `;
 
-export const StyledPrevPageBtn = styled("div")`
+export const StyledUpperNavigation = styled("div")`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -60,35 +59,65 @@ export const StyledTitle = styled("h1")`
   color: ${(props) => props.theme.palette.grey[800]};
   justify-content: space-between;
 
-  // Delete btn
-  div.delete-btn {
-    flex-grow: 0;
-    flex-shrink: 0;
-    font-size: 1.2rem;
+  .post-owner-btn-wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
-    cursor: pointer;
+    gap: 1rem;
 
+    .post-owner-btn {
+      flex: 0 0;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      cursor: pointer;
+    }
+  }
+
+  // Delete btn
+  .delete-btn {
     svg {
       fill: ${(props) => props.theme.palette.warning.main};
       &:hover {
         fill: ${(props) => props.theme.palette.warning.dark};
       }
     }
-
     &:hover::after {
       position: absolute;
       display: block;
       content: "Delete";
       display: block;
       font-size: 0.75rem;
-      bottom: 75%;
+      bottom: 100%;
       opacity: 1;
       animation-delay: 0.5s;
       animation: fadeInTooltip 0.5s ease-in-out forwards;
       color: ${(props) => props.theme.palette.warning.dark};
+      text-shadow: none;
+    }
+  }
+
+  // edit
+  .edit-btn {
+    svg {
+      fill: ${(props) => props.theme.palette.success.main};
+      &:hover {
+        fill: ${(props) => props.theme.palette.success.dark};
+      }
+    }
+    &:hover::after {
+      position: absolute;
+      display: block;
+      content: "Edit";
+      display: block;
+      font-size: 0.75rem;
+      bottom: 100%;
+      opacity: 1;
+      animation-delay: 0.5s;
+      animation: fadeInTooltip 0.5s ease-in-out forwards;
+      color: ${(props) => props.theme.palette.success.main};
       text-shadow: none;
     }
   }

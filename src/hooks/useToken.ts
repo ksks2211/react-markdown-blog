@@ -102,7 +102,7 @@ export function useLoginWithOAuth2() {
   });
 }
 
-export function useLogout() {
+export function useRemoveRefreshToken() {
   return useMutation<void, Error, void, unknown>({
     retry: false,
     mutationFn: deleteRefreshTokenIfExists,

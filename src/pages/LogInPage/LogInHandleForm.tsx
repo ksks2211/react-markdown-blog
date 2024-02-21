@@ -1,4 +1,4 @@
-import { useRef, type FormEvent } from "react";
+import { useCallback, useMemo, useRef, type FormEvent } from "react";
 import { AiFillLock } from "react-icons/ai";
 import { BiSolidUser } from "react-icons/bi";
 import { useLoginWithOptionalRefresh } from "../../hooks/useToken";
@@ -12,11 +12,12 @@ import {
   StyledWarningWrapper,
 } from "./LogInHandleForm.styles";
 import CircularProgress from "@mui/material/CircularProgress";
-import debounce from "lodash-es/debounce";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { StyledLogo } from "./LogInPage.styles";
+import throttle from "lodash-es/throttle";
+import { generateKeyDownHandler } from "../../helpers/keyboardUtils";
 
 export function LogInInputForm({
   setErrorMessage,
@@ -29,17 +30,14 @@ export function LogInInputForm({
 
   const usernameRef = useRef<HTMLInputElement>(null);
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      formik.handleSubmit();
-    }
-  };
-
-  const handleLogInFormSubmit = async (value: LogInForm) => {
-    if (!loginMutation.isLoading) {
-      await performLoginAsync(value, false);
-    }
-  };
+  const handleLogInFormSubmit = useCallback(
+    async (value: LogInForm) => {
+      if (!loginMutation.isLoading) {
+        await performLoginAsync(value, false);
+      }
+    },
+    [loginMutation.isLoading, performLoginAsync]
+  );
 
   const formik = useFormik({
     initialValues: {
@@ -70,11 +68,16 @@ export function LogInInputForm({
     },
   });
 
-  const handleGoogle = debounce((e: FormEvent<HTMLButtonElement>) => {
+  const handleKeyDown = useMemo(
+    () => generateKeyDownHandler(() => formik.handleSubmit()),
+    [formik]
+  );
+
+  const handleGoogle = throttle((e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const API_ADDR = import.meta.env.VITE_API_ADDR as string;
     location.href = `${API_ADDR}/oauth2/authorization/google`;
-  }, 1200);
+  }, 2000);
 
   return (
     <StyledLoginForm onSubmit={formik.handleSubmit}>

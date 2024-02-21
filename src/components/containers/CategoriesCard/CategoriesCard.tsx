@@ -6,6 +6,7 @@ import { StyledCategoriesCard } from "./CategoriesCard.styles";
 const CategoriesCard = ({
   rootCategory,
   parentCategory = "",
+  setErrorMessage,
 }: CategoriesCardProps) => {
   const [rows, setRows] = useState<RowType>({});
 
@@ -21,6 +22,7 @@ const CategoriesCard = ({
             key={"root"}
             categoryName={categoryName}
             category={rootCategory[categoryName]}
+            setErrorMessage={setErrorMessage}
           />
         );
       })}

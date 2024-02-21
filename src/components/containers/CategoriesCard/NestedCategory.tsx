@@ -9,6 +9,7 @@ export const NestedCategory: React.FC<NestedCategoryProps> = ({
   depth,
   rows,
   setRows,
+  setErrorMessage,
 }) => {
   const { subCategories, numOfPosts, numOfAllPosts } = category;
   const numOfCategories = Object.keys(subCategories).length;
@@ -39,10 +40,12 @@ export const NestedCategory: React.FC<NestedCategoryProps> = ({
       numOfAllPosts={numOfAllPosts}
       numOfCategories={numOfCategories}
       rows={rows}
+      setErrorMessage={setErrorMessage}
       className="category-row"
     >
       {Object.keys(subCategories).map((subCategoryName) => (
         <NestedCategory
+          setErrorMessage={setErrorMessage}
           rows={rows}
           setRows={setRows}
           parentCategory={fullCategoryName}

@@ -6,16 +6,19 @@ import {
   StyledLoginWrapper,
 } from "../LogInPage/LogInPage.styles";
 import { SignUpForm } from "./SignUpForm";
+import { useSnackbarState } from "../../hooks/useSnackbarState";
+import SnackbarAlert from "../../components/common/ErrorSnackbar";
 
 export default function SignUpPage() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { displaySnackbar, snackbarState, closeSnackbar } = useSnackbarState();
 
   useEffect(() => {
     if (errorMessage) {
-      alert(errorMessage);
+      displaySnackbar(errorMessage);
       setErrorMessage(null);
     }
-  }, [errorMessage]);
+  }, [errorMessage, displaySnackbar]);
 
   return (
     <>
@@ -28,6 +31,11 @@ export default function SignUpPage() {
           <SignUpForm setErrorMessage={setErrorMessage} />
         </StyledLoginCard>
       </StyledLoginWrapper>
+
+      <SnackbarAlert
+        snackbarState={snackbarState}
+        onClose={() => closeSnackbar()}
+      />
     </>
   );
 }

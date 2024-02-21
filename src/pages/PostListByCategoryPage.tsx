@@ -8,10 +8,14 @@ import Menu from "../contexts/Menu.enum";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import Loader from "../components/common/Loader";
 import withLayout from "../hoc/withLayout";
-import { StyledPostPage, StyledPrevPageBtn } from "./PostPage/PostPage.styles";
+import {
+  StyledPostPage,
+  StyledUpperNavigation,
+  StyledPostList,
+} from "./PostPage/PostPage.styles";
 import { IoMdAdd } from "react-icons/io";
 import { useChangeTitle } from "../hooks/useHeaderTitle";
-import { StyledPostList } from "./PostPage/PostPage.styles";
+
 import { MdArrowBack } from "react-icons/md";
 import { useEffect } from "react";
 
@@ -70,10 +74,10 @@ const PostListByCategory: React.FC = () => {
   return (
     <StyledPostPage>
       {isEmpty && <Navigate to={`${createPath}&`} />}
-      <StyledPrevPageBtn>
+      <StyledUpperNavigation>
         <MdArrowBack onClick={handleBackToPrevPage} />
         <IoMdAdd onClick={handleAddPost} />
-      </StyledPrevPageBtn>
+      </StyledUpperNavigation>
       <StyledPostList>
         {postList.map((post) => (
           <PostCard

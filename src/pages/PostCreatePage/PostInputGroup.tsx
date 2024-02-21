@@ -48,6 +48,7 @@ export default function PostInputGroup({
           onChange={handleTitleChange}
           placeholder="Title"
           autoComplete="off"
+          autoFocus
         />
       </StyledTitleInput>
       <StyledTitleInput name="category">
@@ -91,6 +92,7 @@ export default function PostInputGroup({
           autoComplete="off"
         />
         <StyledIconButton
+          tabIndex={-1}
           aria-label="delete"
           size="small"
           onClick={handleAddTag}

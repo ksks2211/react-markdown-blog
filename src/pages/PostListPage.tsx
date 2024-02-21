@@ -12,7 +12,7 @@ import { scrollToTheTop } from "../helpers/scrollUtils";
 import { Stack, Pagination } from "@mui/material";
 import {
   StyledPostPage,
-  StyledPrevPageBtn,
+  StyledUpperNavigation,
   StyledPostList,
 } from "./PostPage/PostPage.styles";
 import { IoMdAdd } from "react-icons/io";
@@ -51,9 +51,9 @@ const PostList: React.FC = () => {
 
   return (
     <StyledPostPage>
-      <StyledPrevPageBtn>
+      <StyledUpperNavigation>
         <IoMdAdd className="icon-btn" onClick={handleAddPost} />
-      </StyledPrevPageBtn>
+      </StyledUpperNavigation>
       <StyledPostList>
         {postList.map((post) => (
           <PostCard
@@ -61,7 +61,7 @@ const PostList: React.FC = () => {
             id={post.id}
             title={post.title}
             description={post.description}
-            postedBy={post.writer}
+            postedBy={post.writerDisplayName}
             createdAtFromNow={formatDateFromNow(post.createdAt)}
           />
         ))}

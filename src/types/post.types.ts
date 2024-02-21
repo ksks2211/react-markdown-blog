@@ -3,6 +3,7 @@ export interface Post {
   title: string;
   content: string;
   writer: string;
+  writerDisplayName: string;
   tags: string[];
   createdAt: string;
   updatedAt: string;
@@ -21,7 +22,13 @@ export type PostCreatedInfo = {
 
 type PostPreview = Pick<
   Post,
-  "id" | "title" | "createdAt" | "updatedAt" | "writer" | "description"
+  | "id"
+  | "title"
+  | "createdAt"
+  | "updatedAt"
+  | "writer"
+  | "description"
+  | "writerDisplayName"
 >;
 
 export interface Posts {

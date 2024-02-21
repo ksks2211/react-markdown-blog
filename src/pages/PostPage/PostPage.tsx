@@ -5,7 +5,8 @@ import { useDeletePost } from "../../hooks/usePostMutation";
 import { usePrevAndNextPosts, useGetPost } from "../../hooks/usePostQuery";
 import { usePathParamId } from "../../hooks/useParameter";
 import { formatDate } from "../../helpers/dateUtils";
-import { MdArrowBack, MdDelete } from "react-icons/md";
+import { MdArrowBack, MdDelete, MdEdit } from "react-icons/md";
+
 import Menu from "../../contexts/Menu.enum";
 import Loader from "../../components/common/Loader";
 import ErrorFallback from "../../errors/ErrorFallback";
@@ -13,7 +14,7 @@ import withLayout from "../../hoc/withLayout";
 import { scrollToTheTop } from "../../helpers/scrollUtils";
 import {
   StyledPostPage,
-  StyledPrevPageBtn,
+  StyledUpperNavigation,
   StyledMainPost,
   StyledPostMeta,
   StyledTitle,
@@ -143,17 +144,29 @@ const Post: React.FC = () => {
 
   return (
     <StyledPostPage>
-      <StyledPrevPageBtn>
+      <StyledUpperNavigation>
         <MdArrowBack onClick={handleBackToPrevPage} />
-      </StyledPrevPageBtn>
+      </StyledUpperNavigation>
 
       <StyledMainPost ref={mainRef}>
         <StyledPostMeta>
           <StyledTitle>
             {post.title}
+
             {isMyPost && (
-              <div onClick={handlePostDelete} className="delete-btn">
-                <MdDelete />
+              <div className="post-owner-btn-wrapper">
+                <div
+                  onClick={handlePostDelete}
+                  className="post-owner-btn delete-btn"
+                >
+                  <MdDelete />
+                </div>
+                <div
+                  onClick={handlePostDelete}
+                  className="post-owner-btn edit-btn"
+                >
+                  <MdEdit />
+                </div>
               </div>
             )}
           </StyledTitle>
@@ -172,7 +185,7 @@ const Post: React.FC = () => {
           <StyledPostDetails>
             <span>
               <label>Writer</label>
-              {post.writer}
+              {post.writerDisplayName}
             </span>
             <span>
               <label>Category</label>

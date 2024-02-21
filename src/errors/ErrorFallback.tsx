@@ -1,16 +1,23 @@
 import { AxiosError } from "axios";
-import { NotFoundError } from ".";
+import { NotFoundError, UnauthorizedError } from ".";
 import { Link } from "react-router-dom";
 
-import { ComponentType } from "react";
+import { ComponentType, useEffect } from "react";
 import { FallbackProps } from "react-error-boundary";
-import { useLogoutIfUnauthorizedError } from "../hooks/useGlobal";
+import useGlobal from "../hooks/useGlobal";
 
 const ErrorFallback: ComponentType<FallbackProps> = ({
   error,
   resetErrorBoundary,
 }) => {
-  useLogoutIfUnauthorizedError(error);
+  const { isLoggedIn, logout } = useGlobal();
+
+  useEffect(() => {
+    if (isLoggedIn && error instanceof UnauthorizedError) {
+      logout();
+    }
+  }, [error, isLoggedIn, logout]);
+
   let cause = "";
 
   if (error instanceof NotFoundError) {
@@ -21,8 +28,6 @@ const ErrorFallback: ComponentType<FallbackProps> = ({
     // error.status
     cause = "Axios Error";
   }
-
-  // ... other custom error types
 
   return (
     <div role="alert">
