@@ -80,6 +80,7 @@ export default function PostEditor({
               <Chip
                 key={index}
                 label={tag}
+                data-tag-value={tag}
                 color="primary"
                 variant="outlined"
                 onDelete={() => handleTagDelete(tag)}

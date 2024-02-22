@@ -3,6 +3,8 @@ import { useCreateCategory } from "../../../hooks/useCategory";
 import { removeRootDir } from "../../../helpers/stringUtils";
 import { useCallback, useEffect } from "react";
 
+const REGEX = /^\w+$/;
+
 export default function AddNewCategoryModal({
   fullCategoryName,
   createModalOpen,
@@ -42,14 +44,14 @@ export default function AddNewCategoryModal({
     <>
       {createModalOpen && (
         <TextInputModal
-          prompt={`Add new category`}
+          prompt="Add new category"
           open={createModalOpen}
           handleModalClose={closeCreateModal}
           handleSubmit={handleAddCategory}
           label={categoryPath}
           isLoading={mutation.isLoading}
           placeholder="Sub_Category"
-          regex={/^\w+$/}
+          regex={REGEX}
           regexWarning="Only take alphanumeric values"
         />
       )}

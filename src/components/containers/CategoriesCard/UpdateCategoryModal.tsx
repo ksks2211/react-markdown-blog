@@ -3,6 +3,8 @@ import { useChangeCategory } from "../../../hooks/useCategory";
 import { removeRootDir } from "../../../helpers/stringUtils";
 import { useEffect } from "react";
 
+const REGEX = /^(\/\w+){1,7}$/;
+
 export default function UpdateCategoryModal({
   fullCategoryName,
   categoryId,
@@ -41,7 +43,7 @@ export default function UpdateCategoryModal({
         handleSubmit={handleUpdateCategory}
         label={`Current : ${categoryPath}`}
         placeholder="/new/category"
-        regex={/^(\/\w+){1,7}$/}
+        regex={REGEX}
         regexWarning="e.g. /category or /sub1/sub2"
       />
     </>

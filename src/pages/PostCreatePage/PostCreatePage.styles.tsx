@@ -118,15 +118,9 @@ export const StyledFixedButtonGroup = styled("div")`
   background-color: transparent;
   display: flex;
 
-  /* padding: 0 3rem; */
-
   ${(props) => props.theme.breakpoints.up("md")} {
     right: 5rem;
     height: 3.5rem;
     bottom: 3.5rem;
-  }
-
-  * {
-    flex: 1 0;
   }
 `;

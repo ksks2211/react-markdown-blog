@@ -14,8 +14,6 @@ export const NestedCategory: React.FC<NestedCategoryProps> = ({
   const { subCategories, numOfPosts, numOfAllPosts } = category;
   const numOfCategories = Object.keys(subCategories).length;
   const fullCategoryName = `${parentCategory}/${categoryName}`;
-
-  // const [rowOpen, setRowOpen] = useState<boolean>(depth < 3);
   const [subRowsOpen, setSubRowsOpen] = useState<boolean>(depth < 2);
 
   useEffect(() => {

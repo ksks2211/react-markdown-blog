@@ -17,9 +17,31 @@ import { IoMdAdd } from "react-icons/io";
 import { useChangeTitle } from "../hooks/useHeaderTitle";
 
 import { MdArrowBack } from "react-icons/md";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import ErrorFallback from "../errors/ErrorFallback";
+import { EmptyResponseError } from "../errors";
 
-const regex = /^(\/\w+){1,8}$/;
+const PATH_REGEX = /^(\/\w+){1,8}$/;
+
+const generatePathAndCategory = (pathname: string, username: string) => {
+  const isValidPath = PATH_REGEX.test(pathname);
+
+  const categoryId = `${username}-${pathname.split("/").splice(2).join("-")}`;
+
+  const category = `/${categoryId.split("-").splice(1).join("/")}`;
+
+  const createPath = `/posts/create?category=/${pathname
+    .split("/")
+    .splice(2)
+    .join("/")}`;
+
+  return {
+    isValidPath,
+    categoryId,
+    category,
+    createPath,
+  };
+};
 
 const PostListByCategory: React.FC = () => {
   useChangeMenu(Menu.CATEGORIES);
@@ -27,41 +49,35 @@ const PostListByCategory: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { username } = useGlobal();
-  const isValidPath = regex.test(location.pathname);
+  const { isValidPath, categoryId, category, createPath } = useMemo(
+    () => generatePathAndCategory(location.pathname, username),
+    [location.pathname, username]
+  );
+  useChangeTitle(category);
+
   useEffect(() => {
     if (!isValidPath) {
       navigate("/categories");
     }
   }, [isValidPath, navigate]);
 
-  const categoryId = `${username}-${location.pathname
-    .split("/")
-    .splice(2)
-    .join("-")}`;
-
-  const category = `/${categoryId.split("-").splice(1).join("/")}`;
-  useChangeTitle(`${category}`);
-
-  const { data, isLoading, error, hasNextPage, fetchNextPage } =
+  const { data, isLoading, error, hasNextPage, fetchNextPage, refetch } =
     useGetPostListByCategory({ categoryId });
 
-  const createPath = `/posts/create?category=/${location.pathname
-    .split("/")
-    .splice(2)
-    .join("/")}`;
-
-  const handleLoadMorePosts = async () => {
-    await fetchNextPage();
-  };
-
   if (isLoading) return <Loader />;
-  if (error) throw error;
+  if (error)
+    return <ErrorFallback error={error} resetErrorBoundary={refetch} />;
   if (data === undefined) {
-    throw new Error(`Failed To Get Posts with Category ${categoryId}`);
+    const error = new EmptyResponseError("Fail to get proper data from server");
+    return <ErrorFallback error={error} resetErrorBoundary={refetch} />;
   }
 
   const { postList } = data.pages[0];
   const isEmpty = postList.length === 0;
+
+  const handleLoadMorePosts = async () => {
+    await fetchNextPage();
+  };
 
   const handleAddPost = () => {
     navigate(createPath);
@@ -73,7 +89,7 @@ const PostListByCategory: React.FC = () => {
 
   return (
     <StyledPostPage>
-      {isEmpty && <Navigate to={`${createPath}&`} />}
+      {isEmpty && <Navigate to={createPath} />}
       <StyledUpperNavigation>
         <MdArrowBack onClick={handleBackToPrevPage} />
         <IoMdAdd onClick={handleAddPost} />

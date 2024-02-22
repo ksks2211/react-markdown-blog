@@ -25,6 +25,7 @@ const PostList: React.FC = () => {
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const page = toInteger(params.get("page") || "1");
+
   const { data, isLoading, error, refetch } = useGetPostList({ page });
 
   useEffect(() => {
@@ -35,7 +36,7 @@ const PostList: React.FC = () => {
     navigate("/posts/create");
   }, [navigate]);
 
-  const handlePage = useCallback(
+  const handlePageChange = useCallback(
     (e: React.ChangeEvent<unknown>, pageNum: number) => {
       e.preventDefault();
       setParams({ page: `${pageNum}` });
@@ -78,7 +79,7 @@ const PostList: React.FC = () => {
           color="primary"
           count={totalPages}
           page={page}
-          onChange={handlePage}
+          onChange={handlePageChange}
         />
       </Stack>
     </StyledPostPage>

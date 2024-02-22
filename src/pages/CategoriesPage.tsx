@@ -8,6 +8,7 @@ import withLayout from "../hoc/withLayout";
 import { styled } from "@mui/material";
 import { useErrorMessageSnackbarState } from "../hooks/useSnackbarState";
 import SnackbarAlert from "../components/common/ErrorSnackbar";
+import { EmptyResponseError } from "../errors";
 
 const StyledCategoriesPage = styled("div")`
   width: 100%;
@@ -21,21 +22,21 @@ const StyledCategoriesPage = styled("div")`
 
 const CategoriesPage: React.FC = () => {
   useChangeMenu(Menu.CATEGORIES);
-
   const { data, isLoading, error, refetch } = useGetCategories();
-
   const { snackbarState, closeSnackbar, setErrorMessage } =
     useErrorMessageSnackbarState();
 
   if (isLoading) return <Loader />;
   if (error)
     return <ErrorFallback error={error} resetErrorBoundary={refetch} />;
-  if (data === undefined) throw new Error(`Failed To Get Categories`);
+  if (data === undefined) {
+    const error = new EmptyResponseError("Empty Response Error");
+    return <ErrorFallback error={error} resetErrorBoundary={refetch} />;
+  }
 
   return (
     <StyledCategoriesPage>
       <CategoriesCard rootCategory={data} setErrorMessage={setErrorMessage} />
-
       <SnackbarAlert snackbarState={snackbarState} onClose={closeSnackbar} />
     </StyledCategoriesPage>
   );

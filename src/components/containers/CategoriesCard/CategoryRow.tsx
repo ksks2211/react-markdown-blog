@@ -1,8 +1,7 @@
-import { useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { convertSlashesToDashes } from "../../../helpers/stringUtils";
 import type { CategoryRowProps } from "./CategoriesCard.types";
-
 import { FaRegFolder, FaRegFolderOpen, FaPen } from "react-icons/fa";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { RiArrowDropDownLine } from "react-icons/ri";
@@ -34,6 +33,18 @@ function getFlags(numOfCategories: number, depth: number, numOfPosts: number) {
   };
 }
 
+function generateCategory(parentCategoryName: string, categoryName: string) {
+  const fullCategoryName = `${parentCategoryName}/${categoryName}`;
+  const categoryPath = fullCategoryName.split("/").splice(2).join("/");
+  const categoryId = convertSlashesToDashes(fullCategoryName);
+
+  return {
+    fullCategoryName,
+    categoryPath,
+    categoryId,
+  };
+}
+
 export const CategoryRow: React.FC<CategoryRowProps> = ({
   categoryName,
   numOfAllPosts,
@@ -48,13 +59,20 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
   setErrorMessage,
 }) => {
   const { displayName } = useGlobal();
+  const rowRef = useRef<HTMLDivElement>(null);
 
   const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
   const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
 
-  const fullCategoryName = `${parentCategoryName}/${categoryName}`;
-  const categoryPath = fullCategoryName.split("/").splice(2).join("/");
-  const categoryId = convertSlashesToDashes(fullCategoryName);
+  const { fullCategoryName, categoryPath, categoryId } = useMemo(
+    () => generateCategory(parentCategoryName, categoryName),
+    [categoryName, parentCategoryName]
+  );
+
+  const { canToggle, isRoot, havePosts, canRemove, canUpdate } = useMemo(
+    () => getFlags(numOfCategories, depth, numOfPosts),
+    [depth, numOfCategories, numOfPosts]
+  );
 
   const openCreateModal = () => {
     setCreateModalOpen(true);
@@ -64,14 +82,11 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
     setUpdateModalOpen(true);
   };
 
-  const { canToggle, isRoot, havePosts, canRemove, canUpdate } = useMemo(
-    () => getFlags(numOfCategories, depth, numOfPosts),
-    [depth, numOfCategories, numOfPosts]
-  );
+  const handleOpenFolderAfterAddNewCategory = () => {
+    setSubRowsOpen(true);
+  };
 
-  const rowRef = useRef<HTMLDivElement>(null);
-
-  const toggleCategory = () => {
+  const toggleCategory = useCallback(() => {
     if (!subRowsOpen) {
       Object.keys(rows).forEach((key) => {
         const rowRef = rows[key];
@@ -93,7 +108,7 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
     } else {
       setSubRowsOpen(false);
     }
-  };
+  }, [fullCategoryName, parentCategoryName, rows, setSubRowsOpen, subRowsOpen]);
 
   const linkAddr = isRoot
     ? "/categories"
@@ -161,7 +176,9 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
           createModalOpen={createModalOpen}
           fullCategoryName={fullCategoryName}
           setCreateModalOpen={setCreateModalOpen}
-          handleOpenFolderAfterAddNewCategory={() => setSubRowsOpen(true)}
+          handleOpenFolderAfterAddNewCategory={
+            handleOpenFolderAfterAddNewCategory
+          }
         />
       )}
 

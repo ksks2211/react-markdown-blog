@@ -198,7 +198,7 @@ const Post: React.FC = () => {
             </span>
             <span>
               <label>Category</label>
-              {post.category.split("/").slice(1).join("/")}
+              {post.postCategory}
             </span>
           </StyledPostDetails>
         </StyledPostMeta>
@@ -214,10 +214,11 @@ const Post: React.FC = () => {
 
       {!loadMore || isLoadingMorePosts ? (
         <CenterSkeleton height={"8rem"} />
-      ) : morePostsError === null && prevAndNextPosts !== undefined ? (
-        <PrevAndNextPostBtn prevAndNextPosts={prevAndNextPosts} />
       ) : (
-        ""
+        morePostsError === null &&
+        prevAndNextPosts !== undefined && (
+          <PrevAndNextPostBtn prevAndNextPosts={prevAndNextPosts} />
+        )
       )}
       <UtterancesComments postId={postId} />
     </StyledPostPage>

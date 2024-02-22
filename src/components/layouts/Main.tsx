@@ -1,3 +1,4 @@
+import { styled } from "@mui/material";
 import React, { HTMLAttributes } from "react";
 
 export type MainContainerProps = Pick<MainProps, "className"> &
@@ -8,8 +9,16 @@ export interface MainProps extends HTMLAttributes<HTMLDivElement> {
   MainComponent: React.ComponentType;
 }
 
+const StyledMinHeightWrapper = styled("div")`
+  min-height: 70vh;
+`;
+
 const Main: React.FC<MainProps> = ({ MainComponent, ...rest }) => {
-  return <MainComponent {...rest} />;
+  return (
+    <StyledMinHeightWrapper>
+      <MainComponent {...rest} />
+    </StyledMinHeightWrapper>
+  );
 };
 
 export default Main;
