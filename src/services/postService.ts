@@ -34,8 +34,11 @@ export async function deletePostById(postId: number) {
 
 export async function createPost(postForm: PostCreateForm) {
   const { data } = await blogApi.post(urlPrefix, postForm);
-
   return data;
+}
+
+export async function updatePost(postId: number, postForm: PostCreateForm) {
+  await blogApi.put(`${urlPrefix}/${postId}`, postForm);
 }
 
 // Categories + Posts

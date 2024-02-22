@@ -1,9 +1,6 @@
 import { useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  convertSlashesToDashes,
-  removeDash,
-} from "../../../helpers/stringUtils";
+import { convertSlashesToDashes } from "../../../helpers/stringUtils";
 import type { CategoryRowProps } from "./CategoriesCard.types";
 
 import { FaRegFolder, FaRegFolderOpen, FaPen } from "react-icons/fa";
@@ -19,17 +16,18 @@ import cn from "classnames";
 import DeleteCategoryBtn from "./DeleteCategoryBtn";
 import AddNewCategoryModal from "./AddNewCategoryModal";
 import UpdateCategoryModal from "./UpdateCategoryModal";
+import useGlobal from "../../../hooks/useGlobal";
 
 function getFlags(numOfCategories: number, depth: number, numOfPosts: number) {
   const canToggle = numOfCategories !== 0;
-  const isHighlighted = depth === 1;
+  const isRoot = depth === 1;
   const havePosts = numOfPosts === 0;
-  const canRemove = havePosts && !canToggle && !isHighlighted;
-  const canUpdate = !havePosts && !isHighlighted;
+  const canRemove = havePosts && !canToggle && !isRoot;
+  const canUpdate = !havePosts && !isRoot;
 
   return {
     canToggle,
-    isHighlighted,
+    isRoot,
     havePosts,
     canRemove,
     canUpdate,
@@ -49,11 +47,12 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
   setSubRowsOpen,
   setErrorMessage,
 }) => {
-  const fullCategoryName = `${parentCategoryName}/${categoryName}`;
+  const { displayName } = useGlobal();
 
   const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
   const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
 
+  const fullCategoryName = `${parentCategoryName}/${categoryName}`;
   const categoryPath = fullCategoryName.split("/").splice(2).join("/");
   const categoryId = convertSlashesToDashes(fullCategoryName);
 
@@ -65,7 +64,7 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
     setUpdateModalOpen(true);
   };
 
-  const { canToggle, isHighlighted, havePosts, canRemove, canUpdate } = useMemo(
+  const { canToggle, isRoot, havePosts, canRemove, canUpdate } = useMemo(
     () => getFlags(numOfCategories, depth, numOfPosts),
     [depth, numOfCategories, numOfPosts]
   );
@@ -96,7 +95,7 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
     }
   };
 
-  const linkAddr = isHighlighted
+  const linkAddr = isRoot
     ? "/categories"
     : numOfPosts === 0
     ? `/posts/create?category=/${categoryPath}&empty=true`
@@ -108,7 +107,7 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
         <StyledRow
           className={cn("row-wrapper", { "row-close": !subRowsOpen })}
           ref={rowRef}
-          marked={isHighlighted}
+          marked={isRoot}
           subRowsOpen={subRowsOpen}
           depth={depth}
         >
@@ -121,7 +120,7 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({
             {havePosts || <span className="count">{numOfPosts}</span>}
 
             <Link className={"category-name"} to={linkAddr}>
-              {removeDash(categoryName)}
+              {isRoot ? displayName : categoryName}
             </Link>
 
             <AiFillPlusCircle

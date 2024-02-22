@@ -10,6 +10,7 @@ import type { Post, Posts, PrevAndNextPosts } from "@customTypes/post.types";
 
 export function useGetPost({ postId }: { postId: number | string }) {
   const pid = toInteger(postId);
+
   return useQuery<Post, Error>(["post", pid], () => getPostById(pid));
 }
 export function useGetPostList({ page = 1 }: { page?: number } = {}) {

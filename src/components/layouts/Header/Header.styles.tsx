@@ -9,7 +9,7 @@ export const StyledToggleBtn = styled("div")<{ active: boolean }>`
     props.active ? "translateX(calc(var(--sidebar-width) - 1rem))" : 0};
   transition: transform 0.3s ease;
 `;
-export const StyledWrapper = styled("div")`
+export const StyledHeaderIconsWrapper = styled("div")`
   display: flex;
   width: 100%;
   height: 100%;
@@ -18,7 +18,7 @@ export const StyledWrapper = styled("div")`
   padding: 0 1.4rem;
   font-weight: 600;
   font-size: 1.3rem;
-  ${(props) => props.theme.breakpoints.up("md")} {
+  ${(props) => props.theme.breakpoints.up("lg")} {
     padding-right: calc(var(--sidebar-width) + 2rem);
     font-weight: 400;
   }

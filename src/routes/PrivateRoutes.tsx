@@ -10,7 +10,8 @@ const Categories = lazy(() => import("../pages/CategoriesPage"));
 const Tags = lazy(() => import("../pages/TagsPage"));
 const Post = lazy(() => import("../pages/PostPage/PostPage"));
 const PostsByCategory = lazy(() => import("../pages/PostListByCategoryPage"));
-const PostCreate = lazy(() => import("../pages/PostCreatePage/PostCreatePage"));
+const PostCreate = lazy(() => import("../pages/PostCreatePage"));
+const PostUpdate = lazy(() => import("../pages/PostUpdatePage"));
 
 const PrivateRoutes: React.FC = () => {
   scrollToTheTop();
@@ -54,6 +55,14 @@ const PrivateRoutes: React.FC = () => {
         element={
           <Suspense fallback={<Loader />}>
             <Post />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/posts/update/:id"
+        element={
+          <Suspense fallback={<Loader />}>
+            <PostUpdate />
           </Suspense>
         }
       />

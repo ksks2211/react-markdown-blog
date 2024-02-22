@@ -1,39 +1,34 @@
+import type { Post, PostCreateForm } from "@customTypes/post.types";
 import { useCallback, useState } from "react";
-import { useCreatePost } from "../../hooks/usePostMutation";
+import { useUpdatePost } from "../../hooks/usePostMutation";
 import { useSnackbarState } from "../../hooks/useSnackbarState";
-import type { PostCreateForm } from "@customTypes/post.types";
-import isEmpty from "lodash-es/isEmpty";
+import { useNavigate } from "react-router-dom";
 import { SelectChangeEvent } from "@mui/material/Select";
+import isEmpty from "lodash-es/isEmpty";
 import SnackbarAlert from "../../components/common/ErrorSnackbar";
 import PostEditor from "../../components/common/PostEditor";
 
-interface PostCreateContainerProps {
+interface PostUpdateContainerProps {
+  post: Post;
+  postId: number;
   categoryList: string[];
-  handlePrevPageBtn: () => void;
-  category: string;
 }
 
-const initialState = {
-  title: "",
-  content: "",
-  tags: [],
-};
-
-const PostCreatePage: React.FC<PostCreateContainerProps> = ({
+export default function PostUpdatePage({
+  post,
+  postId,
   categoryList,
-  handlePrevPageBtn,
-  category,
-}) => {
-  const mutation = useCreatePost();
-
-  const { snackbarState, displaySnackbar, closeSnackbar } = useSnackbarState();
-
+}: PostUpdateContainerProps) {
   const [state, setState] = useState<PostCreateForm>({
-    ...initialState,
-    category,
+    title: post.title,
+    content: post.content,
+    tags: post.tags,
+    category: post.postCategory,
   });
-
   const [tagInput, setTagInput] = useState("");
+  const navigate = useNavigate();
+  const { snackbarState, displaySnackbar, closeSnackbar } = useSnackbarState();
+  const mutation = useUpdatePost();
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,23 +40,16 @@ const PostCreatePage: React.FC<PostCreateContainerProps> = ({
     []
   );
 
-  const handleContent = useCallback((value: string) => {
+  const handleCategoryChange = useCallback((e: SelectChangeEvent) => {
     setState((prev) => ({
       ...prev,
-      content: value,
+      category: e.target.value,
     }));
   }, []);
 
-  const handleSubmit = useCallback(async () => {
-    if (isEmpty(state.title)) {
-      displaySnackbar("Title is empty!");
-    } else {
-      await mutation.mutateAsync(state);
-    }
-  }, [displaySnackbar, mutation, state]);
-
   const handleAddTag = useCallback(() => {
     if (isEmpty(tagInput)) return;
+
     setState((prev) => {
       if (prev.tags.includes(tagInput.trim())) {
         return prev;
@@ -71,15 +59,27 @@ const PostCreatePage: React.FC<PostCreateContainerProps> = ({
         tags: [...prev.tags, tagInput.trim()],
       };
     });
+
     setTagInput("");
   }, [tagInput]);
 
-  const handleCategoryChange = useCallback((e: SelectChangeEvent) => {
+  const handleContent = useCallback((value: string) => {
     setState((prev) => ({
       ...prev,
-      category: e.target.value,
+      content: value,
     }));
   }, []);
+
+  const handlePrevPageBtn = useCallback(() => {
+    navigate(`/posts/${postId}`);
+  }, [postId, navigate]);
+
+  const handleTagInput = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setTagInput(e.target.value);
+    },
+    []
+  );
 
   const handleTagDelete = (tag: string) => {
     setState((prev) => ({
@@ -88,12 +88,13 @@ const PostCreatePage: React.FC<PostCreateContainerProps> = ({
     }));
   };
 
-  const handleTagInput = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setTagInput(e.target.value);
-    },
-    []
-  );
+  const handleSubmit = useCallback(async () => {
+    if (isEmpty(state.title)) {
+      displaySnackbar("Title is empty!");
+    } else {
+      await mutation.mutateAsync({ postId: postId, form: state });
+    }
+  }, [displaySnackbar, mutation, postId, state]);
 
   return (
     <>
@@ -131,6 +132,4 @@ const PostCreatePage: React.FC<PostCreateContainerProps> = ({
       )}
     </>
   );
-};
-
-export default PostCreatePage;
+}

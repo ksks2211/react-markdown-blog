@@ -40,14 +40,14 @@ export function useErrorMessageSnackbarState() {
     }
   }, [displaySnackbar, errorMessage]);
 
-  const closeSnackbar = (cb?: () => void) => {
+  const closeSnackbar = useCallback((cb?: () => void) => {
     setSnackbarState((prev) => {
-      if (cb) {
+      if (cb && typeof cb === "function") {
         cb();
       }
       return { ...prev, open: false };
     });
-  };
+  }, []);
 
   return {
     snackbarState,

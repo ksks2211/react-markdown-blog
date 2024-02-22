@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, type FormEvent } from "react";
+import { useCallback, useRef, type FormEvent } from "react";
 import { AiFillLock } from "react-icons/ai";
 import { BiSolidUser } from "react-icons/bi";
 import { useLoginWithOptionalRefresh } from "../../hooks/useToken";
@@ -12,13 +12,29 @@ import {
   StyledWarningWrapper,
 } from "./LogInHandleForm.styles";
 import CircularProgress from "@mui/material/CircularProgress";
-
-import { useFormik } from "formik";
+import { FormikHelpers, useFormik } from "formik";
 import * as Yup from "yup";
 import { StyledLogo } from "./LogInPage.styles";
 import throttle from "lodash-es/throttle";
-import { generateKeyDownHandler } from "../../helpers/keyboardUtils";
+import { useEnterKeyPressHandler } from "../../hooks/useHandler";
 
+const FORMIK_INITIAL_VALUE = {
+  username: "",
+  password: "",
+};
+
+const FORMIK_VALIDATION_SCHEMA = Yup.object({
+  username: Yup.string()
+    .min(5, "Username is longer than 5 letters")
+    .required("Username Required"),
+  password: Yup.string()
+    .min(5, "Password is longer than 5 letters")
+    .required("Password Required"),
+});
+
+const CircularProgressStyles = {
+  color: "white",
+};
 export function LogInInputForm({
   setErrorMessage,
 }: {
@@ -39,20 +55,11 @@ export function LogInInputForm({
     [loginMutation.isLoading, performLoginAsync]
   );
 
-  const formik = useFormik({
-    initialValues: {
-      username: "",
-      password: "",
-    },
-    validationSchema: Yup.object({
-      username: Yup.string()
-        .min(5, "Username is longer than 5 letters")
-        .required("Username Required"),
-      password: Yup.string()
-        .min(5, "Password is longer than 5 letters")
-        .required("Password Required"),
-    }),
-    onSubmit: async (value: LogInForm, { setSubmitting, resetForm }) => {
+  const handleFormikSubmit = useCallback(
+    async (
+      value: LogInForm,
+      { setSubmitting, resetForm }: FormikHelpers<LogInForm>
+    ) => {
       setSubmitting(false);
 
       try {
@@ -66,17 +73,27 @@ export function LogInInputForm({
         }
       }
     },
+    [handleLogInFormSubmit, loginMutation]
+  );
+
+  const formik = useFormik({
+    initialValues: FORMIK_INITIAL_VALUE,
+    validationSchema: FORMIK_VALIDATION_SCHEMA,
+    onSubmit: handleFormikSubmit,
   });
 
-  const handleKeyDown = useMemo(
-    () => generateKeyDownHandler(() => formik.handleSubmit()),
-    [formik]
+  const { enterKeyPressHandler: handleKeyDown } = useEnterKeyPressHandler(
+    formik.handleSubmit
   );
 
   const handleGoogle = throttle((e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const API_ADDR = import.meta.env.VITE_API_ADDR as string;
     location.href = `${API_ADDR}/oauth2/authorization/google`;
+  }, 2000);
+
+  const handleLogin = throttle(() => {
+    formik.handleSubmit();
   }, 2000);
 
   return (
@@ -118,19 +135,12 @@ export function LogInInputForm({
         ) : null}
       </StyledWarningWrapper>
 
-      <LoginButton
-        type="button"
-        onClick={() => {
-          formik.handleSubmit();
-        }}
-      >
+      <LoginButton type="button" onClick={handleLogin}>
         {loginMutation.isLoading ? (
           <CircularProgress
             size={20}
             thickness={4.2}
-            sx={{
-              color: "white",
-            }}
+            sx={CircularProgressStyles}
           />
         ) : (
           "Login"

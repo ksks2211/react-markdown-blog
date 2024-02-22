@@ -1,4 +1,4 @@
-import Snackbar from "@mui/material/Snackbar";
+import Snackbar, { SnackbarOrigin } from "@mui/material/Snackbar";
 import Slide, { SlideProps } from "@mui/material/Slide";
 import Alert, { AlertColor } from "@mui/material/Alert";
 
@@ -14,6 +14,12 @@ interface ErrorSnackbarProps {
   };
   onClose: () => void;
 }
+
+const ANCHOR_ORIGIN: SnackbarOrigin = {
+  vertical: "bottom",
+  horizontal: "center",
+};
+
 export default function SnackbarAlert({
   snackbarState,
   onClose,
@@ -24,7 +30,7 @@ export default function SnackbarAlert({
       autoHideDuration={4000}
       TransitionComponent={SlideTransition}
       onClose={onClose}
-      anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      anchorOrigin={ANCHOR_ORIGIN}
     >
       <Alert
         onClose={onClose}

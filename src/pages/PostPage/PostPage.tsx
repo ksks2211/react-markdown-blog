@@ -1,4 +1,11 @@
-import { lazy, useEffect, useRef, useState } from "react";
+import {
+  Suspense,
+  lazy,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useChangeMenu, useUsername } from "../../hooks/useGlobal";
 import { useDeletePost } from "../../hooks/usePostMutation";
@@ -23,11 +30,9 @@ import {
 } from "./PostPage.styles";
 import UtterancesComments from "../../components/common/UtterancesComments";
 import PrevAndNextPostBtn from "./PrevAndNextPostBtn";
-import SuspenseLoader from "../../components/common/SuspenseLoader";
 import TagsBox from "./TagsBox";
 import { throttle } from "lodash-es";
-import Container from "@mui/material/Container";
-import Skeleton from "@mui/material/Skeleton";
+import CenterSkeleton from "../../components/common/CenterSkeleton";
 
 const MarkdownRenderer = lazy(
   () => import("../../components/common/MarkdownRenderer")
@@ -80,7 +85,7 @@ const Post: React.FC = () => {
     }
   }, [postId]);
 
-  const handleBackToPrevPage = () => {
+  const handleBackToPrevPage = useCallback(() => {
     // If you have the state and it has fromPage
     if (location.state && location.state.fromPage) {
       navigate(`/posts${location.state.fromPage}`);
@@ -88,7 +93,7 @@ const Post: React.FC = () => {
       // Else, navigate to default
       navigate("/posts?page=1");
     }
-  };
+  }, [location.state, navigate]);
 
   const handlePostDelete = async () => {
     const isConfirmed = window.confirm("Delete Post?");
@@ -97,6 +102,10 @@ const Post: React.FC = () => {
       window.alert("Deleted!");
       handleBackToPrevPage();
     }
+  };
+
+  const handlePostEdit = () => {
+    navigate(`/posts/update/${postId}`);
   };
 
   const {
@@ -162,7 +171,7 @@ const Post: React.FC = () => {
                   <MdDelete />
                 </div>
                 <div
-                  onClick={handlePostDelete}
+                  onClick={handlePostEdit}
                   className="post-owner-btn edit-btn"
                 >
                   <MdEdit />
@@ -195,18 +204,16 @@ const Post: React.FC = () => {
         </StyledPostMeta>
 
         <div ref={markdownRef}>
-          <SuspenseLoader>
+          <Suspense fallback={<CenterSkeleton height={"35rem"} />}>
             <MarkdownRenderer content={post.content} />
-          </SuspenseLoader>
+          </Suspense>
         </div>
 
         <TagsBox tags={post.tags} />
       </StyledMainPost>
 
       {!loadMore || isLoadingMorePosts ? (
-        <Container>
-          <Skeleton width={"100%"} height={"10rem"} />
-        </Container>
+        <CenterSkeleton height={"8rem"} />
       ) : morePostsError === null && prevAndNextPosts !== undefined ? (
         <PrevAndNextPostBtn prevAndNextPosts={prevAndNextPosts} />
       ) : (

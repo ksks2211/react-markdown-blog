@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import TopFullBar from "../../components/common/TopFullBar";
 import {
@@ -6,19 +5,12 @@ import {
   StyledLoginWrapper,
 } from "../LogInPage/LogInPage.styles";
 import { SignUpForm } from "./SignUpForm";
-import { useSnackbarState } from "../../hooks/useSnackbarState";
+import { useErrorMessageSnackbarState } from "../../hooks/useSnackbarState";
 import SnackbarAlert from "../../components/common/ErrorSnackbar";
 
 export default function SignUpPage() {
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const { displaySnackbar, snackbarState, closeSnackbar } = useSnackbarState();
-
-  useEffect(() => {
-    if (errorMessage) {
-      displaySnackbar(errorMessage);
-      setErrorMessage(null);
-    }
-  }, [errorMessage, displaySnackbar]);
+  const { snackbarState, closeSnackbar, setErrorMessage } =
+    useErrorMessageSnackbarState();
 
   return (
     <>
@@ -32,10 +24,7 @@ export default function SignUpPage() {
         </StyledLoginCard>
       </StyledLoginWrapper>
 
-      <SnackbarAlert
-        snackbarState={snackbarState}
-        onClose={() => closeSnackbar()}
-      />
+      <SnackbarAlert snackbarState={snackbarState} onClose={closeSnackbar} />
     </>
   );
 }

@@ -151,7 +151,7 @@ export const StyledPostDetails = styled(StyledPostMetadata)`
 export const StyledMainPost = styled("div")`
   display: flex;
   flex-direction: column;
-  padding: 0 1rem;
+  padding: 0 0.7rem;
   margin-bottom: 1rem;
 `;
 

@@ -1,9 +1,9 @@
-import { useFormik } from "formik";
+import { FormikHelpers, useFormik } from "formik";
 import * as Yup from "yup";
 import { useCreateUser } from "../../hooks/useUser";
 import type { RegisterUserForm } from "@customTypes/auth.types";
 import { useNavigate } from "react-router-dom";
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 import {
   LoginButton,
   StyledLoginForm,
@@ -15,6 +15,28 @@ import { AiFillLock, AiOutlineMail } from "react-icons/ai";
 
 import CircularProgress from "@mui/material/CircularProgress";
 import { StyledLogo } from "../LogInPage/LogInPage.styles";
+import { useEnterKeyPressHandler } from "../../hooks/useHandler";
+import throttle from "lodash-es/throttle";
+
+const FORMIK_INITIAL_STATE = {
+  username: "",
+  password: "",
+  email: "",
+};
+
+const CircularProgressStyles = {
+  color: "white",
+};
+
+const FORMIK_VALIDATION_SCHEMA = Yup.object({
+  username: Yup.string()
+    .min(5, "Username is longer than 5 letters")
+    .required("Username Required"),
+  password: Yup.string()
+    .min(5, "Password is longer than 5 letters")
+    .required("Password Required"),
+  email: Yup.string().email("Email Address is needed").notRequired(),
+});
 
 export function SignUpForm({
   setErrorMessage,
@@ -26,37 +48,30 @@ export function SignUpForm({
   const mutation = useCreateUser(setErrorMessage);
   const usernameRef = useRef<HTMLInputElement>(null);
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      formik.handleSubmit();
-    }
-  };
+  const handleSignUpForm = useCallback(
+    async (value: RegisterUserForm) => {
+      await mutation.mutateAsync(value);
+      alert("Registered");
 
-  const handleSignUpForm = async (value: RegisterUserForm) => {
-    await mutation.mutateAsync(value);
-    alert("Registered");
-
-    setTimeout(() => {
-      navigate("/login");
-    }, 2000);
-  };
-
-  const formik = useFormik({
-    initialValues: {
-      username: "",
-      password: "",
-      email: "",
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
     },
-    validationSchema: Yup.object({
-      username: Yup.string()
-        .min(5, "Username is longer than 5 letters")
-        .required("Username Required"),
-      password: Yup.string()
-        .min(5, "Password is longer than 5 letters")
-        .required("Password Required"),
-      email: Yup.string().email("Email Address is needed").notRequired(),
-    }),
-    onSubmit: async (value: RegisterUserForm, { setSubmitting, resetForm }) => {
+    [mutation, navigate]
+  );
+
+  const handleSignUpSubmit = useCallback(
+    async (
+      value: RegisterUserForm,
+      {
+        setSubmitting,
+        resetForm,
+      }: FormikHelpers<{
+        username: string;
+        password: string;
+        email: string;
+      }>
+    ) => {
       setSubmitting(false);
 
       await handleSignUpForm(value);
@@ -67,7 +82,22 @@ export function SignUpForm({
         usernameRef.current.focus();
       }
     },
+    [handleSignUpForm]
+  );
+
+  const formik = useFormik({
+    initialValues: FORMIK_INITIAL_STATE,
+    validationSchema: FORMIK_VALIDATION_SCHEMA,
+    onSubmit: handleSignUpSubmit,
   });
+
+  const handleLoginButton = throttle(() => {
+    formik.handleSubmit();
+  }, 2000);
+
+  const { enterKeyPressHandler: handleKeyDown } = useEnterKeyPressHandler(
+    formik.handleSubmit
+  );
 
   return (
     <StyledLoginForm onSubmit={formik.handleSubmit}>
@@ -123,19 +153,12 @@ export function SignUpForm({
         ) : null}
       </StyledWarningWrapper>
 
-      <LoginButton
-        type="button"
-        onClick={() => {
-          formik.handleSubmit();
-        }}
-      >
+      <LoginButton type="button" onClick={handleLoginButton}>
         {mutation.isLoading ? (
           <CircularProgress
             size={20}
             thickness={4.2}
-            sx={{
-              color: "white",
-            }}
+            sx={CircularProgressStyles}
           />
         ) : (
           "Sign Up"

@@ -10,7 +10,11 @@ export interface HeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
   isLg: boolean;
 }
-import { StyledToggleBtn, StyledWrapper, StyledHeader } from "./Header.styles";
+import {
+  StyledToggleBtn,
+  StyledHeaderIconsWrapper,
+  StyledHeader,
+} from "./Header.styles";
 
 const titleStyle = (theme: Theme) => css`
   color: ${theme.global.mainColor};
@@ -46,7 +50,7 @@ const Header: React.FC<HeaderProps> = ({
 
   return (
     <StyledHeader {...rest}>
-      <StyledWrapper>
+      <StyledHeaderIconsWrapper>
         {!isLg && (
           <StyledToggleBtn active={sidebarOpen}>
             <HamburgerButton
@@ -60,7 +64,7 @@ const Header: React.FC<HeaderProps> = ({
         <div css={searchIconStyle}>
           <MdOutlineSearch className="search--icon" />
         </div>
-      </StyledWrapper>
+      </StyledHeaderIconsWrapper>
     </StyledHeader>
   );
 };

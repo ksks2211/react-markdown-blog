@@ -1,5 +1,5 @@
 // ModalComponent.tsx
-import React, { useMemo } from "react";
+import React from "react";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
@@ -10,7 +10,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import isEmpty from "lodash-es/isEmpty";
 import { StyledWarning } from "./CategoriesCard.styles";
-import { generateKeyDownHandler } from "../../../helpers/keyboardUtils";
+import { useEnterKeyPressHandler } from "../../../hooks/useHandler";
 
 interface ModalProps {
   prompt: string;
@@ -66,9 +66,8 @@ const TextInputModal: React.FC<ModalProps> = ({
     },
   });
 
-  const handleKeyDown = useMemo(
-    () => generateKeyDownHandler(() => formik.submitForm()),
-    [formik]
+  const { enterKeyPressHandler: handleKeyDown } = useEnterKeyPressHandler(
+    formik.handleSubmit
   );
 
   return (

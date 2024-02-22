@@ -18,14 +18,13 @@ const ErrorFallback: ComponentType<FallbackProps> = ({
     }
   }, [error, isLoggedIn, logout]);
 
-  let cause = "";
+  let cause = "Unknown Error";
 
   if (error instanceof NotFoundError) {
     cause = "Not Found Error";
   }
 
   if (error instanceof AxiosError) {
-    // error.status
     cause = "Axios Error";
   }
 
@@ -34,7 +33,8 @@ const ErrorFallback: ComponentType<FallbackProps> = ({
       <p>Something went wrong:{cause}</p>
       <pre>{error.message}</pre>
       <button onClick={resetErrorBoundary}>Try again</button>
-      <Link to="/login">Go Back to Log In</Link>
+      <button onClick={logout}>Log out</button>
+      <Link to="/login">Log In</Link>
     </div>
   );
 };

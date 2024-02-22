@@ -111,18 +111,22 @@ export const StyledIconButton = styled(IconButton)`
 `;
 export const StyledFixedButtonGroup = styled("div")`
   position: fixed;
-  bottom: 0;
-  width: 100%;
-  height: 4rem;
-  background-color: transparent;
 
+  height: 2.4rem;
+  right: 3rem;
+  bottom: 2.5rem;
+  background-color: transparent;
   display: flex;
-  align-items: start;
-  justify-content: end;
-  padding: 0 3rem;
+
+  /* padding: 0 3rem; */
 
   ${(props) => props.theme.breakpoints.up("md")} {
-    height: 5rem;
-    padding: 0 5.6rem;
+    right: 5rem;
+    height: 3.5rem;
+    bottom: 3.5rem;
+  }
+
+  * {
+    flex: 1 0;
   }
 `;

@@ -36,10 +36,7 @@ const CategoriesPage: React.FC = () => {
     <StyledCategoriesPage>
       <CategoriesCard rootCategory={data} setErrorMessage={setErrorMessage} />
 
-      <SnackbarAlert
-        snackbarState={snackbarState}
-        onClose={() => closeSnackbar()}
-      />
+      <SnackbarAlert snackbarState={snackbarState} onClose={closeSnackbar} />
     </StyledCategoriesPage>
   );
 };

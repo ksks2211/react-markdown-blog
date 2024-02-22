@@ -74,7 +74,7 @@ export default function Layout({
 }: LayoutProps) {
   const [headerVisible, setHeaderVisible] = useState(true);
   const [prevScrollY, setPrevScrollY] = useState(window.scrollY);
-  const { isLg } = useBreakpoints();
+  const { isLg, isXl } = useBreakpoints();
 
   const theme = useTheme();
 
@@ -148,7 +148,7 @@ export default function Layout({
             <FooterComponent></FooterComponent>
           </StyledMainWrapper>
 
-          <RightSidebarComponent hidden={!isLg} css={rightSidebarStyle} />
+          <RightSidebarComponent hidden={!isXl} css={rightSidebarStyle} />
 
           <ScrollToTop />
         </StyledLowerPartitionWrapper>

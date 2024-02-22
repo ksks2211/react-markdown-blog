@@ -1,6 +1,10 @@
 import { useMutation, useQueryClient } from "react-query";
 
-import { createPost, deletePostById } from "../services/postService";
+import {
+  createPost,
+  deletePostById,
+  updatePost,
+} from "../services/postService";
 import type { PostCreateForm, PostCreatedInfo } from "@customTypes/post.types";
 import { useNavigate } from "react-router-dom";
 
@@ -23,6 +27,22 @@ export function useCreatePost() {
     // onSuccess : (data, variable, context)=>
     onSuccess: (data) => {
       navigate(`/posts/${data.id}`);
+    },
+  });
+}
+
+export function useUpdatePost() {
+  const navigate = useNavigate();
+
+  return useMutation<
+    void,
+    Error,
+    { postId: number; form: PostCreateForm },
+    unknown
+  >({
+    mutationFn: ({ postId, form }) => updatePost(postId, form),
+    onSuccess: (_data, { postId }) => {
+      navigate(`/posts/${postId}`);
     },
   });
 }
