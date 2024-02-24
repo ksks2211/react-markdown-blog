@@ -9,6 +9,7 @@ import { FaFolder, FaTag } from "react-icons/fa";
 import { IconType } from "react-icons/lib";
 import { useNavigate } from "react-router-dom";
 import { lighten, rgba } from "polished";
+import { capitalizeFirst } from "../helpers/stringUtils";
 
 interface HomeProps extends ComponentPropsWithoutRef<"div"> {}
 
@@ -121,7 +122,7 @@ const Home: React.FC<HomeProps> = () => {
         flexGrow={0}
         sx={(theme) => ({
           [theme.breakpoints.up("xs")]: {
-            margin: ".5rem 0",
+            margin: ".5rem .5rem",
           },
 
           [theme.breakpoints.up("md")]: {
@@ -147,7 +148,7 @@ const Home: React.FC<HomeProps> = () => {
             alignItems={"center"}
             justifyContent={"center"}
             width={"100%"}
-            padding=".5rem 1rem"
+            padding=".5rem"
           >
             <Paper
               data-page-value={name}
@@ -168,30 +169,27 @@ const Home: React.FC<HomeProps> = () => {
                 "&:hover": {
                   backgroundColor: (theme) =>
                     rgba(theme.palette.success.light, 0.1),
-                  // lighten(0.1, theme.palette.success.main),
                 },
 
-                [theme.breakpoints.up("sm")]: { width: "75%" },
+                [theme.breakpoints.up("sm")]: { width: "70%" },
 
                 [theme.breakpoints.up("md")]: {
-                  backgroundColor: "purple",
-                  height: "10rem",
-                  minHeight: "7rem",
+                  height: "12rem",
+                  minHeight: "8rem",
                   width: "100%",
-                  minWidth: "18rem",
+                  minWidth: "15rem",
                 },
 
-                [theme.breakpoints.up("md")]: {
-                  width: "100%",
+                [theme.breakpoints.up("lg")]: {
                   minWidth: "9rem",
-                  height: "15rem",
+                  height: "14rem",
                   minHeight: "12rem",
                 },
               })}
               variant="outlined"
             >
               <StyledPageDescription>
-                <div className="title">{name}</div>
+                <div className="title">{capitalizeFirst(name)}</div>
                 <Icon className="icon" />
                 <div className="description">{description}</div>
               </StyledPageDescription>

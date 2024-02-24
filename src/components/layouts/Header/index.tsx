@@ -7,8 +7,10 @@ export interface HeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   onClick: () => void;
   className?: string;
   sidebarOpen: boolean;
+  handleSearch: () => void;
   title: string;
   isLg: boolean;
+  searchIconVisibility?: boolean;
 }
 import {
   StyledToggleBtn,
@@ -21,11 +23,14 @@ const titleStyle = (theme: Theme) => css`
   font-size: 1.2rem;
 `;
 
-const searchIconStyle = css`
+const searchIconStyle = (visible: boolean) => css`
   cursor: pointer;
   display: flex;
   justify-content: center;
-  .search--icon {
+
+  visibility: ${visible ? "visible" : "hidden"};
+
+  .search-icon {
     height: 1.7rem;
     width: 100%;
     opacity: 0.7;
@@ -40,6 +45,8 @@ const Header: React.FC<HeaderProps> = ({
   title,
   sidebarOpen,
   isLg,
+  handleSearch,
+  searchIconVisibility = true,
   ...rest
 }) => {
   const conditionalProps = useMemo(
@@ -61,8 +68,8 @@ const Header: React.FC<HeaderProps> = ({
           </StyledToggleBtn>
         )}
         <h2 css={titleStyle(theme)}>{title}</h2>
-        <div css={searchIconStyle}>
-          <MdOutlineSearch className="search--icon" />
+        <div css={searchIconStyle(searchIconVisibility)} onClick={handleSearch}>
+          <MdOutlineSearch className="search-icon" />
         </div>
       </StyledHeaderIconsWrapper>
     </StyledHeader>

@@ -101,7 +101,7 @@ const PostListByCategory: React.FC = () => {
             id={post.id}
             title={post.title}
             description={post.description}
-            postedBy={post.writer}
+            postedBy={post.writerDisplayName}
             createdAtFromNow={formatDateFromNow(post.createdAt)}
           />
         ))}

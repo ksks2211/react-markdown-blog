@@ -7,7 +7,7 @@ import {
 import { IoIosAdd } from "react-icons/io";
 import { Select, SelectChangeEvent } from "@mui/material";
 import { rgba } from "polished";
-import { useCallback } from "react";
+import { useEnterKeyPressHandler } from "../../hooks/useHandler";
 
 interface PostInputGroupProps {
   title: string;
@@ -30,14 +30,8 @@ export default function PostInputGroup({
   handleAddTag,
   handleTagInput,
 }: PostInputGroupProps) {
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === "Enter") {
-        handleAddTag();
-      }
-    },
-    [handleAddTag]
-  );
+  const { enterKeyPressHandler: handleKeyDown } =
+    useEnterKeyPressHandler(handleAddTag);
 
   return (
     <StyledInputGroup>

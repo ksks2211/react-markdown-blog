@@ -13,7 +13,7 @@ import {
 import { FooterProps } from "../Footer";
 import { RightSidebarProps } from "../RightSidebar";
 import ScrollToTop from "../../common/ScrollToTop";
-import { MainContainerProps } from "../Main";
+
 import type { HeaderContainerProps } from "../../containers/HeaderContainer";
 import type { NavBarContainerProps } from "../../containers/NavBarContainer";
 
@@ -53,12 +53,20 @@ const leftSidebarStyle = ({
   }
 `;
 
+const rightSidebarStyle = css`
+  height: calc(100vh - var(--header-height));
+  min-width: var(--sidebar-width);
+  position: sticky;
+  top: var(--header-height);
+  z-index: 99;
+`;
+
 interface LayoutProps {
   HeaderComponent: React.FC<HeaderContainerProps>;
   LeftSidebarComponent: React.FC<NavBarContainerProps>;
   RightSidebarComponent: React.FC<RightSidebarProps>;
   FooterComponent: React.FC<FooterProps>;
-  MainComponent: React.FC<MainContainerProps>;
+  MainComponent: React.FC;
   sidebarOpen: boolean;
   setSidebarOpen: (v: boolean) => void;
 }
@@ -77,6 +85,14 @@ export default function Layout({
   const { isLg, isXl } = useBreakpoints();
 
   const theme = useTheme();
+
+  useEffect(() => {
+    console.log("LayoutIndex Mounted");
+
+    return () => {
+      console.log("LayoutIndex Unmounted");
+    };
+  }, []);
 
   useEffect(() => {
     if (isLg) {
@@ -114,14 +130,6 @@ export default function Layout({
       window.removeEventListener("scroll", throttledHandler);
     };
   }, [prevScrollY]);
-
-  const rightSidebarStyle = css`
-    height: calc(100vh - var(--header-height));
-    min-width: var(--sidebar-width);
-    position: sticky;
-    top: var(--header-height);
-    z-index: 99;
-  `;
 
   return (
     <StyledPageWrapper sidebarOpen={sidebarOpen}>

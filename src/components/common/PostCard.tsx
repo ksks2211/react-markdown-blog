@@ -5,8 +5,7 @@ import { rgba } from "polished";
 import { scrollToTheTop } from "../../helpers/scrollUtils";
 
 const StyledPostCard = styled("div")`
-  box-shadow: 0 1px 3px 1px
-    ${(props) => rgba(props.theme.palette.grey[800], 0.12)};
+  box-shadow: 0 0 1px ${(props) => props.theme.palette.primary.dark};
 
   cursor: pointer;
 
@@ -20,9 +19,11 @@ const StyledPostCard = styled("div")`
   padding: 1.6rem 1.4rem;
   margin-bottom: 1.4rem;
 
+  background-color: ${(props) => rgba(props.theme.palette.primary.dark, 0.14)};
+
   &:hover {
     background-color: ${(props) =>
-      rgba(props.theme.palette.success.main, 0.14)};
+      rgba(props.theme.palette.primary.dark, 0.28)};
   }
 
   .post-title {
@@ -61,11 +62,12 @@ const StyledPostCard = styled("div")`
   }
 
   ${(props) => props.theme.breakpoints.up("sm")} {
-    border-radius: 1rem;
     padding: 2rem 3.5rem;
   }
 
   ${(props) => props.theme.breakpoints.up("md")} {
+    border-radius: 0.4rem;
+
     padding: 3rem 5rem;
   }
 

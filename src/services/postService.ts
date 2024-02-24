@@ -1,3 +1,4 @@
+import { PostSearchParams } from "./../types/post.types";
 import blogApi from "../api/blogApi";
 import type { PostCreateForm } from "@customTypes/post.types";
 
@@ -55,5 +56,33 @@ export async function getPostsByCategories({
     params: query,
   });
 
+  return data;
+}
+
+export async function getPostsBySearchParams({
+  page,
+  postSearchParams,
+}: {
+  page: number;
+  postSearchParams: PostSearchParams;
+}) {
+  postSearchParams["page"] = page;
+
+  const query = new URLSearchParams();
+  query.set("page", page.toString());
+
+  if (postSearchParams.writer) {
+    query.set("writer", postSearchParams.writer);
+  }
+
+  if (postSearchParams.allTags) {
+    query.set("allTags", postSearchParams.allTags.toString());
+  }
+
+  postSearchParams.tags.forEach((tag) => query.append("tags", tag));
+
+  const { data } = await blogApi.get(`${urlPrefix}/search`, {
+    params: query,
+  });
   return data;
 }

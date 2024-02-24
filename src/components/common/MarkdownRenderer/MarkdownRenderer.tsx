@@ -14,6 +14,10 @@ const Code: CodeComponent = ({ children, className, ...props }) => {
   const language = match?.[1] || "text";
   const codeString = String(children).replace(/\n$/, "");
 
+  if (language === "text") {
+    return <code {...props} children={codeString} style={oneLight} />;
+  }
+
   return (
     <>
       <SyntaxHighLighter

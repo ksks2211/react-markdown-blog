@@ -21,7 +21,7 @@ export type PostCreatedInfo = {
   id: number;
 };
 
-type PostPreview = Pick<
+export type PostPreview = Pick<
   Post,
   | "id"
   | "title"
@@ -46,3 +46,10 @@ type PrevPost =
   | { prev?: never; hasPrev: false };
 
 export type PrevAndNextPosts = NextPost & PrevPost;
+
+export interface PostSearchParams {
+  writer?: string;
+  page?: number;
+  tags: string[];
+  allTags: boolean;
+}

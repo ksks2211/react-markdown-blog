@@ -5,7 +5,7 @@ export const StyledPostPage = styled("div")`
   display: flex;
   width: 100%;
   flex-flow: column;
-  min-height: 70vh;
+  min-height: 30vh;
 
   ${(props) => props.theme.breakpoints.up("md")} {
     padding: 2rem 4rem 0;
