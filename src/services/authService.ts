@@ -1,6 +1,12 @@
 import blogApi from "../api/blogApi";
+import type {
+  RegisterUserForm,
+  LogInForm,
+  JWTInfo,
+} from "@customTypes/auth.types";
 
-import type { RegisterUserForm, LogInForm } from "@customTypes/auth.types";
+const AUTH_PREFIX = "/api/auth";
+const TOKEN_PREFIX = "/api/token";
 
 export async function isAvailableUsername(username: string) {
   const query = new URLSearchParams();
@@ -8,11 +14,11 @@ export async function isAvailableUsername(username: string) {
 
   try {
     const res = await blogApi.get(
-      `/api/auth/is-username-taken?${query.toString()}`
+      `${AUTH_PREFIX}/is-username-taken?${query.toString()}`
     );
     if (res.status === 200) return true;
   } catch (e) {
-    console.error(e);
+    console.info(e);
   }
 
   return false;
@@ -23,28 +29,39 @@ export async function createUser({
   password,
   email,
 }: RegisterUserForm) {
-  const { data } = await blogApi.post("/api/auth/register", {
+  const { data } = await blogApi.post(`${AUTH_PREFIX}/register`, {
     username,
     password,
     email,
   });
   return data;
 }
-// JWT
 
+// JWT
 export async function getJsonWebTokenFromServer({
   username,
   password,
 }: LogInForm) {
-  const res = await blogApi.post("/api/auth/login", { username, password });
-  return res.data;
+  const { data } = await blogApi.post(`${AUTH_PREFIX}/login`, {
+    username,
+    password,
+  });
+  return data as JWTInfo;
 }
 
 export const getJwtByRefreshToken = async () => {
-  const { data } = await blogApi.get("/api/token/renew", {
+  const { data } = await blogApi.get(`${TOKEN_PREFIX}/renew`, {
     withCredentials: true,
   });
-  return data;
+  return data as JWTInfo;
+};
+
+export const deleteRefreshTokenIfExists = async () => {
+  try {
+    await blogApi.delete(`${TOKEN_PREFIX}/refresh`);
+  } catch (e) {
+    console.error(e);
+  }
 };
 
 export const getJwtByOAuth2 = async (params: URLSearchParams) => {
@@ -52,13 +69,5 @@ export const getJwtByOAuth2 = async (params: URLSearchParams) => {
     params,
   });
   await blogApi.get("/login/complete");
-  return data;
-};
-
-export const deleteRefreshTokenIfExists = async () => {
-  try {
-    await blogApi.delete("/api/token/refresh");
-  } catch (e) {
-    console.error(e);
-  }
+  return data as JWTInfo;
 };

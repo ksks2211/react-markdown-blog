@@ -1,45 +1,51 @@
 import { PostSearchParams } from "./../types/post.types";
 import blogApi from "../api/blogApi";
-import type { PostCreateForm } from "@customTypes/post.types";
+import type {
+  Post,
+  PostCreateForm,
+  PostCreatedInfo,
+  Posts,
+  PrevAndNextPosts,
+} from "@customTypes/post.types";
 
-const urlPrefix = "/api/posts";
+const POSTS_PREFIX = "/api/posts";
 
 // Posts
 export async function getPostById(postId: number) {
-  const { data } = await blogApi.get(`${urlPrefix}/${postId}`);
-  return data;
+  const { data } = await blogApi.get(`${POSTS_PREFIX}/${postId}`);
+  return data as Post;
 }
 
 export async function getPosts(page: number) {
   const query = new URLSearchParams();
   query.set("page", page.toString());
-  const { data } = await blogApi.get(`${urlPrefix}?${query.toString()}`);
-  return data;
+  const { data } = await blogApi.get(`${POSTS_PREFIX}?${query.toString()}`);
+  return data as Posts;
 }
 
 export async function getPrevAndNextPosts(postId: number) {
   const query = new URLSearchParams();
   query.set("postId", `${postId}`);
   const { data } = await blogApi.get(
-    `${urlPrefix}/prev-and-next?${query.toString()}`
+    `${POSTS_PREFIX}/prev-and-next?${query.toString()}`
   );
-  return data;
+  return data as PrevAndNextPosts;
 }
 
 export async function deletePostById(postId: number) {
   // success : 204
   // fail : 403
-  await blogApi.delete(`${urlPrefix}/${postId}`);
+  await blogApi.delete(`${POSTS_PREFIX}/${postId}`);
   return postId;
 }
 
 export async function createPost(postForm: PostCreateForm) {
-  const { data } = await blogApi.post(urlPrefix, postForm);
-  return data;
+  const { data } = await blogApi.post(POSTS_PREFIX, postForm);
+  return data as PostCreatedInfo;
 }
 
 export async function updatePost(postId: number, postForm: PostCreateForm) {
-  await blogApi.put(`${urlPrefix}/${postId}`, postForm);
+  await blogApi.put(`${POSTS_PREFIX}/${postId}`, postForm);
 }
 
 // Categories + Posts
@@ -52,11 +58,14 @@ export async function getPostsByCategories({
 }) {
   const query = new URLSearchParams();
   query.set("page", page.toString());
-  const { data } = await blogApi.get(`${urlPrefix}/categories/${categoryId}`, {
-    params: query,
-  });
+  const { data } = await blogApi.get(
+    `${POSTS_PREFIX}/categories/${categoryId}`,
+    {
+      params: query,
+    }
+  );
 
-  return data;
+  return data as Posts;
 }
 
 export async function getPostsBySearchParams({
@@ -66,23 +75,18 @@ export async function getPostsBySearchParams({
   page: number;
   postSearchParams: PostSearchParams;
 }) {
-  postSearchParams["page"] = page;
-
   const query = new URLSearchParams();
   query.set("page", page.toString());
-
   if (postSearchParams.writer) {
     query.set("writer", postSearchParams.writer);
   }
-
   if (postSearchParams.allTags) {
     query.set("allTags", postSearchParams.allTags.toString());
   }
-
   postSearchParams.tags.forEach((tag) => query.append("tags", tag));
 
-  const { data } = await blogApi.get(`${urlPrefix}/search`, {
+  const { data } = await blogApi.get(`${POSTS_PREFIX}/search`, {
     params: query,
   });
-  return data;
+  return data as Posts;
 }
