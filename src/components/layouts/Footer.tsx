@@ -6,7 +6,6 @@ export interface FooterProps extends ComponentPropsWithoutRef<"footer"> {
 }
 
 const StyledFooter = styled("footer")`
-  --footer-text-color: #837c7c;
   display: flex;
   align-items: center;
   justify-content: center;

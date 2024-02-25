@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+
 import { useCallback, useEffect, useState } from "react";
 import useBreakpoints from "../../../hooks/useBreakPoints";
 import throttle from "lodash-es/throttle";
@@ -17,7 +18,7 @@ import ScrollToTop from "../../common/ScrollToTop";
 import type { HeaderContainerProps } from "../../containers/HeaderContainer";
 import type { NavBarContainerProps } from "../../containers/NavBarContainer";
 
-const headerStyle = ({ headerVisible }: { headerVisible: boolean }) => css`
+const headerStyle = (headerVisible: boolean) => css`
   min-height: var(--header-height);
   background-color: var(--header-color);
   position: sticky;
@@ -28,13 +29,8 @@ const headerStyle = ({ headerVisible }: { headerVisible: boolean }) => css`
     : "translateY(calc(-1 * var(--header-height)))"};
   transition: transform 0.3s ease-out;
 `;
-const leftSidebarStyle = ({
-  sidebarOpen,
-  theme,
-}: {
-  sidebarOpen: boolean;
-  theme: Theme;
-}) => css`
+
+const leftSidebarStyle = (sidebarOpen: boolean, theme: Theme) => css`
   height: 100vh;
   min-width: var(--sidebar-width);
   flex-grow: 0;
@@ -83,16 +79,7 @@ export default function Layout({
   const [headerVisible, setHeaderVisible] = useState(true);
   const [prevScrollY, setPrevScrollY] = useState(window.scrollY);
   const { isLg, isXl } = useBreakpoints();
-
   const theme = useTheme();
-
-  useEffect(() => {
-    console.log("LayoutIndex Mounted");
-
-    return () => {
-      console.log("LayoutIndex Unmounted");
-    };
-  }, []);
 
   useEffect(() => {
     if (isLg) {
@@ -133,12 +120,7 @@ export default function Layout({
 
   return (
     <StyledPageWrapper sidebarOpen={sidebarOpen}>
-      <LeftSidebarComponent
-        css={leftSidebarStyle({
-          sidebarOpen,
-          theme,
-        })}
-      />
+      <LeftSidebarComponent css={leftSidebarStyle(sidebarOpen, theme)} />
       <StyledRightPartitionWrapper isDesktop={isLg} sidebarOpen={sidebarOpen}>
         {sidebarOpen && !isLg && (
           <StyledOverlay onClick={handleSidebarToggle} />
@@ -146,7 +128,7 @@ export default function Layout({
 
         <HeaderComponent
           sidebarOpen={sidebarOpen}
-          css={headerStyle({ headerVisible })}
+          css={headerStyle(headerVisible)}
           onClick={handleSidebarToggle}
         />
 

@@ -10,12 +10,12 @@ const CenterSkeleton: React.FC<CenterSkeletonProp> = ({ height }) => {
     <Container
       sx={{
         height,
-        padding: "0.3rem",
+        padding: ".5rem 1rem",
       }}
     >
       <Skeleton
         sx={{
-          transform: "scale(1,.9)",
+          transform: "scale(1,.8)",
         }}
         width={"100%"}
         height={"100%"}

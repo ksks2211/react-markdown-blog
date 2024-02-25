@@ -12,6 +12,7 @@ const theme = createTheme({
     mainColor: "#059862",
     btnColor: "#53a8b6",
     submitBtnColor: "#059862",
+    footerTextColor: "#837c7c",
   },
 });
 
@@ -27,6 +28,7 @@ const globalStyles = css`
     --main-color: ${theme.global.mainColor};
     --btn-color: ${theme.global.btnColor};
     --submit-btn-color: ${theme.global.submitBtnColor};
+    --footer-text-color: ${theme.global.footerTextColor};
   }
 
   @keyframes fadeInTooltip {

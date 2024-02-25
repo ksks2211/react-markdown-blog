@@ -48,7 +48,6 @@ export const StyledRightPartitionWrapper = styled("div")<RightPartitionProps>`
 `;
 export const StyledLowerPartitionWrapper = styled("div")<IsDeskTopProps>`
   background-color: var(--right-sidebar-color);
-
   width: 100%;
   display: flex;
   flex-direction: row;
