@@ -1,8 +1,7 @@
-/** @jsxImportSource @emotion/react */
 import { MdOutlineSearch } from "react-icons/md";
 import HamburgerButton from "../../common/HamburgerButton";
 import { useMemo } from "react";
-import { useTheme, Theme, css } from "@mui/material";
+import { styled } from "@mui/material";
 export interface HeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   onClick: () => void;
   className?: string;
@@ -18,17 +17,21 @@ import {
   StyledHeader,
 } from "./Header.styles";
 
-const titleStyle = (theme: Theme) => css`
-  color: ${theme.global.mainColor};
+export const StyledTitle = styled("div")`
+  color: ${(props) => props.theme.global.mainColor};
   font-size: 1.2rem;
 `;
 
-const searchIconStyle = (visible: boolean) => css`
+interface StyledSearchIconProps {
+  visible: boolean;
+}
+
+export const StyledSearchIcon = styled("div")<StyledSearchIconProps>`
   cursor: pointer;
   display: flex;
   justify-content: center;
 
-  visibility: ${visible ? "visible" : "hidden"};
+  visibility: ${(props) => (props.visible ? "visible" : "hidden")};
 
   .search-icon {
     height: 1.7rem;
@@ -53,7 +56,6 @@ const Header: React.FC<HeaderProps> = ({
     () => (isLg ? {} : { onClick: toggle }),
     [toggle, isLg]
   );
-  const theme = useTheme();
 
   return (
     <StyledHeader {...rest}>
@@ -67,10 +69,10 @@ const Header: React.FC<HeaderProps> = ({
             />
           </StyledToggleBtn>
         )}
-        <h2 css={titleStyle(theme)}>{title}</h2>
-        <div css={searchIconStyle(searchIconVisibility)} onClick={handleSearch}>
+        <StyledTitle>{title}</StyledTitle>
+        <StyledSearchIcon visible={searchIconVisibility} onClick={handleSearch}>
           <MdOutlineSearch className="search-icon" />
-        </div>
+        </StyledSearchIcon>
       </StyledHeaderIconsWrapper>
     </StyledHeader>
   );
