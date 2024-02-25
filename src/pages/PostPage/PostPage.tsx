@@ -53,8 +53,6 @@ const Post: React.FC = () => {
   const [loadMore, setLoadMore] = useState(false);
 
   useEffect(() => {
-    scrollToTheTop();
-
     setTimeout(() => {
       setLoadMore(true);
     }, 4000);
@@ -77,6 +75,7 @@ const Post: React.FC = () => {
   }, [postId]);
 
   useEffect(() => {
+    scrollToTheTop();
     if (markdownRef.current) {
       const headingElements =
         markdownRef.current.querySelectorAll("h1, h2, h3");

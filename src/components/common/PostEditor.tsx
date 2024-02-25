@@ -6,7 +6,7 @@ import {
 } from "../../pages/PostCreatePage/PostCreatePage.styles";
 import PostInputGroup from "../../pages/PostCreatePage/PostInputGroup";
 import useBreakpoints from "../../hooks/useBreakPoints";
-import FixedButtonGroup from "../../pages/PostCreatePage/FixedButtonGroup";
+import PostCreateSubmitButtonGroup from "../../pages/PostCreatePage/PostCreateSubmitButtonGroup";
 import Stack from "@mui/material/Stack";
 import Chip from "@mui/material/Chip";
 import SuspenseLoader from "./SuspenseLoader";
@@ -94,7 +94,7 @@ export default function PostEditor({
         </SuspenseLoader>
       </StyledWrapper>
 
-      <FixedButtonGroup
+      <PostCreateSubmitButtonGroup
         isLg={isLg}
         isLoading={isLoading}
         onPrevPageBtnClick={handlePrevPageBtn}

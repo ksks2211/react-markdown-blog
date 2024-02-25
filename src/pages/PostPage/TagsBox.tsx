@@ -1,3 +1,4 @@
+import { SxProps, Theme } from "@mui/material";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
@@ -7,6 +8,10 @@ interface TagsBoxProps {
   tags: string[];
 }
 export default function TagsBox({ tags }: TagsBoxProps) {
+  const chipSx: SxProps<Theme> = {
+    fontWeight: "500",
+    backgroundColor: (theme) => rgba(theme.palette.info.light, 0.03),
+  };
   return (
     <Box pt={4} pb={4}>
       <Stack flexWrap="wrap" direction="row" spacing={1} justifyContent="end">
@@ -16,10 +21,7 @@ export default function TagsBox({ tags }: TagsBoxProps) {
             variant="outlined"
             key={tag}
             color="info"
-            sx={{
-              fontWeight: "500",
-              backgroundColor: (theme) => rgba(theme.palette.info.light, 0.03),
-            }}
+            sx={chipSx}
           />
         ))}
       </Stack>

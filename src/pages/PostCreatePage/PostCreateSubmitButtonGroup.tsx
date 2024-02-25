@@ -12,7 +12,7 @@ interface FixedButtonGroupProps {
   onSubmitBtnClick: () => void;
 }
 
-export default function FixedButtonGroup({
+export default function PostCreateSubmitButtonGroup({
   isLg,
   isLoading,
   onPrevPageBtnClick,
