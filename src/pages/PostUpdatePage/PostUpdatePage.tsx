@@ -1,7 +1,7 @@
 import type { Post, PostCreateForm } from "@customTypes/post.types";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useUpdatePost } from "../../hooks/usePostMutation";
-import { useSnackbarState } from "../../hooks/useSnackbarState";
+import { useErrorMessageSnackbarState } from "../../hooks/useSnackbarState";
 import { useNavigate } from "react-router-dom";
 import { SelectChangeEvent } from "@mui/material/Select";
 import isEmpty from "lodash-es/isEmpty";
@@ -27,8 +27,17 @@ export default function PostUpdatePage({
   });
   const [tagInput, setTagInput] = useState("");
   const navigate = useNavigate();
-  const { snackbarState, displaySnackbar, closeSnackbar } = useSnackbarState();
+
+  const { snackbarState, displaySnackbar, closeSnackbar } =
+    useErrorMessageSnackbarState();
+
   const mutation = useUpdatePost();
+
+  useEffect(() => {
+    if (mutation.error) {
+      displaySnackbar(mutation.error.message);
+    }
+  }, [mutation.error, displaySnackbar]);
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -115,21 +124,11 @@ export default function PostUpdatePage({
         content={state.content}
         tags={state.tags}
       />
-      {mutation.isError ? (
-        <SnackbarAlert
-          snackbarState={{
-            open: true,
-            severity: "error",
-            msg: mutation.error.message,
-          }}
-          onClose={() => closeSnackbar(mutation.reset)}
-        />
-      ) : (
-        <SnackbarAlert
-          snackbarState={snackbarState}
-          onClose={() => closeSnackbar()}
-        />
-      )}
+
+      <SnackbarAlert
+        snackbarState={snackbarState}
+        onClose={() => closeSnackbar(mutation.reset)}
+      />
     </>
   );
 }

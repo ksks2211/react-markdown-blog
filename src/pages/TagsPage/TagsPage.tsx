@@ -3,7 +3,7 @@ import Menu from "../../contexts/Menu.enum";
 import withLayout from "../../hoc/withLayout";
 import { useMemo, useState } from "react";
 import ToggleSwitch from "../../components/common/ToggleSwitch";
-import { Chip, Stack, SxProps } from "@mui/material";
+import { Box, Chip, Stack, SxProps } from "@mui/material";
 import { useEnterKeyPressHandler } from "../../hooks/useHandler";
 import { IoIosAdd } from "react-icons/io";
 import includes from "lodash-es/includes";
@@ -63,6 +63,9 @@ const Data: React.FC = () => {
     setTag("");
   };
 
+  const toggleAllTags = () => setIsAllTags((prev) => !prev);
+  const toggleOnlyMyPosts = () => setIsOnlyMyPosts((prev) => !prev);
+
   const { enterKeyPressHandler: handleKeyDown } =
     useEnterKeyPressHandler(handleAddTag);
 
@@ -78,7 +81,7 @@ const Data: React.FC = () => {
             <ToggleSwitch
               className="toggle-btn"
               isOn={isAllTags}
-              handleToggle={() => setIsAllTags((prev) => !prev)}
+              handleToggle={toggleAllTags}
             />
           </StyledToggleBtnContainer>
           <StyledToggleBtnContainer>
@@ -86,7 +89,7 @@ const Data: React.FC = () => {
             <ToggleSwitch
               className="toggle-btn"
               isOn={isOnlyMyPosts}
-              handleToggle={() => setIsOnlyMyPosts((prev) => !prev)}
+              handleToggle={toggleOnlyMyPosts}
             />
           </StyledToggleBtnContainer>
         </StyledToggleWrapper>
@@ -138,7 +141,7 @@ const Data: React.FC = () => {
       </StyledSearchTag>
 
       {!searchable ? (
-        <div style={{ minHeight: "30vh" }} />
+        <Box minHeight="15rem" />
       ) : (
         <PostsSearchList params={params} />
       )}

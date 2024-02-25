@@ -1,6 +1,6 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useCreatePost } from "../../hooks/usePostMutation";
-import { useSnackbarState } from "../../hooks/useSnackbarState";
+import { useErrorMessageSnackbarState } from "../../hooks/useSnackbarState";
 import type { PostCreateForm } from "@customTypes/post.types";
 import isEmpty from "lodash-es/isEmpty";
 import { SelectChangeEvent } from "@mui/material/Select";
@@ -26,7 +26,14 @@ const PostCreatePage: React.FC<PostCreateContainerProps> = ({
 }) => {
   const mutation = useCreatePost();
 
-  const { snackbarState, displaySnackbar, closeSnackbar } = useSnackbarState();
+  const { snackbarState, displaySnackbar, closeSnackbar } =
+    useErrorMessageSnackbarState();
+
+  useEffect(() => {
+    if (mutation.error) {
+      displaySnackbar(mutation.error.message);
+    }
+  }, [mutation.error, displaySnackbar]);
 
   const [state, setState] = useState<PostCreateForm>({
     ...initialState,
@@ -114,21 +121,10 @@ const PostCreatePage: React.FC<PostCreateContainerProps> = ({
         content={state.content}
         tags={state.tags}
       />
-      {mutation.isError ? (
-        <SnackbarAlert
-          snackbarState={{
-            open: true,
-            severity: "error",
-            msg: mutation.error.message,
-          }}
-          onClose={() => closeSnackbar(mutation.reset)}
-        />
-      ) : (
-        <SnackbarAlert
-          snackbarState={snackbarState}
-          onClose={() => closeSnackbar()}
-        />
-      )}
+      <SnackbarAlert
+        snackbarState={snackbarState}
+        onClose={() => closeSnackbar(mutation.reset)}
+      />
     </>
   );
 };

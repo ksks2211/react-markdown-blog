@@ -45,7 +45,6 @@ const generatePathAndCategory = (pathname: string, username: string) => {
 
 const PostListByCategory: React.FC = () => {
   useChangeMenu(Menu.CATEGORIES);
-
   const location = useLocation();
   const navigate = useNavigate();
   const { username } = useGlobal();

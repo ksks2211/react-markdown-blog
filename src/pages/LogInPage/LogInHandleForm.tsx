@@ -38,7 +38,7 @@ const CircularProgressStyles = {
 export function LogInInputForm({
   setErrorMessage,
 }: {
-  setErrorMessage: (msg: string | null) => void;
+  setErrorMessage: (msg: string) => void;
 }) {
   const { performLoginAsync, loginMutation } = useLoginWithOptionalRefresh({
     setErrorMessage,

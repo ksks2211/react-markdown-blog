@@ -21,11 +21,9 @@ import ErrorFallback from "../errors/ErrorFallback";
 // ?page=1
 const PostList: React.FC = () => {
   useChangeMenu(Menu.POSTS);
-
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const page = toInteger(params.get("page") || "1");
-
   const { data, isLoading, error, refetch } = useGetPostList({ page });
 
   useEffect(() => {

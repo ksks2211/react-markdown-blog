@@ -9,7 +9,7 @@ import { useErrorMessageSnackbarState } from "../../hooks/useSnackbarState";
 import SnackbarAlert from "../../components/common/ErrorSnackbar";
 
 export default function SignUpPage() {
-  const { snackbarState, closeSnackbar, setErrorMessage } =
+  const { snackbarState, closeSnackbar, displaySnackbar } =
     useErrorMessageSnackbarState();
 
   return (
@@ -20,7 +20,7 @@ export default function SignUpPage() {
 
       <StyledLoginWrapper>
         <StyledLoginCard>
-          <SignUpForm setErrorMessage={setErrorMessage} />
+          <SignUpForm setErrorMessage={displaySnackbar} />
         </StyledLoginCard>
       </StyledLoginWrapper>
 

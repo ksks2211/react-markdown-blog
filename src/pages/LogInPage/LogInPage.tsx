@@ -8,16 +8,16 @@ import SnackbarAlert from "../../components/common/ErrorSnackbar";
 
 export default function LogInPage() {
   const [params, setParams] = useSearchParams();
-  const { setErrorMessage, snackbarState, closeSnackbar } =
+  const { displaySnackbar, snackbarState, closeSnackbar } =
     useErrorMessageSnackbarState();
 
   useEffect(() => {
     const errorFromPrev = params.get("error");
     if (errorFromPrev) {
       setParams();
-      setErrorMessage(errorFromPrev);
+      displaySnackbar(errorFromPrev);
     }
-  }, [params, setErrorMessage, setParams]);
+  }, [params, displaySnackbar, setParams]);
 
   return (
     <>
@@ -27,7 +27,7 @@ export default function LogInPage() {
 
       <StyledLoginWrapper>
         <StyledLoginCard>
-          <LogInInputForm setErrorMessage={setErrorMessage} />
+          <LogInInputForm setErrorMessage={displaySnackbar} />
         </StyledLoginCard>
       </StyledLoginWrapper>
 

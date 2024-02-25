@@ -1,8 +1,8 @@
-import { ComponentPropsWithoutRef } from "react";
+import { ComponentPropsWithoutRef, useCallback } from "react";
 import { useChangeMenu } from "../hooks/useGlobal";
 import Menu from "../contexts/Menu.enum";
 import withLayout from "../hoc/withLayout";
-import { Grid, Paper, styled } from "@mui/material";
+import { Grid, Paper, Theme, styled } from "@mui/material";
 import { MdHomeFilled } from "react-icons/md";
 import { FaFile } from "react-icons/fa6";
 import { FaFolder, FaTag } from "react-icons/fa";
@@ -108,33 +108,70 @@ const Home: React.FC<HomeProps> = () => {
   useChangeMenu(Menu.HOME);
   const navigate = useNavigate();
 
-  const handleRedirect = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const value = e.currentTarget.dataset.pageValue || "home";
-    navigate(`/${value}`);
-  };
+  const handleRedirect = useCallback(
+    (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      const value = e.currentTarget.dataset.pageValue || "home";
+      navigate(`/${value}`);
+    },
+    [navigate]
+  );
+
+  const gridSx = useCallback(
+    (theme: Theme) => ({
+      [theme.breakpoints.up("xs")]: {
+        margin: ".5rem .5rem",
+      },
+
+      [theme.breakpoints.up("md")]: {
+        margin: "4rem",
+      },
+
+      [theme.breakpoints.up("lg")]: {
+        margin: "0",
+        padding: "0 1rem",
+      },
+    }),
+    []
+  );
+
+  const paperSx = useCallback(
+    (theme: Theme) => ({
+      height: "10rem",
+      minHeight: "8rem",
+      display: "flex",
+      width: "100%",
+      minWidth: "10rem",
+      alignItems: "center",
+      justifyContent: "start",
+      boxSizing: "border-box",
+      backgroundColor: lighten(0.1, theme.palette.success.light),
+      transition: ".5s",
+
+      "&:hover": {
+        backgroundColor: rgba(theme.palette.success.light, 0.1),
+      },
+
+      [theme.breakpoints.up("sm")]: { width: "70%" },
+
+      [theme.breakpoints.up("md")]: {
+        height: "12rem",
+        minHeight: "8rem",
+        width: "100%",
+        minWidth: "15rem",
+      },
+
+      [theme.breakpoints.up("lg")]: {
+        minWidth: "9rem",
+        height: "14rem",
+        minHeight: "12rem",
+      },
+    }),
+    []
+  );
 
   return (
     <StyledWrapper>
-      <Grid
-        container
-        spacing={0}
-        pb={1}
-        flexGrow={0}
-        sx={(theme) => ({
-          [theme.breakpoints.up("xs")]: {
-            margin: ".5rem .5rem",
-          },
-
-          [theme.breakpoints.up("md")]: {
-            margin: "4rem",
-          },
-
-          [theme.breakpoints.up("lg")]: {
-            margin: "0",
-            padding: "0 1rem",
-          },
-        })}
-      >
+      <Grid container spacing={0} pb={1} flexGrow={0} sx={gridSx}>
         {pages.map(({ name, Icon, description }) => (
           <Grid
             item
@@ -153,39 +190,7 @@ const Home: React.FC<HomeProps> = () => {
             <Paper
               data-page-value={name}
               onClick={handleRedirect}
-              sx={(theme) => ({
-                height: "10rem",
-                minHeight: "8rem",
-                display: "flex",
-                width: "100%",
-                minWidth: "10rem",
-                alignItems: "center",
-                justifyContent: "start",
-                boxSizing: "border-box",
-                backgroundColor: (theme) =>
-                  lighten(0.1, theme.palette.success.light),
-                transition: ".5s",
-
-                "&:hover": {
-                  backgroundColor: (theme) =>
-                    rgba(theme.palette.success.light, 0.1),
-                },
-
-                [theme.breakpoints.up("sm")]: { width: "70%" },
-
-                [theme.breakpoints.up("md")]: {
-                  height: "12rem",
-                  minHeight: "8rem",
-                  width: "100%",
-                  minWidth: "15rem",
-                },
-
-                [theme.breakpoints.up("lg")]: {
-                  minWidth: "9rem",
-                  height: "14rem",
-                  minHeight: "12rem",
-                },
-              })}
+              sx={paperSx}
               variant="outlined"
             >
               <StyledPageDescription>

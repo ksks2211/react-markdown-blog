@@ -41,7 +41,7 @@ const FORMIK_VALIDATION_SCHEMA = Yup.object({
 export function SignUpForm({
   setErrorMessage,
 }: {
-  setErrorMessage: (msg: string | null) => void;
+  setErrorMessage: (msg: string) => void;
 }) {
   const navigate = useNavigate();
 

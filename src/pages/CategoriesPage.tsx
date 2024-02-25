@@ -23,7 +23,7 @@ const StyledCategoriesPage = styled("div")`
 const CategoriesPage: React.FC = () => {
   useChangeMenu(Menu.CATEGORIES);
   const { data, isLoading, error, refetch } = useGetCategories();
-  const { snackbarState, closeSnackbar, setErrorMessage } =
+  const { snackbarState, closeSnackbar, displaySnackbar } =
     useErrorMessageSnackbarState();
 
   if (isLoading) return <Loader />;
@@ -36,7 +36,7 @@ const CategoriesPage: React.FC = () => {
 
   return (
     <StyledCategoriesPage>
-      <CategoriesCard rootCategory={data} setErrorMessage={setErrorMessage} />
+      <CategoriesCard rootCategory={data} setErrorMessage={displaySnackbar} />
       <SnackbarAlert snackbarState={snackbarState} onClose={closeSnackbar} />
     </StyledCategoriesPage>
   );

@@ -19,7 +19,7 @@ interface LoginData {
   password: string;
 }
 
-type SetErrorMessage = (e: string | null) => void;
+type SetErrorMessage = (e: string) => void;
 
 export function useLoginWithOptionalRefresh({
   setErrorMessage,
