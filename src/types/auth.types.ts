@@ -2,6 +2,7 @@ export type LogInForm = {
   username: string;
   password: string;
 };
+
 export type RegisterUserForm = {
   username: string;
   password: string;

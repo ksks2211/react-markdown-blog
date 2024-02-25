@@ -27,17 +27,16 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   }, []);
 
   const logout = throttle(async () => {
-    setIsLoggedIn(false);
-    setUsername("");
-    setDisplayName("");
-
-    removeTokenFromBrowser();
-
     try {
       await mutation.mutateAsync();
     } catch (e) {
       console.warn(e);
     }
+
+    setIsLoggedIn(false);
+    setUsername("");
+    setDisplayName("");
+    removeTokenFromBrowser();
   }, 3000);
 
   const globalValue = {
