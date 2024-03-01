@@ -14,4 +14,5 @@ export interface NavBarProps extends React.HTMLAttributes<HTMLDivElement> {
   logout: () => void;
   displayName: string;
   profileUrl?: string;
+  handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }

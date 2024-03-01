@@ -1,7 +1,7 @@
-import React, { Suspense, lazy } from "react";
+import React, { lazy } from "react";
 import { Route, Routes } from "react-router-dom";
-import Loader from "../components/common/Loader";
 import HeaderTitleProvider from "../contexts/HeaderTitleProvider";
+import SuspenseLoader from "../components/common/SuspenseLoader";
 
 const Home = lazy(() => import("../pages/HomePage"));
 const Posts = lazy(() => import("../pages/PostListPage"));
@@ -18,76 +18,76 @@ const PrivateRoutes: React.FC = () => {
       <Route
         path="/"
         element={
-          <Suspense fallback={<Loader />}>
+          <SuspenseLoader>
             <Home />
-          </Suspense>
+          </SuspenseLoader>
         }
       />
       <Route
         path="/home"
         element={
-          <Suspense fallback={<Loader />}>
+          <SuspenseLoader>
             <Home />
-          </Suspense>
+          </SuspenseLoader>
         }
       />
       <Route
         path="/posts"
         element={
-          <Suspense fallback={<Loader />}>
+          <SuspenseLoader>
             <Posts />
-          </Suspense>
+          </SuspenseLoader>
         }
       />
       <Route
         path="/posts/create"
         element={
-          <Suspense fallback={<Loader />}>
+          <SuspenseLoader>
             <PostCreate />
-          </Suspense>
+          </SuspenseLoader>
         }
       />
       <Route
         path="/posts/:id"
         element={
-          <Suspense fallback={<Loader />}>
+          <SuspenseLoader>
             <Post />
-          </Suspense>
+          </SuspenseLoader>
         }
       />
       <Route
         path="/posts/update/:id"
         element={
-          <Suspense fallback={<Loader />}>
+          <SuspenseLoader>
             <PostUpdate />
-          </Suspense>
+          </SuspenseLoader>
         }
       />
       <Route
         path="/categories"
         element={
-          <Suspense fallback={<Loader />}>
+          <SuspenseLoader>
             <Categories />
-          </Suspense>
+          </SuspenseLoader>
         }
       />
 
       <Route
         path="/categories/*"
         element={
-          <Suspense fallback={<Loader />}>
+          <SuspenseLoader>
             <HeaderTitleProvider>
               <PostsByCategory />
             </HeaderTitleProvider>
-          </Suspense>
+          </SuspenseLoader>
         }
       />
       <Route
         path="/tags"
         element={
-          <Suspense fallback={<Loader />}>
+          <SuspenseLoader>
             <Tags />
-          </Suspense>
+          </SuspenseLoader>
         }
       />
     </Routes>

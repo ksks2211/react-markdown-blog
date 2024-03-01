@@ -5,7 +5,11 @@ import {
   deletePostById,
   updatePost,
 } from "../services/postService";
-import type { PostCreateForm, PostCreatedInfo } from "@customTypes/post.types";
+import type {
+  PostCreateForm,
+  PostCreatedInfo,
+  PostUpdateForm,
+} from "@customTypes/post.types";
 import { useNavigate } from "react-router-dom";
 
 export function useDeletePost() {
@@ -13,8 +17,8 @@ export function useDeletePost() {
 
   return useMutation<number, Error, number, unknown>({
     mutationFn: deletePostById,
-    onSuccess: (pid) => {
-      queryClient.invalidateQueries(["post", pid]);
+    onSuccess: (postId) => {
+      queryClient.invalidateQueries(["post", postId]);
     },
   });
 }
@@ -23,10 +27,10 @@ export function useCreatePost() {
   const navigate = useNavigate();
 
   return useMutation<PostCreatedInfo, Error, PostCreateForm, unknown>({
-    mutationFn: (postForm) => createPost(postForm),
+    mutationFn: createPost,
     // onSuccess : (data, variable, context)=>
     onSuccess: (data) => {
-      navigate(`/posts/${data.id}`);
+      setTimeout(() => navigate(`/posts/${data.id}`), 500);
     },
   });
 }
@@ -34,15 +38,10 @@ export function useCreatePost() {
 export function useUpdatePost() {
   const navigate = useNavigate();
 
-  return useMutation<
-    void,
-    Error,
-    { postId: number; form: PostCreateForm },
-    unknown
-  >({
-    mutationFn: ({ postId, form }) => updatePost(postId, form),
+  return useMutation<void, Error, PostUpdateForm, unknown>({
+    mutationFn: updatePost,
     onSuccess: (_data, { postId }) => {
-      navigate(`/posts/${postId}`);
+      setTimeout(() => navigate(`/posts/${postId}`), 500);
     },
   });
 }

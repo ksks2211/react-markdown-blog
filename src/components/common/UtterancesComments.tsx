@@ -44,11 +44,7 @@ function UtterancesComments({ postId }: { postId: number }) {
     };
   }, [postId]);
 
-  return (
-    <>
-      <div css={style} ref={ref} key={postId}></div>
-    </>
-  );
+  return <div css={style} ref={ref} key={postId}></div>;
 }
 
 export default UtterancesComments;

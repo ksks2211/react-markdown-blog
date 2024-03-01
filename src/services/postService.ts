@@ -4,6 +4,7 @@ import type {
   Post,
   PostCreateForm,
   PostCreatedInfo,
+  PostUpdateForm,
   Posts,
   PrevAndNextPosts,
 } from "@customTypes/post.types";
@@ -44,7 +45,7 @@ export async function createPost(postForm: PostCreateForm) {
   return data as PostCreatedInfo;
 }
 
-export async function updatePost(postId: number, postForm: PostCreateForm) {
+export async function updatePost({ postId, postForm }: PostUpdateForm) {
   await blogApi.put(`${POSTS_PREFIX}/${postId}`, postForm);
 }
 

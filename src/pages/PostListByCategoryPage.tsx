@@ -19,7 +19,7 @@ import { useChangeTitle } from "../hooks/useHeaderTitle";
 import { MdArrowBack } from "react-icons/md";
 import { useEffect, useMemo } from "react";
 import ErrorFallback from "../errors/ErrorFallback";
-import { EmptyResponseError } from "../errors";
+import { EmptyResponseError } from "../errors/HttpErrors";
 
 const PATH_REGEX = /^(\/\w+){1,8}$/;
 

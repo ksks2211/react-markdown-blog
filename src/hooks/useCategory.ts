@@ -13,11 +13,11 @@ import {
 } from "../services/categoryService";
 
 export function useGetCategories() {
-  return useQuery<Categories, Error>("categories", () => getCategories());
+  return useQuery<Categories, Error>("categories", getCategories);
 }
 
 export function useGetCategoryList() {
-  return useQuery<CategoryList, Error>("categoryList", () => getCategoryList());
+  return useQuery<CategoryList, Error>("categoryList", getCategoryList);
 }
 
 export function useChangeCategory() {
@@ -27,6 +27,7 @@ export function useChangeCategory() {
     mutationFn: changeCategory,
     onSuccess: () => {
       queryClient.invalidateQueries("categories");
+      queryClient.invalidateQueries("categoryList");
     },
   });
 }
@@ -34,9 +35,10 @@ export function useCreateCategory() {
   const queryClient = useQueryClient();
 
   return useMutation<void, Error, string, unknown>({
-    mutationFn: (newCategory) => createCategory(newCategory),
+    mutationFn: createCategory,
     onSuccess: () => {
       queryClient.invalidateQueries("categories");
+      queryClient.invalidateQueries("categoryList");
     },
   });
 } //
@@ -47,6 +49,7 @@ export function useDeleteCategory() {
     mutationFn: deleteCategory,
     onSuccess: () => {
       queryClient.invalidateQueries("categories");
+      queryClient.invalidateQueries("categoryList");
     },
   });
 }

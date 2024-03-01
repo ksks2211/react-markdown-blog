@@ -3,6 +3,7 @@ import { FaRegClock } from "react-icons/fa";
 import { styled } from "@mui/material";
 import { rgba } from "polished";
 import { scrollToTheTop } from "../../helpers/scrollUtils";
+import { useCallback } from "react";
 
 const StyledPostCard = styled("div")`
   box-shadow: 0 0 1px ${(props) => props.theme.palette.primary.dark};
@@ -67,7 +68,6 @@ const StyledPostCard = styled("div")`
 
   ${(props) => props.theme.breakpoints.up("md")} {
     border-radius: 0.4rem;
-
     padding: 3rem 5rem;
   }
 
@@ -82,11 +82,9 @@ const StyledPostCard = styled("div")`
       max-width: 50%;
       overflow: hidden;
       text-overflow: ellipsis;
-
       display: inline-flex;
       text-align: start;
       align-items: center;
-
       white-space: nowrap;
       svg {
         flex-grow: 0;
@@ -126,11 +124,14 @@ const PostCard: React.FC<PostCardProps> = ({
   postedBy,
 }) => {
   const navigate = useNavigate();
-  const handleRedirect = (e: React.MouseEvent) => {
-    scrollToTheTop();
-    e.preventDefault();
-    navigate(`/posts/${id}`, { state: { fromPage: location.search } });
-  };
+  const handleRedirect = useCallback(
+    (e: React.MouseEvent) => {
+      scrollToTheTop();
+      e.preventDefault();
+      navigate(`/posts/${id}`, { state: { fromPage: location.search } });
+    },
+    [id, navigate]
+  );
 
   return (
     <StyledPostCard onClick={handleRedirect}>

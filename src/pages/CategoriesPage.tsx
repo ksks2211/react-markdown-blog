@@ -8,7 +8,7 @@ import withLayout from "../hoc/withLayout";
 import { styled } from "@mui/material";
 import { useErrorMessageSnackbarState } from "../hooks/useSnackbarState";
 import SnackbarAlert from "../components/common/ErrorSnackbar";
-import { EmptyResponseError } from "../errors";
+import { EmptyResponseError } from "../errors/HttpErrors";
 
 const StyledCategoriesPage = styled("div")`
   width: 100%;

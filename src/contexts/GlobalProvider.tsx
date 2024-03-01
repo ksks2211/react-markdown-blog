@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import GlobalContext from "./GlobalContext";
 import {
   getUsername,
-  isValidToken,
+  hasValidToken,
   removeTokenFromBrowser,
   getDisplayName,
+  getProfileImageId,
+  setProfileImageIdInStorage,
 } from "../services/storageService";
 import Menu from "./Menu.enum";
 import { useRemoveRefreshToken } from "../hooks/useToken";
@@ -16,14 +18,21 @@ interface GlobalProviderProps {
 
 const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   const [selectedMenu, setSelectedMenu] = useState<Menu>(Menu.HOME);
-  const [isLoggedIn, setIsLoggedIn] = useState(isValidToken());
+  const [isLoggedIn, setIsLoggedIn] = useState(hasValidToken()); // Login State Check
   const [username, setUsername] = useState<string>(getUsername());
   const [displayName, setDisplayName] = useState<string>(getDisplayName());
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [profileImageId, setProfileImageId] = useState(getProfileImageId());
+
+  const [profileImageUrl, setProfileImageUrl] = useState<undefined | string>(
+    undefined
+  );
+
   const mutation = useRemoveRefreshToken();
 
+  // Login State Double Checker
   useEffect(() => {
-    setIsLoggedIn(isValidToken());
+    setIsLoggedIn(hasValidToken());
   }, []);
 
   const logout = throttle(async () => {
@@ -37,7 +46,12 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     setUsername("");
     setDisplayName("");
     removeTokenFromBrowser();
-  }, 3000);
+  }, 2000);
+
+  const changeProfileImageId = (id: number) => {
+    setProfileImageIdInStorage(id);
+    setProfileImageId(id);
+  };
 
   const globalValue = {
     selectedMenu,
@@ -51,6 +65,10 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     setDisplayName,
     sidebarOpen,
     setSidebarOpen,
+    profileImageId,
+    changeProfileImageId,
+    profileImageUrl,
+    setProfileImageUrl,
   };
   return (
     <GlobalContext.Provider value={globalValue}>

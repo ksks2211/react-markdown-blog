@@ -13,20 +13,12 @@ interface GlobalContextType {
   logout: () => void;
   sidebarOpen: boolean;
   setSidebarOpen: (v: boolean) => void;
+  profileImageId: number;
+  profileImageUrl?: string;
+  setProfileImageUrl: (v: string) => void;
+  changeProfileImageId: (id: number) => void;
 }
 
-const GlobalContext = createContext<GlobalContextType>({
-  selectedMenu: Menu.HOME,
-  isLoggedIn: false,
-  username: "",
-  displayName: "",
-  changeMenu: () => {},
-  setIsLoggedIn: () => {},
-  setUsername: () => {},
-  setDisplayName: () => {},
-  logout: () => {},
-  sidebarOpen: false,
-  setSidebarOpen: () => {},
-});
+const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
 
 export default GlobalContext;

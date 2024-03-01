@@ -1,8 +1,9 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import useGlobal from "../hooks/useGlobal";
 
-import { Suspense, lazy } from "react";
-import Loader from "../components/common/Loader";
+import { lazy } from "react";
+import SuspenseLoader from "../components/common/SuspenseLoader";
+import ImageUploader from "../components/containers/LeftSidebarContainer.tsx/ImageUploader";
 
 const LogIn = lazy(() => import("../pages/LogInPage"));
 const SignUp = lazy(() => import("../pages/SignUpPage/SignUpPage"));
@@ -18,9 +19,9 @@ const GlobalRoutes = () => {
         path="/login"
         element={
           !isLoggedIn ? (
-            <Suspense fallback={<Loader />}>
+            <SuspenseLoader>
               <LogIn />
-            </Suspense>
+            </SuspenseLoader>
           ) : (
             <Navigate to="/" />
           )
@@ -31,9 +32,9 @@ const GlobalRoutes = () => {
         path="/login/google"
         element={
           !isLoggedIn ? (
-            <Suspense fallback={<Loader />}>
+            <SuspenseLoader>
               <GoogleLogIn />
-            </Suspense>
+            </SuspenseLoader>
           ) : (
             <Navigate to="/" />
           )
@@ -44,22 +45,24 @@ const GlobalRoutes = () => {
         path="/sign-up"
         element={
           !isLoggedIn ? (
-            <Suspense fallback={<Loader />}>
+            <SuspenseLoader>
               <SignUp />
-            </Suspense>
+            </SuspenseLoader>
           ) : (
             <Navigate to="/" />
           )
         }
       />
 
+      <Route path="/test" element={<ImageUploader />} />
+
       <Route
         path="*"
         element={
           isLoggedIn ? (
-            <Suspense fallback={<Loader />}>
+            <SuspenseLoader>
               <PrivateRoutes />
-            </Suspense>
+            </SuspenseLoader>
           ) : (
             <Navigate to="/login" />
           )

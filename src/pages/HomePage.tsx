@@ -116,7 +116,7 @@ const Home: React.FC<HomeProps> = () => {
     [navigate]
   );
 
-  const gridSx = useCallback(
+  const GridSx = useCallback(
     (theme: Theme) => ({
       [theme.breakpoints.up("xs")]: {
         margin: ".5rem .5rem",
@@ -171,7 +171,7 @@ const Home: React.FC<HomeProps> = () => {
 
   return (
     <StyledWrapper>
-      <Grid container spacing={0} pb={1} flexGrow={0} sx={gridSx}>
+      <Grid container spacing={0} pb={1} flexGrow={0} sx={GridSx}>
         {pages.map(({ name, Icon, description }) => (
           <Grid
             item

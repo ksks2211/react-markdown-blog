@@ -52,7 +52,6 @@ export function SignUpForm({
     async (value: RegisterUserForm) => {
       await mutation.mutateAsync(value);
       alert("Registered");
-
       setTimeout(() => {
         navigate("/login");
       }, 2000);

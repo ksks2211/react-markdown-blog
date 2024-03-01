@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { NotFoundError, UnauthorizedError } from ".";
+import { NotFoundError, UnauthorizedError } from "./HttpErrors";
 import { Link } from "react-router-dom";
 
 import { ComponentType, useEffect } from "react";

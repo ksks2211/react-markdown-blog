@@ -1,22 +1,23 @@
 import blogApi from "../api/blogApi";
 import type {
   RegisterUserForm,
-  LogInForm,
-  JWTInfo,
+  LoginForm,
+  LoginSuccessResponse,
 } from "@customTypes/auth.types";
+import { HttpStatusCode } from "axios";
 
 const AUTH_PREFIX = "/api/auth";
 const TOKEN_PREFIX = "/api/token";
 
 export async function isAvailableUsername(username: string) {
-  const query = new URLSearchParams();
-  query.set("username", username);
+  const params = new URLSearchParams();
+  params.set("username", username);
 
   try {
-    const res = await blogApi.get(
-      `${AUTH_PREFIX}/is-username-taken?${query.toString()}`
-    );
-    if (res.status === 200) return true;
+    const res = await blogApi.get(`${AUTH_PREFIX}/is-username-taken`, {
+      params,
+    });
+    if (res.status === HttpStatusCode.Ok) return true;
   } catch (e) {
     console.info(e);
   }
@@ -41,19 +42,19 @@ export async function createUser({
 export async function getJsonWebTokenFromServer({
   username,
   password,
-}: LogInForm) {
+}: LoginForm) {
   const { data } = await blogApi.post(`${AUTH_PREFIX}/login`, {
     username,
     password,
   });
-  return data as JWTInfo;
+  return data as LoginSuccessResponse;
 }
 
 export const getJwtByRefreshToken = async () => {
   const { data } = await blogApi.get(`${TOKEN_PREFIX}/renew`, {
     withCredentials: true,
   });
-  return data as JWTInfo;
+  return data as LoginSuccessResponse;
 };
 
 export const deleteRefreshTokenIfExists = async () => {
@@ -69,5 +70,9 @@ export const getJwtByOAuth2 = async (params: URLSearchParams) => {
     params,
   });
   await blogApi.get("/login/complete");
-  return data as JWTInfo;
+  return data as LoginSuccessResponse;
+};
+
+export const updateUserProfileImageId = async (profileImageId: number) => {
+  await blogApi.put(`${AUTH_PREFIX}/update`, { profileImageId });
 };

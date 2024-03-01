@@ -12,6 +12,8 @@ interface FixedButtonGroupProps {
   onSubmitBtnClick: () => void;
 }
 
+const ButtonSx = { backgroundColor: rgba("#fff", 0.8) };
+
 export default function PostCreateSubmitButtonGroup({
   isLg,
   isLoading,
@@ -24,7 +26,7 @@ export default function PostCreateSubmitButtonGroup({
         <Button
           type="button"
           color="primary"
-          sx={{ backgroundColor: rgba("#fff", 0.8) }}
+          sx={ButtonSx}
           startIcon={<MdArrowBack />}
           onClick={onPrevPageBtnClick}
         >
@@ -35,13 +37,13 @@ export default function PostCreateSubmitButtonGroup({
           <Button
             type="button"
             color="primary"
-            sx={{ backgroundColor: rgba("#fff", 0.8) }}
+            sx={ButtonSx}
             onClick={onSubmitBtnClick}
           >
             Submit
           </Button>
         ) : (
-          <Button type="button" sx={{ backgroundColor: rgba("#fff", 0.8) }}>
+          <Button type="button" sx={ButtonSx}>
             <CircularProgress
               size={isLg ? 22 : 18}
               thickness={isLg ? 4.2 : 3.8}

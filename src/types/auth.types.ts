@@ -1,4 +1,4 @@
-export type LogInForm = {
+export type LoginForm = {
   username: string;
   password: string;
 };
@@ -17,12 +17,17 @@ export interface JWT {
   auths: string[];
   id: number;
   displayName: string;
+  profileImageId: string;
 }
 
-export interface JWTInfo {
-  statusCode: number;
+export interface LoginSuccessResponse {
   message: string;
   token: string;
   username: string;
   displayName: string;
+  profileImageId?: number;
+}
+
+export interface UserProfileUpdate {
+  profileImageId: number;
 }

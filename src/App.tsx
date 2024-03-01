@@ -10,6 +10,7 @@ import { ThemeProvider, CssBaseline } from "@mui/material";
 import theme from "./theme";
 
 const queryClient = new QueryClient();
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>

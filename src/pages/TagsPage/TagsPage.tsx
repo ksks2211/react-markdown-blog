@@ -27,13 +27,20 @@ const STACK_STYLE: SxProps = {
 const Data: React.FC = () => {
   useChangeMenu(Menu.TAGS);
 
+  // Search Options
   const [isOnlyMyPosts, setIsOnlyMyPosts] = useState(false);
   const [isAllTags, setIsAllTags] = useState(false);
 
+  // Search Tags
   const [tags, setTags] = useState<string[]>([]);
+
+  // Search Tag Input value
   const [tag, setTag] = useState("");
+
+  // User Id
   const username = useUsername();
 
+  // Generate Search Parameters
   const params = useMemo(
     () =>
       isOnlyMyPosts
@@ -42,7 +49,7 @@ const Data: React.FC = () => {
     [isAllTags, isOnlyMyPosts, tags, username]
   );
 
-  const searchable = tags.length > 0;
+  const hasSearchTags = tags.length > 0;
 
   const handleTagDelete = (tag: string) => {
     setTags((prev) => prev.filter((t) => t !== tag));
@@ -140,7 +147,7 @@ const Data: React.FC = () => {
         </Stack>
       </StyledSearchTag>
 
-      {!searchable ? (
+      {!hasSearchTags ? (
         <Box minHeight="15rem" />
       ) : (
         <PostsSearchList params={params} />

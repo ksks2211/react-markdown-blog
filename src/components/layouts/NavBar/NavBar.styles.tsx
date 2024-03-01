@@ -36,13 +36,14 @@ export const StyledProfileCard = styled("div")`
   flex-direction: column;
   margin-bottom: 2rem;
 
-  .profile--image {
+  .profile-image {
     border: 2px solid rgba(222, 222, 222, 0.7);
     border-radius: 50%;
 
     transition: border 0.6s;
     width: 6rem;
     height: 6rem;
+    cursor: pointer;
 
     &:hover {
       border: 2px solid #fff;
@@ -58,7 +59,7 @@ export const StyledProfileCard = styled("div")`
     }
   }
 
-  .profile--name {
+  .profile-name {
     cursor: pointer;
     width: 100%;
     font-weight: 900;
@@ -67,6 +68,7 @@ export const StyledProfileCard = styled("div")`
     text-align: center;
     transition: color 0.2s;
     font-family: "Roboto", sans-serif;
+    margin-top: 1rem;
   }
 `;
 export const StyledList = styled("ul")`

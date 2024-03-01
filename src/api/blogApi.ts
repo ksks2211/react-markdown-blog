@@ -1,8 +1,13 @@
-import axios, { isAxiosError } from "axios";
-import { NotFoundError, UnauthorizedError } from "../errors";
-import { getTokenFromBrowser, isValidToken } from "../services/storageService";
+import axios, { isAxiosError, HttpStatusCode } from "axios";
+import { getTokenFromBrowser, hasValidToken } from "../services/storageService";
 import type { ErrorResponse } from "@customTypes/response.types";
-import { BadRequestError } from "../errors/BadRequestError";
+import {
+  NotFoundError,
+  UnauthorizedError,
+  BadRequestError,
+  ConflictError,
+  RequestFailError,
+} from "../errors/HttpErrors";
 
 const API_ADDR = import.meta.env.VITE_API_ADDR as string;
 
@@ -21,25 +26,32 @@ blogApi.interceptors.response.use(
       console.info(error);
     }
 
-    // no response error
-    if (!error.response) throw error;
+    // no response error (network failure etc)
+    if (!error.response) {
+      throw new RequestFailError(
+        error?.message ||
+          "Failed to get response from server. Check server state!"
+      );
+    }
 
     const { response } = error;
 
-    if (response.status === 400)
+    if (response.status === HttpStatusCode.BadRequest)
       throw new BadRequestError(response.data as ErrorResponse);
-    if (response.status === 401)
+    if (response.status === HttpStatusCode.Unauthorized)
       throw new UnauthorizedError(response.data as ErrorResponse);
-    if (response.status === 404)
-      throw new NotFoundError(response.data.message || "Not Found Error");
-    if (response.status === 409) throw new Error(response.data.message);
+    if (response.status === HttpStatusCode.NotFound)
+      throw new NotFoundError(response.data as ErrorResponse);
+    if (response.status === HttpStatusCode.Conflict)
+      throw new ConflictError(response.data as ErrorResponse);
 
     throw new Error(response.data.message);
   }
 );
 
 blogApi.interceptors.request.use((request) => {
-  if (isValidToken()) {
+  // use token only when it exists & token is not expired
+  if (hasValidToken()) {
     const token = getTokenFromBrowser();
     request.headers["Authorization"] = `Bearer ${token}`;
   }

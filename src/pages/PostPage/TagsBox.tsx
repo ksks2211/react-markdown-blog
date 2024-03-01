@@ -8,7 +8,7 @@ interface TagsBoxProps {
   tags: string[];
 }
 export default function TagsBox({ tags }: TagsBoxProps) {
-  const chipSx: SxProps<Theme> = {
+  const ChipSx: SxProps<Theme> = {
     fontWeight: "500",
     backgroundColor: (theme) => rgba(theme.palette.info.light, 0.03),
   };
@@ -21,7 +21,7 @@ export default function TagsBox({ tags }: TagsBoxProps) {
             variant="outlined"
             key={tag}
             color="info"
-            sx={chipSx}
+            sx={ChipSx}
           />
         ))}
       </Stack>

@@ -11,8 +11,8 @@ import {
   getJwtByOAuth2,
   getJwtByRefreshToken,
 } from "../services/authService";
-import type { JWTInfo, LogInForm } from "@customTypes/auth.types";
-import { BadRequestError } from "../errors/BadRequestError";
+import type { LoginSuccessResponse, LoginForm } from "@customTypes/auth.types";
+import { BadRequestError } from "../errors/HttpErrors";
 
 interface LoginData {
   username: string;
@@ -26,23 +26,25 @@ export function useLoginWithOptionalRefresh({
 }: {
   setErrorMessage: SetErrorMessage;
 }) {
-  const { setIsLoggedIn, setUsername, setDisplayName } = useGlobal();
+  const { setIsLoggedIn, setUsername, setDisplayName, changeProfileImageId } =
+    useGlobal();
 
   const loginMutation = useMutation<
-    JWTInfo,
+    LoginSuccessResponse,
     BadRequestError,
     LoginData & { needRefreshToken: boolean }
   >({
     mutationFn: ({ username, password }) => {
       return getJsonWebTokenFromServer({ username, password });
     },
-    onSuccess: ({ token, displayName }, variable) => {
+    onSuccess: ({ token, displayName, profileImageId }, variable) => {
       if (variable.needRefreshToken) {
         // refreshTokenMutation.mutate
       }
       setTokenToBrowser(token);
       setUsername(variable.username);
       setDisplayName(displayName);
+      changeProfileImageId(profileImageId || -1);
       setIsLoggedIn(true);
     },
     onError: (error) => {
@@ -53,7 +55,7 @@ export function useLoginWithOptionalRefresh({
   });
 
   const performLoginAsync = async (
-    loginForm: LogInForm,
+    loginForm: LoginForm,
     needRefreshToken = false
   ) => {
     return await loginMutation.mutateAsync({
@@ -68,7 +70,7 @@ export function useLoginWithOptionalRefresh({
 export function useLoginWithRefreshToken() {
   const { setIsLoggedIn } = useGlobal();
 
-  return useMutation<JWTInfo, Error>({
+  return useMutation<LoginSuccessResponse, Error>({
     retry: false,
     mutationFn: getJwtByRefreshToken,
     onSuccess: (data) => {
@@ -83,15 +85,17 @@ export function useLoginWithRefreshToken() {
 }
 
 export function useLoginWithOAuth2() {
-  const { setIsLoggedIn, setUsername, setDisplayName } = useGlobal();
+  const { setIsLoggedIn, setUsername, setDisplayName, changeProfileImageId } =
+    useGlobal();
 
-  return useMutation<JWTInfo, Error, URLSearchParams, unknown>({
+  return useMutation<LoginSuccessResponse, Error, URLSearchParams, unknown>({
     retry: false,
     mutationFn: (params) => getJwtByOAuth2(params),
-    onSuccess: ({ token, username, displayName }) => {
+    onSuccess: ({ token, username, displayName, profileImageId }) => {
       setTokenToBrowser(token);
       setUsername(username);
       setDisplayName(displayName);
+      changeProfileImageId(profileImageId || -1);
       setIsLoggedIn(true);
     },
     onError: (e) => {

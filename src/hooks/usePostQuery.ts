@@ -20,8 +20,9 @@ export function useGetPost({ postId }: { postId: number | string }) {
 
 export function useGetPostList({ page = 1 }: { page?: number } = {}) {
   const queryClient = useQueryClient();
+
   return useQuery<Posts, Error>(
-    ["posts", page],
+    ["posts", "page", page],
     () => getPosts(toInteger(page)),
     {
       onSuccess: (newData) => {
@@ -46,7 +47,7 @@ export function useGetPostListByCategory({
   categoryId: string;
 }) {
   return useInfiniteQuery<Posts, Error>(
-    ["posts", categoryId],
+    ["posts", "category", categoryId],
     ({ pageParam = 1 }) =>
       getPostsByCategories({ page: toInteger(pageParam), categoryId }),
     {
@@ -57,7 +58,7 @@ export function useGetPostListByCategory({
 
       select: (data) => {
         const pages = data.pages;
-        const mergedPages = pages.reduce(
+        const mergedPage = pages.reduce(
           (acc, page) => {
             acc.totalPages = page.totalPages;
             acc.postList = unionBy(acc.postList, page.postList, "id");
@@ -65,7 +66,7 @@ export function useGetPostListByCategory({
           },
           { totalPages: 1, postList: [] } as Posts
         );
-        return { pages: [mergedPages], pageParams: data.pageParams };
+        return { pages: [mergedPage], pageParams: data.pageParams };
       },
     }
   );

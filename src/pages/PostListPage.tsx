@@ -18,6 +18,8 @@ import {
 import { IoMdAdd } from "react-icons/io";
 import ErrorFallback from "../errors/ErrorFallback";
 
+const StackSx = { margin: "2rem 0" };
+
 // ?page=1
 const PostList: React.FC = () => {
   useChangeMenu(Menu.POSTS);
@@ -70,7 +72,7 @@ const PostList: React.FC = () => {
         justifyContent="center"
         alignItems="center"
         spacing={0}
-        sx={{ margin: "2rem 0" }}
+        sx={StackSx}
       >
         <Pagination
           variant="outlined"

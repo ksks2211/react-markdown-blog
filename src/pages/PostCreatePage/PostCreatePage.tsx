@@ -13,7 +13,7 @@ interface PostCreateContainerProps {
   category: string;
 }
 
-const initialState = {
+const INITIAL_POST_STATE = {
   title: "",
   content: "",
   tags: [],
@@ -36,7 +36,7 @@ const PostCreatePage: React.FC<PostCreateContainerProps> = ({
   }, [mutation.error, displaySnackbar]);
 
   const [state, setState] = useState<PostCreateForm>({
-    ...initialState,
+    ...INITIAL_POST_STATE,
     category,
   });
 

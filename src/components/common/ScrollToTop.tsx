@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FaArrowCircleUp } from "react-icons/fa";
-import { gsap } from "gsap";
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import throttle from "lodash-es/throttle";
 import { styled } from "@mui/material";
 import { darken } from "polished";
+import { gsap } from "gsap";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
 gsap.registerPlugin(ScrollToPlugin);
 
@@ -36,27 +36,28 @@ const ScrollToTopButton: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const checkVisibility = () => {
+    const checkVisibility = throttle(() => {
       if (window.scrollY > window.innerHeight * 0.33) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
       }
-    };
-    window.addEventListener("scroll", throttle(checkVisibility, 1000));
+    }, 1000);
+
+    window.addEventListener("scroll", checkVisibility);
     return () => {
       window.removeEventListener("scroll", checkVisibility);
     };
   }, []);
 
-  const scrollToTop = () => {
+  const scrollToTop = useCallback(() => {
     gsap.to(window, {
       duration: 1,
       scrollTo: 0,
-      ease: "power2.inOut",
+      ease: "power1.in",
     });
-    setIsVisible(false);
-  };
+    setTimeout(() => setIsVisible(false), 500);
+  }, []);
 
   return (
     isVisible && (

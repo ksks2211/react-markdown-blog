@@ -1,5 +1,4 @@
-import styled from "@emotion/styled";
-import { css } from "@emotion/react";
+import { css, styled } from "@mui/material";
 
 interface CircleProps {
   color: string;
@@ -9,7 +8,7 @@ interface CircleProps {
   delay?: boolean;
 }
 
-const StyledCircle = styled.div<CircleProps>`
+const StyledCircle = styled("div")<CircleProps>`
   width: ${(props) => props.size}rem;
   height: ${(props) => props.size}rem;
   background-color: ${(props) => props.color};
@@ -88,7 +87,7 @@ const basedLoaderStyles = css`
   z-index: 999;
 `;
 
-const StyledLoader = styled.div<LoaderProps>`
+const StyledLoader = styled("div")<LoaderProps>`
   ${basedLoaderStyles};
 
   .circles-wrapper {

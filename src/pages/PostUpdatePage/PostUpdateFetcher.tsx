@@ -6,7 +6,7 @@ import { useChangeMenu, useUsername } from "../../hooks/useGlobal";
 import { usePathParamId } from "../../hooks/useParameter";
 import { useGetPost } from "../../hooks/usePostQuery";
 import { useNavigate } from "react-router-dom";
-import { NotFoundError } from "../../errors";
+import { EmptyResponseError, NotFoundError } from "../../errors/HttpErrors";
 import { useGetCategoryList } from "../../hooks/useCategory";
 import PostUpdatePage from "./PostUpdatePage";
 
@@ -61,7 +61,7 @@ export default function PostUpdateFetcher() {
   if (post === undefined)
     return (
       <ErrorFallback
-        error={new Error(`Failed To Get Post ${postId}`)}
+        error={new EmptyResponseError(`Failed To Get Post ${postId}`)}
         resetErrorBoundary={refetchPost}
       />
     );
@@ -69,7 +69,7 @@ export default function PostUpdateFetcher() {
   if (categoryList === undefined)
     return (
       <ErrorFallback
-        error={new Error(`Failed To Get Category List`)}
+        error={new EmptyResponseError(`Failed To Get Category List`)}
         resetErrorBoundary={refetchPost}
       />
     );

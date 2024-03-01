@@ -2,7 +2,7 @@ import { useCallback, useRef, type FormEvent } from "react";
 import { AiFillLock } from "react-icons/ai";
 import { BiSolidUser } from "react-icons/bi";
 import { useLoginWithOptionalRefresh } from "../../hooks/useToken";
-import type { LogInForm } from "@customTypes/auth.types";
+import type { LoginForm } from "@customTypes/auth.types";
 import profile from "../../assets/profile.png";
 import google from "../../assets/google.svg";
 import {
@@ -22,6 +22,8 @@ const FORMIK_INITIAL_VALUE = {
   username: "",
   password: "",
 };
+
+const API_ADDR = import.meta.env.VITE_API_ADDR as string;
 
 const FORMIK_VALIDATION_SCHEMA = Yup.object({
   username: Yup.string()
@@ -47,7 +49,7 @@ export function LogInInputForm({
   const usernameRef = useRef<HTMLInputElement>(null);
 
   const handleLogInFormSubmit = useCallback(
-    async (value: LogInForm) => {
+    async (value: LoginForm) => {
       if (!loginMutation.isLoading) {
         await performLoginAsync(value, false);
       }
@@ -57,8 +59,8 @@ export function LogInInputForm({
 
   const handleFormikSubmit = useCallback(
     async (
-      value: LogInForm,
-      { setSubmitting, resetForm }: FormikHelpers<LogInForm>
+      value: LoginForm,
+      { setSubmitting, resetForm }: FormikHelpers<LoginForm>
     ) => {
       setSubmitting(false);
 
@@ -88,7 +90,7 @@ export function LogInInputForm({
 
   const handleGoogle = throttle((e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const API_ADDR = import.meta.env.VITE_API_ADDR as string;
+
     location.href = `${API_ADDR}/oauth2/authorization/google`;
   }, 2000);
 

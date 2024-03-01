@@ -9,7 +9,7 @@ import { useErrorMessageSnackbarState } from "../../hooks/useSnackbarState";
 import { useGetPostListBySearchQuery } from "../../hooks/usePostQuery";
 import Loader from "../../components/common/Loader";
 import ErrorFallback from "../../errors/ErrorFallback";
-import { EmptyResponseError } from "../../errors";
+import { EmptyResponseError } from "../../errors/HttpErrors";
 import { memo } from "react";
 import Container from "@mui/material/Container";
 import { styled } from "@mui/material";
@@ -81,6 +81,7 @@ const PostsSearch: React.FC<PostsSearchListProps> = ({ params }) => {
         <Button
           variant="contained"
           color="success"
+          type="button"
           disabled={!hasNextPage}
           onClick={handleLoadMorePosts}
         >

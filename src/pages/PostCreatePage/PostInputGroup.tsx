@@ -5,7 +5,7 @@ import {
   StyledTitleInput,
 } from "./PostCreatePage.styles";
 import { IoIosAdd } from "react-icons/io";
-import { Select, SelectChangeEvent } from "@mui/material";
+import { Select, SelectChangeEvent, SxProps, Theme } from "@mui/material";
 import { rgba } from "polished";
 import { useEnterKeyPressHandler } from "../../hooks/useHandler";
 
@@ -19,6 +19,22 @@ interface PostInputGroupProps {
   handleAddTag: () => void;
   handleTagInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
+
+const SelectInputProps = { "aria-label": "Without label" };
+
+const SelectSx: SxProps<Theme> = (theme) => ({
+  "& > fieldset": {
+    border: "none",
+  },
+
+  "& #mui-component-select-category": {
+    minHeight: "1rem",
+  },
+  "& > *:active, & > *:focus": {
+    backgroundColor: rgba(theme.palette.primary.main, 0.07),
+    borderRadius: ".4em",
+  },
+});
 
 export default function PostInputGroup({
   title,
@@ -52,21 +68,8 @@ export default function PostInputGroup({
           name="category"
           onChange={handleCategoryChange}
           displayEmpty
-          inputProps={{ "aria-label": "Without label" }}
-          sx={{
-            "& > fieldset": {
-              border: "none",
-            },
-
-            "& #mui-component-select-category": {
-              minHeight: "1rem",
-            },
-            "& > *:active, & > *:focus": {
-              backgroundColor: (theme) =>
-                rgba(theme.palette.primary.main, 0.07),
-              borderRadius: ".4em",
-            },
-          }}
+          inputProps={SelectInputProps}
+          sx={SelectSx}
         >
           {categoryList.map((cat) => {
             return (

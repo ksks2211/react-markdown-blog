@@ -1,5 +1,6 @@
 import type { JWT } from "@customTypes/auth.types";
 import jwtDecode from "jwt-decode";
+import { toInteger } from "lodash-es";
 
 const TOKEN_KEY = "jwt_token";
 
@@ -16,7 +17,7 @@ export const removeTokenFromBrowser = () => {
   sessionStorage.clear();
 };
 
-export const isValidToken = () => {
+export const hasValidToken = () => {
   const token = getTokenFromBrowser();
   if (token) {
     try {
@@ -29,6 +30,7 @@ export const isValidToken = () => {
       } else {
         sessionStorage.setItem("username", decoded.sub);
         sessionStorage.setItem("displayName", decoded.displayName);
+        sessionStorage.setItem("profileImageId", decoded.profileImageId);
         return true;
       }
     } catch (error) {
@@ -47,4 +49,13 @@ export const getUsername = () => {
 export const getDisplayName = () => {
   const username = sessionStorage.getItem("displayName") || "";
   return username;
+};
+
+export const getProfileImageId = () => {
+  const imageId = sessionStorage.getItem("profileImageId") || "-1";
+  return toInteger(imageId);
+};
+
+export const setProfileImageIdInStorage = (id: number) => {
+  sessionStorage.setItem("profileImageId", id.toString());
 };

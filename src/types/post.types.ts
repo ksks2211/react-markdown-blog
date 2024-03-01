@@ -17,6 +17,11 @@ export type PostCreateForm = Pick<
   "title" | "content" | "description" | "tags" | "category"
 >;
 
+export type PostUpdateForm = {
+  postId: number;
+  postForm: PostCreateForm;
+};
+
 export type PostCreatedInfo = {
   id: number;
 };

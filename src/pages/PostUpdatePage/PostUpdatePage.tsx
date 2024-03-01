@@ -101,7 +101,7 @@ export default function PostUpdatePage({
     if (isEmpty(state.title)) {
       displaySnackbar("Title is empty!");
     } else {
-      await mutation.mutateAsync({ postId: postId, form: state });
+      await mutation.mutateAsync({ postId: postId, postForm: state });
     }
   }, [displaySnackbar, mutation, postId, state]);
 
