@@ -16,6 +16,8 @@ const blogApi = axios.create({
   baseURL: API_ADDR,
 });
 
+axios.defaults.withCredentials = true;
+
 blogApi.interceptors.response.use(
   (response) => {
     return response;
