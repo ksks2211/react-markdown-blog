@@ -12,6 +12,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Use AWS_REGION Secret
+        env:
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run: |
+          echo "Using AWS_REGION"
+          # Use the AWS_REGION in a command without directly echoing it
+          aws configure set region $AWS_REGION    
       - uses: actions/checkout@v2
 
       - name: Set up Node.js
