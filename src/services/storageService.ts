@@ -1,6 +1,5 @@
 import type { JWT } from "@customTypes/auth.types";
 import jwtDecode from "jwt-decode";
-import { toInteger } from "lodash-es";
 
 const TOKEN_KEY = "jwt_token";
 
@@ -30,7 +29,8 @@ export const hasValidToken = () => {
       } else {
         sessionStorage.setItem("username", decoded.sub);
         sessionStorage.setItem("displayName", decoded.displayName);
-        sessionStorage.setItem("profileImageId", decoded.profileImageId);
+
+        sessionStorage.setItem("profile", decoded.profile || "");
         return true;
       }
     } catch (error) {
@@ -51,11 +51,11 @@ export const getDisplayName = () => {
   return username;
 };
 
-export const getProfileImageId = () => {
-  const imageId = sessionStorage.getItem("profileImageId") || "-1";
-  return toInteger(imageId);
+export const getProfile = () => {
+  const profile = sessionStorage.getItem("profile") || "";
+  return profile;
 };
 
-export const setProfileImageIdInStorage = (id: number) => {
-  sessionStorage.setItem("profileImageId", id.toString());
+export const setProfile = (profile: string) => {
+  sessionStorage.setItem("profile", profile);
 };

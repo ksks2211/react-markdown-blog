@@ -73,6 +73,6 @@ export const getJwtByOAuth2 = async (params: URLSearchParams) => {
   return data as LoginSuccessResponse;
 };
 
-export const updateUserProfileImageId = async (profileImageId: number) => {
-  await blogApi.put(`${AUTH_PREFIX}/update`, { profileImageId });
+export const updateUserProfile = async (profile: string) => {
+  await blogApi.put(`${AUTH_PREFIX}/update`, { profile });
 };

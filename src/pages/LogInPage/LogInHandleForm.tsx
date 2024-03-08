@@ -90,9 +90,8 @@ export function LogInInputForm({
 
   const handleGoogle = throttle((e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-
     location.href = `${API_ADDR}/oauth2/authorization/google`;
-  }, 2000);
+  }, 1000);
 
   const handleLogin = throttle(() => {
     formik.handleSubmit();

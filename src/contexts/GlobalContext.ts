@@ -1,5 +1,6 @@
 import { createContext } from "react";
 import Menu from "./Menu.enum";
+import type { LoginSuccessResponse } from "@customTypes/auth.types";
 
 interface GlobalContextType {
   selectedMenu: Menu;
@@ -11,12 +12,11 @@ interface GlobalContextType {
   setUsername: (n: string) => void;
   setDisplayName: (n: string) => void;
   logout: () => void;
+  login: (data: LoginSuccessResponse) => void;
   sidebarOpen: boolean;
   setSidebarOpen: (v: boolean) => void;
-  profileImageId: number;
-  profileImageUrl?: string;
-  setProfileImageUrl: (v: string) => void;
-  changeProfileImageId: (id: number) => void;
+  profile: string;
+  updateProfile: (v: string) => void;
 }
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined);

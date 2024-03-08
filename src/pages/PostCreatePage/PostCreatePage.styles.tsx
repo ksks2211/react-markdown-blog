@@ -38,7 +38,8 @@ export const StyledWrapper = styled("div")`
   width: 100%;
   overflow: hidden;
 `;
-export const StyledTitleInput = styled("div")<{ name: string }>`
+
+export const StyledTitleInputRow = styled("div")<{ name: string }>`
   width: 100%;
 
   border: none;

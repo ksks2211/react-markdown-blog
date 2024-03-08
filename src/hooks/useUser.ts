@@ -1,5 +1,5 @@
 import { useMutation } from "react-query";
-import { createUser, updateUserProfileImageId } from "../services/authService";
+import { createUser, updateUserProfile } from "../services/authService";
 import type { RegisterUserForm } from "@customTypes/auth.types";
 
 export function useCreateUser(setErrorMessage: (msg: string) => void) {
@@ -12,8 +12,8 @@ export function useCreateUser(setErrorMessage: (msg: string) => void) {
   });
 }
 
-export function useUpdateUserProfileImageId() {
-  return useMutation<void, Error, number, unknown>({
-    mutationFn: updateUserProfileImageId,
+export function useUpdateUserProfile() {
+  return useMutation<void, Error, string, unknown>({
+    mutationFn: updateUserProfile,
   });
 }

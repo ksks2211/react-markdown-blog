@@ -2,7 +2,7 @@ import MenuItem from "@mui/material/MenuItem";
 import {
   StyledIconButton,
   StyledInputGroup,
-  StyledTitleInput,
+  StyledTitleInputRow,
 } from "./PostCreatePage.styles";
 import { IoIosAdd } from "react-icons/io";
 import { Select, SelectChangeEvent, SxProps, Theme } from "@mui/material";
@@ -51,7 +51,7 @@ export default function PostInputGroup({
 
   return (
     <StyledInputGroup>
-      <StyledTitleInput name="title">
+      <StyledTitleInputRow name="title">
         <input
           value={title}
           name="title"
@@ -60,8 +60,8 @@ export default function PostInputGroup({
           autoComplete="off"
           autoFocus
         />
-      </StyledTitleInput>
-      <StyledTitleInput name="category">
+      </StyledTitleInputRow>
+      <StyledTitleInputRow name="category">
         <Select
           value={category}
           className="category-select"
@@ -79,11 +79,12 @@ export default function PostInputGroup({
             );
           })}
         </Select>
-      </StyledTitleInput>
-      <StyledTitleInput name="tags">
+      </StyledTitleInputRow>
+      <StyledTitleInputRow name="tags">
         <input
           value={tag}
           onChange={handleTagInput}
+          onKeyDownCapture={handleKeyDown}
           onKeyDown={handleKeyDown}
           name="tag-input"
           autoComplete="off"
@@ -97,7 +98,7 @@ export default function PostInputGroup({
         >
           <IoIosAdd fontSize="inherit" />
         </StyledIconButton>
-      </StyledTitleInput>
+      </StyledTitleInputRow>
     </StyledInputGroup>
   );
 }

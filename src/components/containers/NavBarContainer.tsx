@@ -5,8 +5,10 @@ import Menu from "../../contexts/Menu.enum";
 
 import { GoHome, GoFile, GoTag, GoFileDirectory } from "react-icons/go";
 import type { NavBarProps } from "../layouts/NavBar/NavBar.types";
-import { useCallback, useEffect, useState } from "react";
-import { useCreateImage, useGetImageUrl } from "../../hooks/useImage";
+import { useCallback, useEffect } from "react";
+import { useCreateImage } from "../../hooks/useImage";
+import defaultProfileUri from "../../assets/profile2.png";
+import { isEmpty } from "lodash-es";
 
 export type NavBarContainerProps = Pick<NavBarProps, "className">;
 
@@ -17,36 +19,15 @@ const menu = {
   [Menu.TAGS]: GoTag,
 };
 
-const DEFAULT_IMAGE_SRC =
-  "https://raw.githubusercontent.com/ksks2211/ksks2211.github.io/main/assets/img/commons/profile.png";
-
 export const NavBarContainer: React.FC<NavBarContainerProps> = (props) => {
-  const global = useGlobal();
+  const { profile, updateProfile, ...globalRest } = useGlobal();
   const { isLg } = useBreakpoints();
 
-  const [loadImage, setLoadImage] = useState(false);
-  const { data } = useGetImageUrl({
-    imageId: global.profileImageId,
-    enabled: loadImage,
-  });
-
   useEffect(() => {
-    if (global.profileImageId > 0) {
-      setLoadImage(true);
+    if (isEmpty(profile)) {
+      updateProfile(defaultProfileUri);
     }
-  }, [global.profileImageId]);
-
-  useEffect(() => {
-    if (global.profileImageId < 1 && global.profileImageUrl === undefined) {
-      global.setProfileImageUrl(DEFAULT_IMAGE_SRC);
-    }
-  }, [global]);
-
-  useEffect(() => {
-    if (data !== undefined) {
-      global.setProfileImageUrl(data.imageUrl);
-    }
-  }, [data, global]);
+  }, [profile, updateProfile]);
 
   const mutation = useCreateImage();
 
@@ -56,21 +37,20 @@ export const NavBarContainer: React.FC<NavBarContainerProps> = (props) => {
       if (!files) return;
       if (files[0]) {
         const file = files[0];
-        global.setProfileImageUrl(URL.createObjectURL(file));
+        updateProfile(URL.createObjectURL(file));
         mutation.mutate(file);
-        setLoadImage(true);
       }
     },
-    [global, mutation]
+    [mutation, updateProfile]
   );
 
   return (
     <NavBar
       menu={menu}
       isLg={isLg}
-      profileUrl={global.profileImageUrl}
+      profileUrl={profile}
       handleImageChange={handleImageChange}
-      {...global}
+      {...globalRest}
       {...props}
     ></NavBar>
   );

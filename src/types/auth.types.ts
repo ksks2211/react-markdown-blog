@@ -17,7 +17,7 @@ export interface JWT {
   auths: string[];
   id: number;
   displayName: string;
-  profileImageId: string;
+  profile?: string;
 }
 
 export interface LoginSuccessResponse {
@@ -25,9 +25,9 @@ export interface LoginSuccessResponse {
   token: string;
   username: string;
   displayName: string;
-  profileImageId?: number;
+  profile?: string;
 }
 
 export interface UserProfileUpdate {
-  profileImageId: number;
+  profile: string;
 }

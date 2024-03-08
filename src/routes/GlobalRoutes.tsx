@@ -3,7 +3,6 @@ import useGlobal from "../hooks/useGlobal";
 
 import { lazy } from "react";
 import SuspenseLoader from "../components/common/SuspenseLoader";
-import ImageUploader from "../components/containers/LeftSidebarContainer.tsx/ImageUploader";
 
 const LogIn = lazy(() => import("../pages/LogInPage"));
 const SignUp = lazy(() => import("../pages/SignUpPage/SignUpPage"));
@@ -53,8 +52,6 @@ const GlobalRoutes = () => {
           )
         }
       />
-
-      <Route path="/test" element={<ImageUploader />} />
 
       <Route
         path="*"

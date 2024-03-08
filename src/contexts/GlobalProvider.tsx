@@ -5,12 +5,14 @@ import {
   hasValidToken,
   removeTokenFromBrowser,
   getDisplayName,
-  getProfileImageId,
-  setProfileImageIdInStorage,
+  getProfile,
+  setProfile,
+  setTokenToBrowser,
 } from "../services/storageService";
 import Menu from "./Menu.enum";
 import { useRemoveRefreshToken } from "../hooks/useToken";
 import throttle from "lodash-es/throttle";
+import type { LoginSuccessResponse } from "@customTypes/auth.types";
 
 interface GlobalProviderProps {
   children: React.ReactNode;
@@ -22,11 +24,8 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   const [username, setUsername] = useState<string>(getUsername());
   const [displayName, setDisplayName] = useState<string>(getDisplayName());
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [profileImageId, setProfileImageId] = useState(getProfileImageId());
 
-  const [profileImageUrl, setProfileImageUrl] = useState<undefined | string>(
-    undefined
-  );
+  const [profile, changeProfile] = useState<string>(getProfile());
 
   const mutation = useRemoveRefreshToken();
 
@@ -45,12 +44,22 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     setIsLoggedIn(false);
     setUsername("");
     setDisplayName("");
+    setProfile("");
+
     removeTokenFromBrowser();
   }, 2000);
 
-  const changeProfileImageId = (id: number) => {
-    setProfileImageIdInStorage(id);
-    setProfileImageId(id);
+  const updateProfile = (profile: string) => {
+    changeProfile(profile);
+    setProfile(profile);
+  };
+
+  const login = (data: LoginSuccessResponse) => {
+    setTokenToBrowser(data.token);
+    setUsername(data.username);
+    setDisplayName(data.displayName);
+    updateProfile(data.profile || "");
+    setIsLoggedIn(true);
   };
 
   const globalValue = {
@@ -61,14 +70,13 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     isLoggedIn,
     setIsLoggedIn,
     logout,
+    login,
     displayName,
     setDisplayName,
     sidebarOpen,
     setSidebarOpen,
-    profileImageId,
-    changeProfileImageId,
-    profileImageUrl,
-    setProfileImageUrl,
+    profile,
+    updateProfile,
   };
   return (
     <GlobalContext.Provider value={globalValue}>

@@ -1,9 +1,5 @@
 import { useMutation } from "react-query";
 
-import {
-  removeTokenFromBrowser,
-  setTokenToBrowser,
-} from "../services/storageService";
 import useGlobal from "./useGlobal";
 import {
   deleteRefreshTokenIfExists,
@@ -26,8 +22,7 @@ export function useLoginWithOptionalRefresh({
 }: {
   setErrorMessage: SetErrorMessage;
 }) {
-  const { setIsLoggedIn, setUsername, setDisplayName, changeProfileImageId } =
-    useGlobal();
+  const { logout, login } = useGlobal();
 
   const loginMutation = useMutation<
     LoginSuccessResponse,
@@ -37,20 +32,15 @@ export function useLoginWithOptionalRefresh({
     mutationFn: ({ username, password }) => {
       return getJsonWebTokenFromServer({ username, password });
     },
-    onSuccess: ({ token, displayName, profileImageId }, variable) => {
+    onSuccess: (data, variable) => {
       if (variable.needRefreshToken) {
         // refreshTokenMutation.mutate
       }
-      setTokenToBrowser(token);
-      setUsername(variable.username);
-      setDisplayName(displayName);
-      changeProfileImageId(profileImageId || -1);
-      setIsLoggedIn(true);
+      login(data);
     },
     onError: (error) => {
       setErrorMessage(error.message);
-      removeTokenFromBrowser();
-      setIsLoggedIn(false);
+      logout();
     },
   });
 
@@ -68,40 +58,33 @@ export function useLoginWithOptionalRefresh({
 }
 
 export function useLoginWithRefreshToken() {
-  const { setIsLoggedIn } = useGlobal();
+  const { login, logout } = useGlobal();
 
   return useMutation<LoginSuccessResponse, Error>({
     retry: false,
     mutationFn: getJwtByRefreshToken,
     onSuccess: (data) => {
-      const token = data.token;
-      setTokenToBrowser(token);
-      setIsLoggedIn(true);
+      login(data);
     },
-    onError: (error) => {
-      console.info(error);
+    onError: (e) => {
+      console.error(e.message);
+      logout();
     },
   });
 }
 
 export function useLoginWithOAuth2() {
-  const { setIsLoggedIn, setUsername, setDisplayName, changeProfileImageId } =
-    useGlobal();
+  const { login, logout } = useGlobal();
 
   return useMutation<LoginSuccessResponse, Error, URLSearchParams, unknown>({
     retry: false,
     mutationFn: (params) => getJwtByOAuth2(params),
-    onSuccess: ({ token, username, displayName, profileImageId }) => {
-      setTokenToBrowser(token);
-      setUsername(username);
-      setDisplayName(displayName);
-      changeProfileImageId(profileImageId || -1);
-      setIsLoggedIn(true);
+    onSuccess: (data) => {
+      login(data);
     },
     onError: (e) => {
       console.error(e.message);
-      removeTokenFromBrowser();
-      setIsLoggedIn(false);
+      logout();
     },
   });
 }
