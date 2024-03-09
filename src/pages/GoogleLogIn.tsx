@@ -6,7 +6,9 @@ function GoogleLogIn() {
   const [oauth2Params] = useSearchParams();
   const mutation = useLoginWithOAuth2();
 
-  console.log(oauth2Params);
+  oauth2Params.forEach((value, key) => {
+    console.log(`V:${value}, K : ${key}`);
+  });
 
   mutation.mutate(oauth2Params);
 
