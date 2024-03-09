@@ -70,7 +70,7 @@ export const getJwtByOAuth2 = async (params: URLSearchParams) => {
     params,
     withCredentials: true,
   });
-  await blogApi.get("/login/complete");
+  // await blogApi.get("/login/complete");
   return data as LoginSuccessResponse;
 };
 
