@@ -71,7 +71,7 @@ export const getJwtByOAuth2 = async (params: URLSearchParams) => {
   const { data } = await blogApi.get("/login/oauth2/code/google", {
     params,
   });
-  // await blogApi.get("/login/complete");
+  await blogApi.get("/login/complete");
   return data as LoginSuccessResponse;
 };
 
