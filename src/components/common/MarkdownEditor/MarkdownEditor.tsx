@@ -1,4 +1,4 @@
-import rehypeSanitize from "rehype-sanitize";
+import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
 import { Suspense, lazy, useCallback } from "react";
 import type { MDEditorProps } from "@uiw/react-md-editor";
 import Loader from "../Loader";
@@ -8,8 +8,19 @@ import "./MarkdownEditor.scss";
 const MDEditor = lazy(() => import("@uiw/react-md-editor/nohighlight"));
 const MarkdownRenderer = lazy(() => import("../MarkdownRenderer"));
 
+const customRehype = {
+  ...defaultSchema,
+  tagNames: [...(defaultSchema.tagNames || []), "img"],
+  attributes: {
+    ...defaultSchema.attributes,
+    img: ["src", "alt", "title", "width", "height"],
+  },
+};
+
+rehypeSanitize;
+
 const PREVIEW_OPTIONS: MDEditorProps["previewOptions"] = {
-  rehypePlugins: [[rehypeSanitize]],
+  rehypePlugins: [[rehypeSanitize, customRehype]],
 };
 
 const COMPONENTS_OPTIONS: MDEditorProps["components"] = {
