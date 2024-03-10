@@ -66,8 +66,6 @@ export const deleteRefreshTokenIfExists = async () => {
 };
 
 export const getJwtByOAuth2 = async (params: URLSearchParams) => {
-  console.log(params.toString());
-
   const { data } = await blogApi.get("/login/oauth2/code/google", {
     params,
   });

@@ -9,7 +9,8 @@ function GoogleLogIn() {
   mutation.mutate(oauth2Params);
 
   if (mutation.isError) {
-    const message = encodeURIComponent(mutation.error.message || "Login Fail");
+    console.log(mutation.error);
+    const message = encodeURIComponent(mutation.error.message || "Login");
     return <Navigate to={`/login?error=${message}`} />;
   }
 
